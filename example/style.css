@@ -1,0 +1,51 @@
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, del, dfn, em, img, ins, kbd, q, samp, small, strong, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, table, tbody, tfoot, thead, tr, th, td, article, aside, footer, header, nav, section {
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  font-size:100%;
+  vertical-align:baseline;
+  background:transparent;
+}
+body {
+  -webkit-text-size-adjust:none;
+  font-family:sans-serif;
+}
+h1 {
+  font-family:'Architects Daughter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size:45px;
+  margin:15px;
+  text-align:center;
+  color:#ddd;
+}
+h2 {
+  font-size:14px;
+  font-weight:bold;
+  color:#3c3c3c;
+  margin:20px 10px 10px;
+}
+small {
+  margin:0 10px 30px;
+  display:block;
+  font-size:12px;
+}
+a {
+  color:#028AD4 !important;
+}
+.slipNslide li div {
+  margin:0 10px;
+  padding:50px;
+  background:#1db1ff;
+  font-weight:bold;
+  color:#fff;
+  font-size:20px;
+  text-align:center;
+}
+#slider,
+#slider2 {
+  padding-bottom:20px;
+}
+#slider3 {
+  padding-bottom:40px;
+}
