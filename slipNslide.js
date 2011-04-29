@@ -36,10 +36,9 @@ slipNslide.prototype = {
 
   setup: function() {
 
-    var offset = this.container.getBoundingClientRect(),
-        lastWidth = this.width;
+    var lastWidth = this.width; // cache for change calc
 
-    this.width = offset.width;
+    this.width = this.container.getBoundingClientRect().width;
 
     this.container.style.visibility = 'hidden';
 
