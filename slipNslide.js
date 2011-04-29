@@ -42,7 +42,7 @@ slipNslide.prototype = {
     this.container.style.visibility = 'hidden';
 
     this.width = this.container.getBoundingClientRect().width;
-    this.slideWidth = !this.slidesPer ? this.slides[0].getBoundingClientRect().width : this.width/this.slidesPer;
+    this.slideWidth = !this.slidesPer ? this.width : this.width/this.slidesPer;
 
     // dynamic css
     this.element.style.width = (this.slides.length * this.slideWidth) + 'px';
