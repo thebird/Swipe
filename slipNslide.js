@@ -18,10 +18,12 @@ window.slipNslide = function(element, options) {
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
+  this.slidesPer = this.options.slidesPer || 0;
 
   // static css
   this.container.style.overflow = 'hidden';
   this.element.style.listStyle = 'none';
+  //cache original set width
 
   this.setup();
 
@@ -42,7 +44,7 @@ slipNslide.prototype = {
     this.container.style.visibility = 'hidden';
 
     this.width = this.container.getBoundingClientRect().width;
-    this.slideWidth = this.slides[0].getBoundingClientRect().width
+    this.slideWidth = !this.slidesPer ? this.slides[0].getBoundingClientRect().width : this.width/this.slidesPer;
 
     // dynamic css
     this.element.style.width = (this.slides.length * this.slideWidth) + 'px';
