@@ -17,6 +17,7 @@ window.slipNslide = function(element, options) {
   // retreive options
   this.options = options || {};
   this.index = this.options.startSlide || 0;
+  this.speed = this.options.speed || 300;
 
   // static css
   this.container.style.overflow = 'hidden';
@@ -67,13 +68,13 @@ slipNslide.prototype = {
 
   prev: function() {
 
-    if (this.index) this.slide(this.index-1, 300);
+    if (this.index) this.slide(this.index-1, this.speed);
 
   },
 
   next: function() {
 
-    if (this.index < this.slides.length - 1) this.slide(this.index+1, 300);
+    if (this.index < this.slides.length - 1) this.slide(this.index+1, this.speed);
 
   },
 
@@ -123,7 +124,7 @@ slipNslide.prototype = {
     var isValidSlide = Number(new Date()) - this.time < 250 && Math.abs(this.deltaX) > 20 || Math.abs(this.deltaX) > this.width/2,
         isPastBounds = !this.index && this.deltaX > 0 || this.index == this.slides.length-1 && this.deltaX < 0;
 
-    if (!this.isScrolling) this.slide(this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), 300);
+    if (!this.isScrolling) this.slide(this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed);
 
   }
 
