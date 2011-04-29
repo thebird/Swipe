@@ -42,13 +42,14 @@ slipNslide.prototype = {
     this.container.style.visibility = 'hidden';
 
     this.width = this.container.getBoundingClientRect().width;
+    this.slideWidth = this.slides[0].getBoundingClientRect().width
 
     // dynamic css
-    this.element.style.width = (this.slides.length * this.width) + 'px';
+    this.element.style.width = (this.slides.length * this.slideWidth) + 'px';
     var index = this.slides.length;
     while (index--) {
       var el = this.slides[index];
-      el.style.width = this.width + 'px';
+      el.style.width = this.slideWidth + 'px';
       el.style.display = 'inline-block';
     }
 
@@ -61,7 +62,8 @@ slipNslide.prototype = {
   slide: function(index,duration) {
 
     this.element.style.webkitTransitionDuration = duration + 'ms';
-    this.element.style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
+    this.element.style.webkitTransform = 'translate3d(' + -(index * this.slideWidth) + 'px,0,0)';
+
     this.index = index; // set new index to allow for expression arguments
 
   },
@@ -113,7 +115,7 @@ slipNslide.prototype = {
 
       e.preventDefault();
       this.deltaX = this.deltaX / ( (!this.index || this.index == this.slides.length - 1) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
-      this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
+      this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.slideWidth) + 'px,0,0)';
 
     }
 
