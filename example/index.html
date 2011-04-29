@@ -47,17 +47,22 @@
   </ul>
 </div>
 
+<a href='#' onclick='slider3.prev();return false;'>prev</a> 
+<a href='#' onclick='slider3.next();return false;'>next</a>
+
+<br><br>
+
 
 <script src='../slipNslide.js'></script>
 <script>
-new slipNslide(
-  document.getElementById('slider'), {
-    startPosition: 0,
-    callback: function() {}
-  }
-);
-new slipNslide(document.getElementById('slider2'));
-new slipNslide(document.getElementById('slider3'));
+var slider = new slipNslide(
+               document.getElementById('slider'), {
+                 startPosition: 0,
+                 callback: function() {}
+               }
+             );
+var slider2 = new slipNslide(document.getElementById('slider2'));
+var slider3 = new slipNslide(document.getElementById('slider3'));
 </script>
 
 </body> 

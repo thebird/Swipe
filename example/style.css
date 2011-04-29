@@ -31,7 +31,9 @@ small {
   font-size:12px;
 }
 a {
-  color:#028AD4 !important;
+  margin:0 0 0 10px;
+  font-size:12px;
+  color:#3c3c3c;
 }
 .slipNslide li div {
   margin:0 10px;
@@ -47,5 +49,5 @@ a {
   padding-bottom:20px;
 }
 #slider3 {
-  padding-bottom:40px;
+  padding-bottom:20px;
 }

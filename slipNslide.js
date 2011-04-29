@@ -71,6 +71,16 @@ slipNslide.prototype = {
     return this.deltaX + this.position > 0 || Math.abs(this.position) == this.end && this.end + this.deltaX < this.end;
   },
 
+  prev: function() {
+    this.position += (this.position) ? this.width : 0;
+    this.slide(this.position, 300);
+  },
+
+  next: function() {
+    this.position += (-this.position != this.end) ? -this.width : 0;
+    this.slide(this.position, 300);
+  },
+
   handleEvent: function(e) {
 
     switch (e.type) {
