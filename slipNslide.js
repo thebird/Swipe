@@ -1,6 +1,5 @@
 /*
  * slipNslide Mobile Slider
- * http://m.alt8242.com/slipNslide/
  *
  * Brad Birdsall, Prime
  * Copyright 2011, Licensed GPL & MIT
