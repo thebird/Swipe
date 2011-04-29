@@ -23,7 +23,6 @@ window.slipNslide = function(element, options) {
   // static css
   this.container.style.overflow = 'hidden';
   this.element.style.listStyle = 'none';
-  //cache original set width
 
   this.setup();
 
