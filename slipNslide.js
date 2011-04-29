@@ -9,20 +9,22 @@
 
 window.slipNslide = function(element, options) {
 
-  this.options = options || {};
-
-  this.position = this.options.startPosition || 0;
-  this.callback = this.options.callback || function() {};
-
+  // reference dom elements
   this.container = element;
   this.element = this.container.getElementsByTagName('ul')[0]; // the slide pane
   this.slides = this.element.getElementsByTagName('li');
+
+  // retreive options
+  this.options = options || {};
+  this.index = this.options.startSlide || 0;
 
   // static css
   this.container.style.overflow = 'hidden';
   this.element.style.listStyle = 'none';
 
   this.setup();
+
+  this.callback = this.options.callback || function() {};
 
   this.element.addEventListener('touchstart', this, false);
   this.element.addEventListener('touchmove', this, false);
@@ -36,15 +38,12 @@ slipNslide.prototype = {
 
   setup: function() {
 
-    var lastWidth = this.width; // cache for change calc
+    this.container.style.visibility = 'hidden';
 
     this.width = this.container.getBoundingClientRect().width;
 
-    this.container.style.visibility = 'hidden';
-
     // dynamic css
     this.element.style.width = (this.slides.length * this.width) + 'px';
-
     var index = this.slides.length;
     while (index--) {
       var el = this.slides[index];
@@ -52,58 +51,51 @@ slipNslide.prototype = {
       el.style.display = 'inline-block';
     }
 
-    this.end = ( this.slides.length - 1 ) * this.width;
-
-    // reset position if already at a slide other than 0 
-    this.position = this.position ? ( this.position / lastWidth ) * this.width : this.position;
-    this.slide( this.position, 0 ); // stops initial flickering on first move
+    this.slide(this.index, 0); // set start position and force translate to remove initial flickering
 
     this.container.style.visibility = 'visible';
 
   },
 
-  slide: function(pos,duration) {
-    this.element.style.webkitTransitionDuration = duration + 'ms';
-    this.element.style.webkitTransform = 'translate3d(' + pos + 'px,0,0)';
-  },
+  slide: function(index,duration) {
 
-  atBounds: function() {
-    return this.deltaX + this.position > 0 || Math.abs(this.position) == this.end && this.end + this.deltaX < this.end;
+    this.element.style.webkitTransitionDuration = duration + 'ms';
+    this.element.style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
+    this.index = index; // set new index to allow for expression arguments
+
   },
 
   prev: function() {
-    this.position += (this.position) ? this.width : 0;
-    this.slide(this.position, 300);
+
+    if (this.index) this.slide(this.index-1, 300);
+
   },
 
   next: function() {
-    this.position += (-this.position != this.end) ? -this.width : 0;
-    this.slide(this.position, 300);
+
+    if (this.index < this.slides.length - 1) this.slide(this.index+1, 300);
+
   },
 
   handleEvent: function(e) {
-
     switch (e.type) {
       case 'touchstart': this.onTouchStart(e); break;
       case 'touchmove': this.onTouchMove(e); break;
       case 'touchend': this.onTouchEnd(e); break;
-      case 'webkitTransitionEnd': this.callback(e, this.slides[-this.position/this.width]); break;
+      case 'webkitTransitionEnd': this.callback(e, this.slides[this.index]); break;
       case 'resize': this.setup(); break;
     }
-
   },
 
   onTouchStart: function(e) {
-
+    
+    // get touch coordinates for delta calculations in onTouchMove
     this.startX = e.touches[0].pageX;
     this.startY = e.touches[0].pageY;
 
-    this.time = Number(new Date());
-
-    this.isScrolling = undefined;
-
-    this.deltaX = 0;
-
+    this.time = Number(new Date()); // set start time of touch sequence
+    this.isScrolling = undefined; // used for testing first onTouchMove event
+    this.deltaX = 0; // reset deltaX
     this.element.style.webkitTransitionDuration = 0; // set transition time to 0 for 1-to-1 touch movement
 
   },
@@ -113,30 +105,25 @@ slipNslide.prototype = {
     this.deltaX = e.touches[0].pageX - this.startX;
 
     if ( typeof this.isScrolling == 'undefined') { // determine if test has run
-      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.startY) ); 
-    }
 
-    if (!this.isScrolling) {
+      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.startY) ); 
+
+    } else if (!this.isScrolling) { // is test yeilds user is not trying to scroll natively
+
       e.preventDefault();
-      this.deltaX = this.atBounds() ? this.deltaX / ( Math.abs(this.deltaX) / this.width + 1 ) : this.deltaX;
-      this.slide( this.deltaX + this.position );
+      this.deltaX = this.deltaX / ( (!this.index || this.index == this.slides.length - 1) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
+      this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
+
     }
 
   },
 
   onTouchEnd: function(e) {
 
-    if (this.isScrolling) return;
+    var isValidSlide = Number(new Date()) - this.time < 250 && Math.abs(this.deltaX) > 20 || Math.abs(this.deltaX) > this.width/2,
+        isPastBounds = !this.index && this.deltaX > 0 || this.index == this.slides.length-1 && this.deltaX < 0;
 
-    this.position +=
-      ( Number(new Date()) - this.time < 250 && Math.abs(this.deltaX) > 20 ||
-        Math.abs(this.deltaX) > this.width / 2  ) // check amt of time elap and if swipe was half of screen width
-      ?
-      this.atBounds() ? 0 : // snap back from bounds
-        ( this.deltaX > 0 ) ? this.width: -this.width
-      : 0;
-
-    this.slide(this.position, 300);
+    if (!this.isScrolling) this.slide(this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), 300);
 
   }
 
