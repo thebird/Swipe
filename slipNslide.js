@@ -20,7 +20,8 @@ window.slipNslide = function(element, options) {
   this.slides = this.element.getElementsByTagName('li');
 
   // set length based on slidesPer
-  this.length = Math.round( this.slides.length/ (this.slidesPer > 1 ? this.slidesPer : 1) );
+  var totalSlides = this.slides.length / (this.slidesPer > 1 ? this.slidesPer : 1);
+  this.length = totalSlides - totalSlides % 1 + ( totalSlides % 1 > 0 ? 1 : 0 );
 
   // static css
   this.container.style.overflow = 'hidden';
