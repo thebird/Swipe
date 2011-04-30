@@ -8,16 +8,19 @@
 
 window.slipNslide = function(element, options) {
 
-  // reference dom elements
-  this.container = element;
-  this.element = this.container.getElementsByTagName('ul')[0]; // the slide pane
-  this.slides = this.element.getElementsByTagName('li');
-
   // retreive options
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.slidesPer = this.options.slidesPer || 0;
+
+  // reference dom elements
+  this.container = element;
+  this.element = this.container.getElementsByTagName('ul')[0]; // the slide pane
+  this.slides = this.element.getElementsByTagName('li');
+
+  // set length based on slidesPer
+  this.length = Math.round( this.slides.length/ (this.slidesPer > 1 ? this.slidesPer : 1) );
 
   // static css
   this.container.style.overflow = 'hidden';
@@ -42,7 +45,7 @@ slipNslide.prototype = {
     this.container.style.visibility = 'hidden';
 
     this.width = this.container.getBoundingClientRect().width;
-    this.slideWidth = !this.slidesPer ? this.width : this.width/this.slidesPer;
+    this.slideWidth = this.slidesPer > 1 ? this.width/this.slidesPer : this.width;
 
     // dynamic css
     this.element.style.width = (this.slides.length * this.slideWidth) + 'px';
@@ -62,7 +65,7 @@ slipNslide.prototype = {
   slide: function(index,duration) {
 
     this.element.style.webkitTransitionDuration = duration + 'ms';
-    this.element.style.webkitTransform = 'translate3d(' + -(index * this.slideWidth) + 'px,0,0)';
+    this.element.style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
 
     this.index = index; // set new index to allow for expression arguments
 
@@ -76,7 +79,7 @@ slipNslide.prototype = {
 
   next: function() {
 
-    if (this.index < this.slides.length - 1) this.slide(this.index+1, this.speed);
+    if (this.index < this.length - 1) this.slide(this.index+1, this.speed);
 
   },
 
@@ -114,8 +117,8 @@ slipNslide.prototype = {
     } else if (!this.isScrolling) { // is test yeilds user is not trying to scroll natively
 
       e.preventDefault();
-      this.deltaX = this.deltaX / ( (!this.index || this.index == this.slides.length - 1) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
-      this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.slideWidth) + 'px,0,0)';
+      this.deltaX = this.deltaX / ( (!this.index || this.index == this.length - 1) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
+      this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
 
     }
 
@@ -124,7 +127,7 @@ slipNslide.prototype = {
   onTouchEnd: function(e) {
 
     var isValidSlide = Number(new Date()) - this.time < 250 && Math.abs(this.deltaX) > 20 || Math.abs(this.deltaX) > this.width/2,
-        isPastBounds = !this.index && this.deltaX > 0 || this.index == this.slides.length-1 && this.deltaX < 0;
+        isPastBounds = !this.index && this.deltaX > 0 || this.index == this.length - 1 && this.deltaX < 0;
 
     if (!this.isScrolling) this.slide(this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed);
 
