@@ -111,16 +111,16 @@ slipNslide.prototype = {
 
     this.deltaX = e.touches[0].pageX - this.startX;
 
-    if ( typeof this.isScrolling == 'undefined') { // determine if test has run
+    // determine if scrolling test has run - one time test
+    if ( typeof this.isScrolling == 'undefined') {
+      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.startY) );
+    }
 
-      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.startY) ); 
-
-    } else if (!this.isScrolling) { // is test yeilds user is not trying to scroll natively
-
+    // if user is not trying to scroll vertically
+    if (!this.isScrolling) { 
       e.preventDefault();
       this.deltaX = this.deltaX / ( (!this.index || this.index == this.length - 1) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
       this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
-
     }
 
   },
