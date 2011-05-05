@@ -46,6 +46,7 @@ slipNslide.prototype = {
     this.container.style.visibility = 'hidden';
 
     this.width = this.container.getBoundingClientRect().width;
+
     this.slideWidth = this.slidesPer > 1 ? this.width/this.slidesPer : this.width;
 
     // dynamic css
@@ -56,6 +57,7 @@ slipNslide.prototype = {
       el.style.width = this.slideWidth + 'px';
       el.style.display = 'inline-block';
     }
+    this.element.style.height = this.element.getBoundingClientRect().height + 'px';
 
     this.slide(this.index, 0); // set start position and force translate to remove initial flickering
 
