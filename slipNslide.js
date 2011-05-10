@@ -57,7 +57,8 @@ slipNslide.prototype = {
       el.style.width = this.slideWidth + 'px';
       el.style.display = 'inline-block';
     }
-    this.element.style.height = this.element.getBoundingClientRect().height + 'px';
+
+    //this.element.style.height = this.element.getBoundingClientRect().height + 'px';
 
     this.slide(this.index, 0); // set start position and force translate to remove initial flickering
 
