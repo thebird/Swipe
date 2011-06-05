@@ -12,24 +12,19 @@ window.slipNslide = function(element, options) {
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
-  this.slidesPer = this.options.slidesPer || 0;
+  this.callback = this.options.callback || function() {};
 
   // reference dom elements
   this.container = element;
   this.element = this.container.getElementsByTagName('ul')[0]; // the slide pane
   this.slides = this.element.getElementsByTagName('li');
-
-  // set length based on slidesPer
-  var totalSlides = this.slides.length / (this.slidesPer > 1 ? this.slidesPer : 1);
-  this.length = totalSlides - totalSlides % 1 + ( totalSlides % 1 > 0 ? 1 : 0 );
+  this.length = this.slides.length;
 
   // static css
   this.container.style.overflow = 'hidden';
   this.element.style.listStyle = 'none';
 
   this.setup();
-
-  this.callback = this.options.callback || function() {};
 
   this.element.addEventListener('touchstart', this, false);
   this.element.addEventListener('touchmove', this, false);
@@ -57,8 +52,6 @@ slipNslide.prototype = {
       el.style.width = this.slideWidth + 'px';
       el.style.display = 'inline-block';
     }
-
-    //this.element.style.height = this.element.getBoundingClientRect().height + 'px';
 
     this.slide(this.index, 0); // set start position and force translate to remove initial flickering
 
@@ -120,7 +113,7 @@ slipNslide.prototype = {
     }
 
     // if user is not trying to scroll vertically
-    if (!this.isScrolling) { 
+    if (!this.isScrolling) {
       e.preventDefault();
       this.deltaX = this.deltaX / ( (!this.index || this.index == this.length - 1) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
       this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
