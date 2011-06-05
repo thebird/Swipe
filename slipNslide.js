@@ -115,7 +115,7 @@ slipNslide.prototype = {
     // if user is not trying to scroll vertically
     if (!this.isScrolling) {
       e.preventDefault();
-      this.deltaX = this.deltaX / ( (!this.index || this.index == this.length - 1) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
+      this.deltaX = this.deltaX / ( (!this.index && this.deltaX > 0 || this.index == this.length - 1 && this.deltaX < 0) ? ( Math.abs(this.deltaX) / this.width + 1 ) : 1 );
       this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
     }
 
