@@ -85,7 +85,7 @@ slipNslide.prototype = {
       case 'touchstart': this.onTouchStart(e); break;
       case 'touchmove': this.onTouchMove(e); break;
       case 'touchend': this.onTouchEnd(e); break;
-      case 'webkitTransitionEnd': this.callback(e, this.slides[this.index]); break;
+      case 'webkitTransitionEnd': this.callback(e, this.index, this.slides[this.index]); break;
       case 'resize': this.setup(); break;
     }
   },
