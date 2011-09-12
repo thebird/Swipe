@@ -44,14 +44,12 @@ slipNslide.prototype = {
 
     this.width = this.container.getBoundingClientRect().width;
 
-    this.slideWidth = this.slidesPer > 1 ? this.width/this.slidesPer : this.width;
-
     // dynamic css
-    this.element.style.width = (this.slides.length * this.slideWidth) + 'px';
+    this.element.style.width = (this.slides.length * this.width) + 'px';
     var index = this.slides.length;
     while (index--) {
       var el = this.slides[index];
-      el.style.width = this.slideWidth + 'px';
+      el.style.width = this.width + 'px';
       el.style.display = 'inline-block';
     }
 
