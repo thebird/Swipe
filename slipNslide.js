@@ -40,8 +40,10 @@ slipNslide.prototype = {
 
   setup: function() {
 
+    // hide slider element but keep positioning during setup
     this.container.style.visibility = 'hidden';
 
+    // determine width of each slide
     this.width = this.container.getBoundingClientRect().width;
 
     // dynamic css
@@ -53,8 +55,10 @@ slipNslide.prototype = {
       el.style.display = 'inline-block';
     }
 
-    this.slide(this.index, 0); // set start position and force translate to remove initial flickering
+    // set start position and force translate to remove initial flickering
+    this.slide(this.index, 0); 
 
+    // show slider element
     this.container.style.visibility = 'visible';
 
   },
@@ -92,11 +96,17 @@ slipNslide.prototype = {
 
   onTouchStart: function(e) {
     
-    // get touch coordinates for delta calculations in onTouchMove
-    this.startX = e.touches[0].pageX;
-    this.startY = e.touches[0].pageY;
+    this.start = {
 
-    this.time = Number(new Date()); // set start time of touch sequence
+      // get touch coordinates for delta calculations in onTouchMove
+      pageX: e.touches[0].pageX,
+      pageY: e.touches[0].pageY,
+
+      // set initial timestamp of touch sequence
+      time: Number( new Date() )
+
+    }
+
     this.isScrolling = undefined; // used for testing first onTouchMove event
     this.deltaX = 0; // reset deltaX
     this.element.style.webkitTransitionDuration = 0; // set transition time to 0 for 1-to-1 touch movement
@@ -105,11 +115,11 @@ slipNslide.prototype = {
 
   onTouchMove: function(e) {
 
-    this.deltaX = e.touches[0].pageX - this.startX;
+    this.deltaX = e.touches[0].pageX - this.start.pageX;
 
     // determine if scrolling test has run - one time test
     if ( typeof this.isScrolling == 'undefined') {
-      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.startY) );
+      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) );
     }
 
     // if user is not trying to scroll vertically
@@ -123,7 +133,7 @@ slipNslide.prototype = {
 
   onTouchEnd: function(e) {
 
-    var isValidSlide = Number(new Date()) - this.time < 250 && Math.abs(this.deltaX) > 20 || Math.abs(this.deltaX) > this.width/2,
+    var isValidSlide = Number(new Date()) - this.start.time < 250 && Math.abs(this.deltaX) > 20 || Math.abs(this.deltaX) > this.width/2,
         isPastBounds = !this.index && this.deltaX > 0 || this.index == this.length - 1 && this.deltaX < 0;
 
     if (!this.isScrolling) this.slide(this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed);
