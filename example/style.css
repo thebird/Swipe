@@ -35,6 +35,11 @@ a {
   font-size:12px;
   color:#3c3c3c;
 }
+
+/* just for example page */
+.slipNslide {
+  padding-bottom:20px;
+}
 .slipNslide li div {
   margin:0 10px;
   padding:40px 10px;
@@ -43,14 +48,4 @@ a {
   color:#fff;
   font-size:20px;
   text-align:center;
-}
-#slider,
-#slider2 {
-  padding-bottom:20px;
-}
-#slider3 {
-  padding-bottom:20px;
-}
-#slider4 {
-  padding-bottom:20px;
 }
