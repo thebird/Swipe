@@ -8,6 +8,8 @@
 
 window.slipNslide = function(element, options) {
 
+  if (!element) return null;
+
   // retreive options
   this.options = options || {};
   this.index = this.options.startSlide || 0;
