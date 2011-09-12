@@ -55,7 +55,7 @@ slipNslide.prototype = {
     while (index--) {
       var el = this.slides[index];
       el.style.width = this.width + 'px';
-      el.style.display = 'inline-block';
+      el.style.display = 'table-cell';
     }
 
     // set start position and force translate to remove initial flickering
