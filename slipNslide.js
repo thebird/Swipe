@@ -23,6 +23,9 @@ window.slipNslide = function(element, options) {
   this.slides = this.element.getElementsByTagName('li');
   this.length = this.slides.length;
 
+  // return immediately if their are less than two slides
+  if (this.length < 2) return null;
+
   // static css
   this.container.style.overflow = 'hidden';
   this.element.style.listStyle = 'none';
