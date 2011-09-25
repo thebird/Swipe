@@ -1,0 +1,62 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+<link href='style.css' rel='stylesheet'/>
+</head>
+<body>
+
+<h1>Swipe</h1>
+
+<h2>150px wide</h2>
+
+<div id='slider' class='swipe' style='width:150px'>
+  <ul>
+    <li style='display:block'><div>1</div></li>
+    <li style='display:none'><div>2</div></li>
+    <li style='display:none'><div>3</div></li>
+    <li style='display:none'><div>4</div></li>
+    <li style='display:none'><div>5</div></li>
+  </ul>
+</div>
+
+
+<h2>250px wide</h2>
+
+<div id='slider2' class='swipe' style='width:250px'>
+  <ul>
+    <li style='display:block'><div>1</div></li>
+    <li style='display:none'><div>2</div></li>
+    <li style='display:none'><div>3</div></li>
+    <li style='display:none'><div>4</div></li>
+    <li style='display:none'><div>5</div></li>
+  </ul>
+</div>
+
+
+<h2>Full width</h2>
+
+<div id='slider3' class='swipe'>
+  <ul>
+    <li style='display:block'><div>1</div></li>
+    <li style='display:none'><div>2</div></li>
+    <li style='display:none'><div>3</div></li>
+    <li style='display:none'><div>4</div></li>
+    <li style='display:none'><div>5</div></li>
+  </ul>
+</div>
+
+<a href='#' onclick='slider3.prev();return false;'>prev</a> 
+<a href='#' onclick='slider3.next();return false;'>next</a>
+<br><br>
+
+
+<script src='swipe.js'></script>
+<script>
+new Swipe(document.getElementById('slider'));
+new Swipe(document.getElementById('slider2'));
+var slider3 = new Swipe(document.getElementById('slider3'));
+</script>
+
+</body> 
+</html> 

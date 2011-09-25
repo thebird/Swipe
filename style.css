@@ -12,12 +12,10 @@ body {
   font-family:sans-serif;
 }
 h1 {
-  font-family:'Architects Daughter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  font-size:45px;
+  font-size:36px;
   margin:15px;
   text-align:center;
-  color:#ddd;
+  color:#666;
 }
 h2 {
   font-size:14px;
@@ -35,14 +33,12 @@ a {
   font-size:12px;
   color:#3c3c3c;
 }
-
-/* just for example page */
-.slipNslide {
+.swipe {
   padding-bottom:20px;
 }
-.slipNslide li div {
+.swipe li div {
   margin:0 10px;
-  padding:40px 10px;
+  padding:50px 10px;
   background:#1db1ff;
   font-weight:bold;
   color:#fff;
