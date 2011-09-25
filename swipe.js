@@ -1,12 +1,12 @@
 /*
- * slipNslide Mobile Slider
+ * Swipe 1.0
  *
  * Brad Birdsall, Prime
  * Copyright 2011, Licensed GPL & MIT
  *
 */
 
-window.slipNslide = function(element, options) {
+window.Swipe = function(element, options) {
 
   // return immediately if element doesn't exist
   if (!element) return null;
@@ -42,7 +42,7 @@ window.slipNslide = function(element, options) {
 
 }
 
-slipNslide.prototype = {
+Swipe.prototype = {
 
   setup: function() {
 
