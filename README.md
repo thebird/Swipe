@@ -30,11 +30,11 @@ I always place this at the bottom of the page, externally, to verify the page is
 
 Swipe can take an optional second parameter– an object of key/value settings:
 
-- 	**startSlide** Integer *(default:0)* - The index position Swipe should start at
+- 	**startSlide** Integer *(default:0)* - index position Swipe should start at
 
--	**speed** Integer *(default:300)* - The speed of prev and next transitions in milliseconds.
+-	**speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
 
--	**callback** Function - Function to run at the end of any slide change. *(effective for updating position indicators/counters)*
+-	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
 
 ### Example
 
@@ -67,12 +67,12 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 
 ## Requirements
-Swipe requires a device that supports CSS transforms and works best with devices that support touch. Both of these are not required for the code to run since Swipe does not include any feature detection in the core code. This decision was made due to the fact that all mobile web development should already have some sort of feature detection built into the page. I recommend using a custom build of [Modernizr]{http://modernizr.com), don't recreate the wheel.
+Swipe requires a device that supports CSS transforms and works best with devices that support touch. Both of these are not required for the code to run since Swipe does not include any feature detection in the core code. This decision was made due to the fact that all mobile web development should already have some sort of feature detection built into the page. I recommend using a custom build of [Modernizr](http://modernizr.com), don't recreate the wheel.
 
 Sample use with Modernizr:
 
 ``` js
-if (Modernizr.csstransforms) {
+if ( Modernizr.csstransforms ) {
   window.mySwipe = new Swipe('#slider');
 }
 ```
