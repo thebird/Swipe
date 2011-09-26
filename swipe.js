@@ -82,6 +82,13 @@ Swipe.prototype = {
 
   },
 
+  getPos: function() {
+    
+    // return current index position
+    return this.index;
+
+  },
+
   prev: function() {
 
     // if not at first slide
