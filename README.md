@@ -30,14 +30,11 @@ I always place this at the bottom of the page, externally, to verify the page is
 
 Swipe can take an optional second parameter– an object of key/value settings:
 
-- 	**startSlide** Integer *(default:0)*
-	The index position Swipe should start at
+- 	**startSlide** Integer *(default:0)* - The index position Swipe should start at
 
--	**speed** Integer *(default:300)*
-	The speed of prev and next transitions in milliseconds.
+-	**speed** Integer *(default:300)* - The speed of prev and next transitions in milliseconds.
 
--	**callback** Function
-	Function to run at the end of any slide change. *(effective for updating position indicators/counters)*
+-	**callback** Function - Function to run at the end of any slide change. *(effective for updating position indicators/counters)*
 
 ### Example
 
