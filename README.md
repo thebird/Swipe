@@ -84,3 +84,5 @@ This is why I set all elements but the first list item to `display:none`– if t
 I would love to hear more about how to improve Swipe. Play with it and let me know how you use and please fork away. If you have any questions, contact me on [Twitter](http://twitter.com/bradbirdsall) or [GitHub](http://github.com/bradbirdsall).
 
 
+## License
+Swipe mobile slider is &copy; 2011 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of GPL &amp; MIT licenses. 
