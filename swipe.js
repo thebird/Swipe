@@ -41,6 +41,12 @@ Swipe.prototype = {
 
   setup: function() {
 
+    this.started = false;
+
+    // return immediately if their are less than two slides
+    if (this.length < 2) return null;
+
+
     // get and measure amt of slides
     this.slides = this.element.getElementsByTagName('li');
     this.length = this.slides.length;
@@ -117,12 +123,20 @@ Swipe.prototype = {
   },
 
   onTouchStart: function(e) {
-    
+    var x,y;
+    try {
+        x = e.touches[0].pageX;
+        y = e.touches[0].pageY
+    } catch(ex) {
+        x = e.screenX;
+        y = e.screenY;
+    }
+    this.started = true;
     this.start = {
 
       // get touch coordinates for delta calculations in onTouchMove
-      pageX: e.touches[0].pageX,
-      pageY: e.touches[0].pageY,
+      pageX: x,
+      pageY: y,
 
       // set initial timestamp of touch sequence
       time: Number( new Date() )
@@ -142,11 +156,22 @@ Swipe.prototype = {
 
   onTouchMove: function(e) {
 
-    this.deltaX = e.touches[0].pageX - this.start.pageX;
+    if (!this.start || !this.started) return;
+    var newX;
+    var newY;
+    try {
+        newX = e.touches[0].pageX;
+        newY = e.touches[0].pageY;
+    } catch(ex) {
+        newX = e.screenX;
+        newY = e.screenY;
+    }
+
+    this.deltaX = newX - this.start.pageX;
 
     // determine if scrolling test has run - one time test
     if ( typeof this.isScrolling == 'undefined') {
-      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) );
+      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(newY - this.start.pageY) );
     }
 
     // if user is not trying to scroll vertically
@@ -172,6 +197,9 @@ Swipe.prototype = {
   },
 
   onTouchEnd: function(e) {
+
+    if(!this.started) return;
+    this.started = false;
 
     // determine if slide attempt triggers next/prev slide
     var isValidSlide = 
