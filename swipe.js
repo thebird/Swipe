@@ -20,11 +20,6 @@ window.Swipe = function(element, options) {
   // reference dom elements
   this.container = element;
   this.element = this.container.getElementsByTagName('ul')[0]; // the slide pane
-  this.slides = this.element.getElementsByTagName('li');
-  this.length = this.slides.length;
-
-  // return immediately if their are less than two slides
-  if (this.length < 2) return null;
 
   // static css
   this.container.style.overflow = 'hidden';
@@ -46,6 +41,13 @@ Swipe.prototype = {
 
   setup: function() {
 
+    // get and measure amt of slides
+    this.slides = this.element.getElementsByTagName('li');
+    this.length = this.slides.length;
+
+    // return immediately if their are less than two slides
+    if (this.length < 2) return null;
+
     // hide slider element but keep positioning during setup
     this.container.style.visibility = 'hidden';
 
@@ -59,6 +61,7 @@ Swipe.prototype = {
       var el = this.slides[index];
       el.style.width = this.width + 'px';
       el.style.display = 'table-cell';
+      el.style.verticalAlign = 'top';
     }
 
     // set start position and force translate to remove initial flickering
