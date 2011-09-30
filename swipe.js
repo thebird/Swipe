@@ -33,6 +33,9 @@ window.Swipe = function(element, options) {
   this.element.addEventListener('touchmove', this, false);
   this.element.addEventListener('touchend', this, false);
   this.element.addEventListener('webkitTransitionEnd', this, false);
+  this.element.addEventListener('msTransitionEnd', this, false);
+  this.element.addEventListener('OTransitionEnd', this, false);
+  this.element.addEventListener('transitionend', this, false);
   window.addEventListener('resize', this, false);
 
 }
@@ -74,11 +77,14 @@ Swipe.prototype = {
 
   slide: function(index, duration) {
 
+    var style = this.element.style;
+
     // set duration speed (0 represents 1-to-1 scrolling)
-    this.element.style.webkitTransitionDuration = duration + 'ms';
+    style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = duration + 'ms';
 
     // translate to given index position
-    this.element.style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
+    style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
+    style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + -(index * this.width) + 'px)';
 
     // set new index to allow for expression arguments
     this.index = index;
