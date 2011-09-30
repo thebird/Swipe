@@ -34,7 +34,7 @@ window.Swipe = function(element, options) {
   this.element.addEventListener('touchend', this, false);
   this.element.addEventListener('webkitTransitionEnd', this, false);
   this.element.addEventListener('msTransitionEnd', this, false);
-  this.element.addEventListener('OTransitionEnd', this, false);
+  this.element.addEventListener('oTransitionEnd', this, false);
   this.element.addEventListener('transitionend', this, false);
   window.addEventListener('resize', this, false);
 
@@ -117,7 +117,10 @@ Swipe.prototype = {
       case 'touchstart': this.onTouchStart(e); break;
       case 'touchmove': this.onTouchMove(e); break;
       case 'touchend': this.onTouchEnd(e); break;
-      case 'webkitTransitionEnd': this.callback(e, this.index, this.slides[this.index]); break;
+      case 'webkitTransitionEnd':
+      case 'msTransitionEnd':
+      case 'oTransitionEnd':
+      case 'transitionend': this.callback(e, this.index, this.slides[this.index]); break;
       case 'resize': this.setup(); break;
     }
   },
@@ -142,7 +145,7 @@ Swipe.prototype = {
     this.deltaX = 0;
 
     // set transition time to 0 for 1-to-1 touch movement
-    this.element.style.webkitTransitionDuration = 0; 
+    this.element.style.webkitTransitionDuration = 0;
 
   },
 
@@ -171,8 +174,9 @@ Swipe.prototype = {
           ( Math.abs(this.deltaX) / this.width + 1 )      // determine resistance level
           : 1 );                                          // no resistance if false
       
-      // translate immediately 1-to-1 
+      // translate immediately 1-to-1
       this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
+
     }
 
   },
