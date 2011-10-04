@@ -46,6 +46,7 @@ Swipe can take an optional second parameter– an object of key/value settings:
 window.mySwipe = new Swipe('#slider', {
 	startSlide: 2,
 	speed: 400,
+  auto: 3000, // begin with auto slideshow (time in milliseconds between slides)
 	callback: function(event, index, elem) {
 
 	  // do something cool

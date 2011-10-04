@@ -11,11 +11,14 @@ window.Swipe = function(element, options) {
   // return immediately if element doesn't exist
   if (!element) return null;
 
+  var _this = this;
+
   // retreive options
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
+  this.delay = this.options.auto || 0;
 
   // reference dom elements
   this.container = element;
@@ -27,6 +30,9 @@ window.Swipe = function(element, options) {
 
   // trigger slider initialization
   this.setup();
+
+  // setup auto slideshow
+  this.start();
 
   // add event listeners
   this.element.addEventListener('touchstart', this, false);
@@ -98,18 +104,38 @@ Swipe.prototype = {
 
   },
 
-  prev: function() {
+  prev: function(delay) {
+
+    // cancel slideshow
+    this.delay = delay || 0;
+    clearTimeout(this.interval);
 
     // if not at first slide
     if (this.index) this.slide(this.index-1, this.speed);
 
   },
 
-  next: function() {
+  next: function(delay) {
+
+    // cancel slideshow
+    this.delay = delay || 0;
+    clearTimeout(this.interval);
 
     // if not at last slide
     if (this.index < this.length - 1) this.slide(this.index+1, this.speed);
 
+  },
+
+  start: function() {
+
+    var _this = this;
+
+    this.interval = (this.delay && this.index < this.length - 1)
+      ? setTimeout(function() { 
+        _this.next(_this.delay);
+      }, this.delay)
+      : 0;
+  
   },
 
   handleEvent: function(e) {
@@ -120,12 +146,23 @@ Swipe.prototype = {
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
       case 'oTransitionEnd':
-      case 'transitionend': this.callback(e, this.index, this.slides[this.index]); break;
+      case 'transitionend': this.transitionEnd(e); break;
       case 'resize': this.setup(); break;
     }
   },
 
+  transitionEnd: function(e) {
+    
+    if (this.delay) this.start();
+    
+    this.callback(e, this.index, this.slides[this.index]);
+
+  },
+
   onTouchStart: function(e) {
+
+    // cancel slideshow
+    clearTimeout(this.interval);
     
     this.start = {
 
