@@ -23,7 +23,7 @@ Above is the initial required structure– an unordered list wrapped in a contai
 
 ``` js
 
-window.mySwipe = new Swipe('#slider');
+window.mySwipe = new Swipe(document.getElementById('slider'));
 
 ```
 I always place this at the bottom of the page, externally, to verify the page is ready.
@@ -37,16 +37,18 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 -	**speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
 
+- **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
+
 -	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
 
 ### Example
 
 ``` js
 
-window.mySwipe = new Swipe('#slider', {
+window.mySwipe = new Swipe(document.getElementById('slider'), {
 	startSlide: 2,
 	speed: 400,
-  auto: 3000, // begin with auto slideshow (time in milliseconds between slides)
+    auto: 3000,
 	callback: function(event, index, elem) {
 
 	  // do something cool
@@ -77,7 +79,7 @@ Sample use with Modernizr:
 
 ``` js
 if ( Modernizr.csstransforms ) {
-  window.mySwipe = new Swipe('#slider');
+  window.mySwipe = new Swipe(document.getElementById('slider'));
 }
 ```
 
