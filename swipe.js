@@ -121,8 +121,8 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    // if not at last slide
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed);
+    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
+    else this.slide(0, this.speed); //if last slide return to start
 
   },
 
@@ -130,7 +130,7 @@ Swipe.prototype = {
 
     var _this = this;
 
-    this.interval = (this.delay && this.index < this.length - 1)
+    this.interval = (this.delay)
       ? setTimeout(function() { 
         _this.next(_this.delay);
       }, this.delay)
