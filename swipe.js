@@ -22,7 +22,7 @@ window.Swipe = function(element, options) {
 
   // reference dom elements
   this.container = element;
-  this.element = this.container.getElementsByTagName('ul')[0]; // the slide pane
+  this.element = this.container.children[0]; // the slide pane
 
   // static css
   this.container.style.overflow = 'hidden';
@@ -44,14 +44,14 @@ window.Swipe = function(element, options) {
   this.element.addEventListener('transitionend', this, false);
   window.addEventListener('resize', this, false);
 
-}
+};
 
 Swipe.prototype = {
 
   setup: function() {
 
     // get and measure amt of slides
-    this.slides = this.element.getElementsByTagName('li');
+    this.slides = this.element.children;
     this.length = this.slides.length;
 
     // return immediately if their are less than two slides
@@ -173,7 +173,7 @@ Swipe.prototype = {
       // set initial timestamp of touch sequence
       time: Number( new Date() )
 
-    }
+    };
 
     // used for testing first onTouchMove event
     this.isScrolling = undefined;
@@ -241,4 +241,4 @@ Swipe.prototype = {
 
   }
 
-}
+};
