@@ -19,7 +19,7 @@ Swipe only needs to follow a simple pattern. Here is an example:
 </div>
 ```
 
-Above is the initial required structure– an unordered list wrapped in a containing div *(more on the `display:block/none` reasoning below)*. Place any content you want within the list items. The containing div will need to be passed to a new Swipe object like so:
+Above is the initial required structure– a series of elements wrapped in two containers. An unordered list makes sense here, but this can be any combination of elements that has the same structure.  *(more on the `display:block/none` reasoning below)*.Place any content you want within the items. The containing div will need to be passed to a new Swipe object like so:
 
 ``` js
 
