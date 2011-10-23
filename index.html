@@ -50,12 +50,29 @@
 <a href='#' onclick='slider3.next();return false;'>next</a>
 <br><br>
 
+<h2>Arbitrary Elements</h2>
+
+<div id='slider4' class='swipe'>
+  <div>
+    <div style='display:block'><div>1</div></div>
+    <div style='display:none'><div>2</div></div>
+    <div style='display:none'><div>3</div></div>
+    <div style='display:none'><div>4</div></div>
+    <div style='display:none'><div>5</div></div>
+  </div>
+</div>
+
+<a href='#' onclick='slider4.prev();return false;'>prev</a> 
+<a href='#' onclick='slider4.next();return false;'>next</a>
+<br><br>
+
 
 <script src='swipe.js'></script>
 <script>
 new Swipe(document.getElementById('slider'));
 new Swipe(document.getElementById('slider2'));
 var slider3 = new Swipe(document.getElementById('slider3'));
+var slider4 = new Swipe(document.getElementById('slider4'));
 </script>
 
 </body> 
