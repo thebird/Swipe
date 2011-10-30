@@ -198,19 +198,15 @@ function setTab(elem) {
 }
 
 // url bar hiding
-(function () {
-  
-  var ua = navigator.userAgent,
-      viewport = document.querySelector && document.querySelector('meta[name="viewport"]');
+var ua = navigator.userAgent,
+    viewport = document.querySelector && document.querySelector('meta[name="viewport"]');
 
-  if (viewport && /iPhone|iPad/.test(ua) && !/Opera Mini/.test(ua)) {
-    viewport.content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
-    document.addEventListener("gesturestart", function() {
-      viewport.content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
-    }, false);
-  }
-
-})();
+if (viewport && /iPhone|iPad/.test(ua) && !/Opera Mini/.test(ua)) {
+  viewport.content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+  document.addEventListener("gesturestart", function() {
+    viewport.content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+  }, false);
+}
 
 // analytics
 var _gauges = _gauges || [];
