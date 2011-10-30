@@ -1,67 +1,206 @@
-<!DOCTYPE HTML> 
+<!DOCTYPE HTML>
 <html>
 <head>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
-<link href='style.css' rel='stylesheet'/>
+<title>Swipe JS</title>
+<meta nam='description' content='Swipe is a lightweight mobile slider with 1:1 touch movement, resistant bounds, scroll prevention, and completely library agnostic.'>
+<meta name='keywords' content='Swipe, mobile, mobile web, slider, touch, 1:1, Brad Birdsall, lightweight, JS, javascript'>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name='HandheldFriendly' content='True'>
+<meta name='MobileOptimized' content='320'>
+<meta name='format-detection' content='telephone=no'>
+<meta name='viewport' content='width=device-width, minimum-scale=1.0, maximum-scale=1.0'>
+<meta http-equiv='cleartype' content='on'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel='stylesheet' href='style.css'>
 </head>
 <body>
 
-<h1>Swipe</h1>
+<header>
+  <h1>Swipe</h1>
+</header>
 
-<h2>150px wide</h2>
+<div id='gallery'>
 
-<div id='slider' class='swipe' style='width:150px'>
-  <ul>
-    <li style='display:block'><div>1</div></li>
-    <li style='display:none'><div>2</div></li>
-    <li style='display:none'><div>3</div></li>
-    <li style='display:none'><div>4</div></li>
-    <li style='display:none'><div>5</div></li>
-  </ul>
+  <div id='slider'>
+    <ul>
+      <li style='display:block'><div>1</div></li>
+      <li style='display:none'><div>2</div></li>
+      <li style='display:none'><div>3</div></li>
+    </ul>
+  </div>
+  
+  <nav>
+    <a href='#' id='prev' onclick='slider.prev();return false;'><em>prev</em></a>
+    <a href='#' id='next' onclick='slider.next();return false;'><em>next</em></a>
+  </nav>
+
 </div>
 
 
-<h2>250px wide</h2>
+<p class='about'>Swipe is a lightweight mobile slider with 1:1 touch movement, resistant bounds, scroll prevention, and completely library agnostic.</p>
 
-<div id='slider2' class='swipe' style='width:250px'>
+<ul id='tabSelector' class='base-tabs'>
+  <li class='on'>Intro</li>
+  <li>Usage</li>
+  <li>API &amp; Requirements</li>
+</ul>
+
+<div id='tabs'>
   <ul>
-    <li style='display:block'><div>1</div></li>
-    <li style='display:none'><div>2</div></li>
-    <li style='display:none'><div>3</div></li>
-    <li style='display:none'><div>4</div></li>
-    <li style='display:none'><div>5</div></li>
+    <li style='display:block'>
+      <div>
+
+        <p>Swipe brings content sliding to the mobile web to preserve space and allow for new types of interaction. Many mobile web sliders currently exist but few embody all the rules a slider like this should follow.</p>
+
+        <h2>1:1 touch movement</h2>
+        <p>1:1 movement, as described above, is about tracking the position of the touch and moving the content exactly how the touch interacts. This interaction is very common in native apps.</p>
+
+        <h2>Resistant bounds</h2>
+        <p>When Swipe is at the left-most position, sliding any more left will increase the resistance to slide, making it obvious that you have reached the end. This detection/resistance occurs at both left and right bounds.</p>
+
+        <h2>Rotation/resize adjustment</h2>
+        <p>When a user rotates their device (in turn resizing the browser window), the slider resets to make sure the sliding elements are the right size. This is only necessary for sliders without declared widths.</p>
+
+        <h2>Variable width containers</h2>
+        <p>Swipe allows you to set a width to the container, which designates the width of each slide element. This is important if you do not want a full width slider (the default).</p>
+
+        <h2>Scroll prevention</h2>
+        <p>Scroll prevention is one of the most overlooked pieces of mobile sliders. Swipe detects if you’re trying to scroll down the page or slide content left to right.</p>
+
+        <h2>Library agnostic</h2>
+        <p>Swipe doesn’t rely on any library. Trust me this is a good thing. All you have to do is pass in the container element, set some parameters, and BOOM goes the dynamite– your all set. You may choose to pass the element to Swipe with a library, but it’s not necessary.</p>
+
+      </div>
+    </li>
+    <li style='display:none'>
+      <div>
+        
+        <p>Swipe only needs to follow a simple pattern. Here is an example:</p>
+        
+        <pre><code>&lt;div id='slider'&gt;
+  &lt;ul&gt;
+    &lt;li style='display:block'&gt;&lt;/li&gt;
+    &lt;li style='display:none'&gt;&lt;/li&gt;
+    &lt;li style='display:none'&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+        <p>Above is the initial required structure– a series of elements wrapped in two containers. An unordered list makes sense here, but this can be any combination of elements that has the same structure. Place any content you want within the items.</p>
+        <p>The containing div will need to be passed to a new Swipe object like so:</p>
+
+        <pre><code>window.mySwipe = new Swipe(
+  document.getElementById('slider')
+);</code></pre>
+        
+        <p>I always place this at the bottom of the page, externally, to verify the page is ready.</p>
+
+        <br>
+        <h2>Config Options</h2>
+        <p>Swipe can take an optional second parameter– an object of key/value settings:</p>
+
+        <ul class='config-list'>
+          <li>
+            <p>
+              <strong>startSlide</strong> Integer <em>(default:0)</em>
+              <small>index position Swipe should start at</small>
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>speed</strong> Integer <em>(default:300)</em>
+              <small>speed of prev and next transitions in milliseconds</small>
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>auto</strong> Integer
+              <small>begin with auto slideshow (time in milliseconds between slides)</small>
+            </p>
+          </li>
+          <li>
+            <p>
+              <strong>callback</strong> Function
+              <small>runs at the end of any slide change. <em>(effective for updating position indicators/counters)</em></small>
+            </p>
+          </li>
+        </ul>
+
+      </div>
+    </li>
+
+    <li style='display:none'>
+      <div>
+
+        <p>Swipe exposes a few functions that can be useful for script control of your slider.</p>
+
+        <pre><code>prev() <em>// slide to prev</em>
+next() <em>// slide to next</em>
+getPos() <em>// returns current 
+          slide index position</em>
+slide(index, duration) 
+  <em>// slide to set index position
+  (duration: speed of transition 
+  in ms)</em></code></pre>
+
+        <br>
+        <h2>Requirements</h2>
+        <p>Swipe requires a device that supports CSS transforms and works best with devices that support touch. Both of these are not required for the code to run since Swipe does not include any feature detection in the core code. This decision was made due to the fact that all mobile web development should already have some sort of feature detection built into the page. I recommend using a custom build of <a href='http://modernizr.com' target='_blank'>Modernizr</a>, don't recreate the wheel.</p>
+
+        <p>Sample use with Modernizr:</p>
+        <pre><code>if ( Modernizr.csstransforms ) {
+  window.mySwipe = new Swipe(
+    document.getElementById('slider')
+  );
+}</pre></code>
+
+        <p>This is why I set all elements but the first list item to <span style='font-family:monospace;font-weight:bold;-webkit-font-smoothing: antialiased;'>display:none</span>– if the device doesn't pass the feature tests then it will fallback to displaying only the first item.</p>
+
+      </div>
+    </li>    
+
   </ul>
 </div>
 
+<p class='copy'>Swipe mobile slider is © 2011 <a href='http://twitter.com/bradbirdsall' target='_blank'>Brad Birdsall</a> and is licensed under the terms of GPL &amp; MIT licenses.</p>
 
-<h2>Full width</h2>
-
-<div id='slider3' class='swipe'>
-  <ul>
-    <li style='display:block'><div>1</div></li>
-    <li style='display:none'><div>2</div></li>
-    <li style='display:none'><div>3</div></li>
-    <li style='display:none'><div>4</div></li>
-    <li style='display:none'><div>5</div></li>
-  </ul>
-</div>
-
-<a href='#' onclick='slider3.prev();return false;'>prev</a> 
-<a href='#' onclick='slider3.next();return false;'>next</a>
-<br><br>
 
 
 <script src='https://raw.github.com/bradbirdsall/Swipe/master/swipe.js'></script>
 <script>
-new Swipe(document.getElementById('slider'));
-new Swipe(document.getElementById('slider2'));
-var slider3 = new Swipe(document.getElementById('slider3'));
-</script>
 
+// slider
+var slider = new Swipe(document.getElementById('slider')),
 
-<script>
+// tabs
+    tabs = new Swipe(document.getElementById('tabs'), {
+      callback: function(event,index,elem) {
+        setTab(selectors[index]);
+      }
+    }),
+    selectors = document.getElementById('tabSelector').children;
+
+for (var i = 0; i < selectors.length; i++) {
+  var elem = selectors[i];
+  elem.setAttribute('data-tab', i);
+  elem.onclick = function(e) {
+    e.preventDefault();
+    setTab(this);
+    tabs.slide(parseInt(this.getAttribute('data-tab'),10),300);
+  }
+}
+
+function setTab(elem) {
+  for (var i = 0; i < selectors.length; i++) {
+    selectors[i].className = selectors[i].className.replace('on',' ');
+  }
+  elem.className += ' on';
+}
+
+// analytics
 var _gauges=_gauges||[];(function(){var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.id="gauges-tracker",a.setAttribute("data-site-id","4ea59682f5a1f51fd7000002"),a.src="//secure.gaug.es/track.js";var b=document.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)})()
+
 </script>
 
-</body> 
-</html> 
+</body>
+</html>
