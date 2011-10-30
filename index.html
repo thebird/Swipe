@@ -197,9 +197,6 @@ function setTab(elem) {
   elem.className += ' on';
 }
 
-// analytics
-var _gauges=_gauges||[];(function(){var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.id="gauges-tracker",a.setAttribute("data-site-id","4ea59682f5a1f51fd7000002"),a.src="//secure.gaug.es/track.js";var b=document.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)})()
-
 // url bar hiding
 (function () {
   
@@ -213,6 +210,19 @@ var _gauges=_gauges||[];(function(){var a=document.createElement("script");a.typ
     }, false);
   }
 
+})();
+
+// analytics
+var _gauges = _gauges || [];
+(function() {
+  var t   = document.createElement('script');
+  t.type  = 'text/javascript';
+  t.async = true;
+  t.id    = 'gauges-tracker';
+  t.setAttribute('data-site-id', '4ea59682f5a1f51fd7000002');
+  t.src = '//secure.gaug.es/track.js';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(t, s);
 })();
 
 </script>
