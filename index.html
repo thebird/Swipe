@@ -198,15 +198,39 @@ function setTab(elem) {
 }
 
 // url bar hiding
-var ua = navigator.userAgent,
-    viewport = document.querySelector && document.querySelector('meta[name="viewport"]');
+(function() {
+    
+  var win = window,
+      doc = win.document;
 
-if (viewport && /iPhone|iPad/.test(ua) && !/Opera Mini/.test(ua)) {
-  viewport.content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
-  document.addEventListener("gesturestart", function() {
-    viewport.content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
-  }, false);
-}
+  // If there's a hash, or addEventListener is undefined, stop here
+  if ( !location.hash || !win.addEventListener ) {
+
+    //scroll to 1
+    window.scrollTo( 0, 1 );
+    var scrollTop = 1,
+
+    //reset to 0 on bodyready, if needed
+    bodycheck = setInterval(function(){
+      if( doc.body ){
+        clearInterval( bodycheck );
+        scrollTop = "scrollTop" in doc.body ? doc.body.scrollTop : 1;
+        win.scrollTo( 0, scrollTop === 1 ? 0 : 1 );
+      } 
+    }, 15 );
+
+    if (win.addEventListener) {
+      win.addEventListener("load", function(){
+        setTimeout(function(){
+          //reset to hide addr bar at onload
+          win.scrollTo( 0, scrollTop === 1 ? 0 : 1 );
+        }, 0);
+      }, false );
+    }
+  }
+
+})();
+
 
 // analytics
 var _gauges = _gauges || [];
