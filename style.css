@@ -9,6 +9,7 @@ table { margin:0; padding:0; clear:left; width:100%; border-collapse:collapse; b
 table td { vertical-align:top; margin:0; }
 html {
   height:100%;
+  background:#191D1F;
 }
 body {
   font:13px/1.4 sans-serif; 
@@ -18,6 +19,8 @@ body {
   -webkit-text-size-adjust: none;
   -ms-text-size-adjust: none;
   color:#3c3c3c;
+  max-width:480px;
+  background:#fff;
   font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
 }
 a {
@@ -79,6 +82,28 @@ header {
     height:35px;
     position:relative;
   }
+    #position {
+      text-align:center;
+      font-size:27px;
+      line-height:1.3;
+      color:#697279;
+      display:block;
+      position:absolute;
+      top:0;
+      left:50%;
+      margin-left:-75px;
+      width:150px;
+    }
+      #position em {
+        display:inline-block;
+        padding:0 3px;
+        font-style:normal;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.35);
+        font-family:sans-serif;
+      }
+      #position em.on {
+        color:#fff;
+      }
     #prev {
       border-right:1px #232628 solid;
       display:inline-block;
@@ -87,7 +112,6 @@ header {
       #prev em {
         display:block;
         border-right:1px #30373C solid;
-        color:#fff;
         padding:10px 13px 8px;
         font-style:normal;
         font-weight:bold;
@@ -95,6 +119,7 @@ header {
         text-transform:uppercase;
         color:#697279;
         letter-spacing:1px;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.35);
       }
     #next {
       border-left:1px #232628 solid;
@@ -107,7 +132,6 @@ header {
       #next em {
         display:block;
         border-left:1px #30373C solid;
-        color:#fff;
         padding:10px 13px 8px;
         font-style:normal;
         font-weight:bold;
@@ -115,6 +139,7 @@ header {
         text-transform:uppercase;
         color:#697279;
         letter-spacing:1px;
+        text-shadow: 0 -1px 0 rgba(0,0,0,.35);
       }
 
 
