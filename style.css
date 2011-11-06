@@ -249,3 +249,33 @@ p.copy {
   text-shadow:0 1px 0 #fff;
   border-top:1px #DADDE0 solid
 }
+
+
+
+.button {
+  -webkit-background-clip: padding-box;
+  border: solid 1px;
+  border-color: #CCC #C0C1C2 #BDBEC0;
+  -webkit-border-radius: 3px;
+  -webkit-box-sizing: border-box;
+  display: block;
+  font-weight: bold;
+  line-height: 26px;
+  overflow: hidden;
+  padding: 2px 8px;
+  margin:0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  background: -webkit-gradient( linear, left top, left bottom, from(#FDFEFE), to(#F0F1F2) );
+  -webkit-box-shadow: inset 0 1px 0 #fff;
+  font-size:13px;
+  color:#6A6F71;
+  text-decoration:none;
+  text-align:center;
+}
+.button:hover {
+  background: -webkit-gradient( linear, left top, left bottom, from(#EDEEEE), to(#E4E5E6) );
+  border-color: #B0ADAE #BFBDBD #C7C8CA;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .15), 0 1px 0 #fff;
+}
