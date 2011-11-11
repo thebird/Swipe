@@ -187,9 +187,6 @@ Swipe.prototype = {
   },
 
   onTouchMove: function(e) {
-    
-    // ensure swiping with one touch and not pinching
-    if(e.touches.length > 1 || e.scale !== 1) return;
 
     this.deltaX = e.touches[0].pageX - this.start.pageX;
 
