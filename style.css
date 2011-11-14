@@ -279,3 +279,13 @@ p.copy {
   border-color: #B0ADAE #BFBDBD #C7C8CA;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .15), 0 1px 0 #fff;
 }
+
+
+.twitter {
+  text-align:center;
+  margin-top:20px;
+  margin-bottom:0;
+}
+.twitter .twitter-follow-button {
+  width:150px;
+}
