@@ -35,14 +35,16 @@ window.Swipe = function(element, options) {
   this.start();
 
   // add event listeners
-  this.element.addEventListener('touchstart', this, false);
-  this.element.addEventListener('touchmove', this, false);
-  this.element.addEventListener('touchend', this, false);
-  this.element.addEventListener('webkitTransitionEnd', this, false);
-  this.element.addEventListener('msTransitionEnd', this, false);
-  this.element.addEventListener('oTransitionEnd', this, false);
-  this.element.addEventListener('transitionend', this, false);
-  window.addEventListener('resize', this, false);
+  if (this.element.addEventListener) {
+    this.element.addEventListener('touchstart', this, false);
+    this.element.addEventListener('touchmove', this, false);
+    this.element.addEventListener('touchend', this, false);
+    this.element.addEventListener('webkitTransitionEnd', this, false);
+    this.element.addEventListener('msTransitionEnd', this, false);
+    this.element.addEventListener('oTransitionEnd', this, false);
+    this.element.addEventListener('transitionend', this, false);
+    window.addEventListener('resize', this, false);
+  }
 
 };
 
@@ -57,11 +59,14 @@ Swipe.prototype = {
     // return immediately if their are less than two slides
     if (this.length < 2) return null;
 
-    // hide slider element but keep positioning during setup
-    this.container.style.visibility = 'hidden';
-
     // determine width of each slide
     this.width = this.container.getBoundingClientRect().width;
+
+    // return immediately if measurement fails
+    if (!this.width) return null;
+
+    // hide slider element but keep positioning during setup
+    this.container.style.visibility = 'hidden';
 
     // dynamic css
     this.element.style.width = (this.slides.length * this.width) + 'px';
