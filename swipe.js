@@ -31,8 +31,8 @@ window.Swipe = function(element, options) {
   // trigger slider initialization
   this.setup();
 
-  // setup auto slideshow
-  this.start();
+  // begin auto slideshow
+  this.begin();
 
   // add event listeners
   if (this.element.addEventListener) {
@@ -131,7 +131,7 @@ Swipe.prototype = {
 
   },
 
-  start: function() {
+  begin: function() {
 
     var _this = this;
 
@@ -158,8 +158,8 @@ Swipe.prototype = {
 
   transitionEnd: function(e) {
     
-    if (this.delay) this.start();
-    
+    if (this.delay) this.begin();
+
     this.callback(e, this.index, this.slides[this.index]);
 
   },
