@@ -165,9 +165,6 @@ Swipe.prototype = {
   },
 
   onTouchStart: function(e) {
-
-    // cancel slideshow
-    clearTimeout(this.interval);
     
     this.start = {
 
@@ -208,6 +205,9 @@ Swipe.prototype = {
 
       // prevent native scrolling 
       e.preventDefault();
+
+      // cancel slideshow
+      clearTimeout(this.interval);
 
       // increase resistance if first or last slide
       this.deltaX = 
