@@ -142,6 +142,11 @@ Swipe.prototype = {
       : 0;
   
   },
+  
+  stop: function() {
+    this.delay = 0;
+    clearTimeout(this.interval);
+  },
 
   handleEvent: function(e) {
     switch (e.type) {
