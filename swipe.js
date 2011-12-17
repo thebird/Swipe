@@ -111,7 +111,7 @@ Swipe.prototype = {
 
   prev: function(delay) {
 
-    // cancel slideshow
+    // cancel next scheduled automatic transition, if any
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
@@ -122,7 +122,7 @@ Swipe.prototype = {
 
   next: function(delay) {
 
-    // cancel slideshow
+    // cancel next scheduled automatic transition, if any
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
@@ -141,6 +141,16 @@ Swipe.prototype = {
       }, this.delay)
       : 0;
   
+  },
+  
+  stop: function() {
+    this.delay = 0;
+    clearTimeout(this.interval);
+  },
+  
+  resume: function() {
+    this.delay = this.options.auto || 0;
+    this.begin();
   },
 
   handleEvent: function(e) {
