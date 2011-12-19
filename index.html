@@ -8,71 +8,48 @@
 
 <h1>Swipe</h1>
 
-<h2>150px wide</h2>
-
-<div id='slider' class='swipe' style='width:150px'>
-  <ul>
-    <li style='display:block'><div>1</div></li>
-    <li style='display:none'><div>2</div></li>
-    <li style='display:none'><div>3</div></li>
-    <li style='display:none'><div>4</div></li>
-    <li style='display:none'><div>5</div></li>
-  </ul>
+<div id='swipe' style='max-width:320px; margin:0 auto'>
+  <div><b>1</b></div>
+  <div><b>2</b></div>
+  <div><b>3</b></div>
+  <div><b>4</b></div>
+  <div><b>5</b></div>
+  <div><b>6</b></div>
+  <div><b>7</b></div>
+  <div><b>8</b></div>
+  <div><b>9</b></div>
+  <div><b>10</b></div>
+  <div><b>11</b></div>
+  <div><b>12</b></div>
+  <div><b>13</b></div>
+  <div><b>14</b></div>
+  <div><b>15</b></div>
+  <div><b>16</b></div>
+  <div><b>17</b></div>
+  <div><b>18</b></div>
+  <div><b>19</b></div>
+  <div><b>20</b></div>
 </div>
 
 
-<h2>250px wide</h2>
-
-<div id='slider2' class='swipe' style='width:250px'>
-  <ul>
-    <li style='display:block'><div>1</div></li>
-    <li style='display:none'><div>2</div></li>
-    <li style='display:none'><div>3</div></li>
-    <li style='display:none'><div>4</div></li>
-    <li style='display:none'><div>5</div></li>
-  </ul>
-</div>
+<!-- <a href='#' onclick='mySwipe.prev();return false;'>prev</a> 
+<a href='#' onclick='mySwipe.next();return false;'>next</a> -->
 
 
-<h2>Full width</h2>
 
-<div id='slider3' class='swipe'>
-  <ul>
-    <li style='display:block'><div>1</div></li>
-    <li style='display:none'><div>2</div></li>
-    <li style='display:none'><div>3</div></li>
-    <li style='display:none'><div>4</div></li>
-    <li style='display:none'><div>5</div></li>
-  </ul>
-</div>
+<button onclick='mySwipe.element.style.overflow="hidden"'>Hide the overflow</button>
 
-<a href='#' onclick='slider3.prev();return false;'>prev</a> 
-<a href='#' onclick='slider3.next();return false;'>next</a>
-<br><br>
 
-<h2>Arbitrary Elements</h2>
 
-<div id='slider4' class='swipe'>
-  <div>
-    <div style='display:block'><div>1</div></div>
-    <div style='display:none'><div>2</div></div>
-    <div style='display:none'><div>3</div></div>
-    <div style='display:none'><div>4</div></div>
-    <div style='display:none'><div>5</div></div>
-  </div>
-</div>
 
-<a href='#' onclick='slider4.prev();return false;'>prev</a> 
-<a href='#' onclick='slider4.next();return false;'>next</a>
-<br><br>
+<div id='console'></div>
+
+
 
 
 <script src='swipe.js'></script>
 <script>
-new Swipe(document.getElementById('slider'));
-new Swipe(document.getElementById('slider2'));
-var slider3 = new Swipe(document.getElementById('slider3'));
-var slider4 = new Swipe(document.getElementById('slider4'));
+var mySwipe = new Swipe(document.getElementById('swipe'));
 </script>
 
 </body> 

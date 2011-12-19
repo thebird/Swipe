@@ -33,15 +33,20 @@ a {
   font-size:12px;
   color:#3c3c3c;
 }
-.swipe {
+#swipe {
   padding-bottom:20px;
 }
-.swipe li div, .swipe div div div {
-  margin:0 10px;
-  padding:50px 10px;
+#swipe div {
+  overflow:hidden;
+}
+#swipe div b {
   background:#1db1ff;
+  display:block;
   font-weight:bold;
   color:#fff;
   font-size:20px;
   text-align:center;
+  padding:100px 10px;
+  margin:10px;
+  border-radius:3px;
 }
