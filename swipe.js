@@ -78,23 +78,22 @@ Swipe.prototype = {
       if (!index) { // if first element
 
         style.position = 'relative';
-        style.webkitTransform = 'translate3d(0,0,0)';
-        this.cache[index] = 0;
+        this._slide([index],0,0,1);
 
       } else {
 
         style.position = 'absolute';
         style.top = '0';
-        style.webkitTransform = 'translate3d(' + this.width + 'px,0,0)';
-        this.cache[index] = this.width;
+        this._slide([index],this.width,0,1);
 
       }
 
     }
 
-
     // show slider element
     this.element.style.visibility = 'visible';
+
+    
 
   },
 
