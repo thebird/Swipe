@@ -6,9 +6,10 @@
 </head>
 <body>
 
-<h1>Swipe</h1>
+<h1><br>Swipe</h1>
 
 <div id='swipe' style='max-width:320px; margin:0 auto'>
+  <div><b>0</b></div>
   <div><b>1</b></div>
   <div><b>2</b></div>
   <div><b>3</b></div>
@@ -32,25 +33,35 @@
 </div>
 
 
-<!-- <a href='#' onclick='mySwipe.prev();return false;'>prev</a> 
-<a href='#' onclick='mySwipe.next();return false;'>next</a> -->
 
+<div style='text-align:center'>
+  
+  <button onclick='mySwipe.prev()'>prev</button> 
+  <button onclick='mySwipe.next()'>next</button>
+  <button id='hide'>hide overflow</button>
 
+  <div id='console'></div>
 
-<button onclick='mySwipe.element.style.overflow="hidden"'>Hide the overflow</button>
+</div>
 
-
-
-
-<div id='console'></div>
 
 
 
 
 <script src='swipe.js'></script>
 <script>
-var mySwipe = new Swipe(document.getElementById('swipe'));
-</script>
 
-</body> 
-</html> 
+var mySwipe = new Swipe(document.getElementById('swipe'));
+
+document.getElementById('hide').onclick = function() {
+  var button = mySwipe.element, overflow = button.style.overflow;
+  if (overflow == 'hidden') {
+    button.style.overflow = 'visible';
+    this.innerHTML = 'hide overflow';
+  } else {
+    button.style.overflow = 'hidden';
+    this.innerHTML = 'show overflow';
+  }
+}
+
+</script>
