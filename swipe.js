@@ -1,5 +1,5 @@
 /*
- * Swipe 1.0
+ * Swipe 2.0
  *
  * Brad Birdsall, Prime
  * Copyright 2011, Licensed GPL & MIT
