@@ -156,59 +156,6 @@ Swipe.prototype = {
     }
   },
 
-  transitionEnd: function(e) {
-    
-    if (this.delay) this.begin();
-
-    this.callback(e, this.index, this.slides[this.index]);
-
-  },
-
-  slide: function(to, speed) {
-    
-    var from = this.index;
-
-    if (from == to) return; // do nothing if already on requested slide
-
-    var toStack = Math.abs(from-to) - 1,
-        direction = Math.abs(from-to) / (from-to), // 1:right -1:left
-        inBetween = [];
-
-    while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
-
-    // stack em
-    this._slide(inBetween,this.width * direction,0,1);
-
-    // now slide from and to in the proper direction
-    this._slide([from,to],this.width * direction,this.speed,0);
-
-    this.index = to;
-
-  },
-
-  _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
-    
-    var _slides = this.slides,
-        l = nums.length;
-
-    while(l--) {
-
-      var elem = _slides[nums[l]];
-
-      if (elem) { // if the element at slide number exists
-
-        elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
-        elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
-
-        if (_setting == 1) this.cache[nums[l]] = dist;
-        else if (_setting == 0) this.cache[nums[l]] += dist;
-
-      }
-
-    }
-
-  },
-
   onTouchStart: function(e) {
     
     this.start = {
@@ -302,7 +249,60 @@ Swipe.prototype = {
 
     }
 
-  }
+  },
+
+  slide: function(to, speed) {
+    
+    var from = this.index;
+
+    if (from == to) return; // do nothing if already on requested slide
+
+    var toStack = Math.abs(from-to) - 1,
+        direction = Math.abs(from-to) / (from-to), // 1:right -1:left
+        inBetween = [];
+
+    while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
+
+    // stack em
+    this._slide(inBetween,this.width * direction,0,1);
+
+    // now slide from and to in the proper direction
+    this._slide([from,to],this.width * direction,this.speed,0);
+
+    this.index = to;
+
+  },
+
+  _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
+    
+    var _slides = this.slides,
+        l = nums.length;
+
+    while(l--) {
+
+      var elem = _slides[nums[l]];
+
+      if (elem) { // if the element at slide number exists
+
+        elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
+        elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
+
+        if (_setting == 1) this.cache[nums[l]] = dist;
+        else if (_setting == 0) this.cache[nums[l]] += dist;
+
+      }
+
+    }
+
+  },  
+
+  transitionEnd: function(e) {
+    
+    if (this.delay) this.begin();
+
+    this.callback(e, this.index, this.slides[this.index]);
+
+  }  
 
 };
 
