@@ -11,15 +11,16 @@ window.Swipe = function(element, options) {
   // return immediately if element doesn't exist
   if (!element) return null;
 
+  // reference dom elements
+  this.element = element;
+
   // retreive options
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
-
-  // reference dom elements
-  this.element = element;
+  this.cache = new Array(length);
 
   // static css
   //this.element.style.overflow = 'hidden';
@@ -53,7 +54,6 @@ Swipe.prototype = {
     // get and measure amt of slides
     this.slides = this.element.children;
     this.length = this.slides.length;
-    this.cache = new Array(length);
 
     // return immediately if their are less than two slides
     if (this.length < 2) return null;
@@ -67,33 +67,38 @@ Swipe.prototype = {
     // hide slider element but keep positioning during setup
     this.element.style.visibility = 'hidden';
 
+    // create variable to find tallest slide
+    var tempHeight = 0,
+        refArray = [[],[],[]]; // determine slides before, current, and after
 
     // stack elements
     for (var index = this.length - 1; index > -1; index--) {
 
-      var style = this.slides[index].style;
+      var elem = this.slides[index],
+          height = elem.getBoundingClientRect().height;
 
-      style.width = this.width + 'px';
+      elem.style.width = this.width + 'px';
+      elem.style.position = 'absolute';
+      elem.style.top = '0';
 
-      if (!index) { // if first element
+      // replace tempHeight if this slides height is greater
+      tempHeight = tempHeight < height ? height : tempHeight;
 
-        style.position = 'relative';
-        this._slide([index],0,0,1);
-
-      } else {
-
-        style.position = 'absolute';
-        style.top = '0';
-        this._slide([index],this.width,0,1);
-
-      }
+      // add this index to the reference array
+      refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index); // 0:before 1:equal 2:after
 
     }
 
+    // set height of container based on tallest slide (required with absolute positioning)
+    this.element.style.height = tempHeight + 'px';
+
+    // stack left, current, and right slides
+    this._slide(refArray[0],-this.width,0,1);
+    this._slide(refArray[1],0,0,1);
+    this._slide(refArray[2],this.width,0,1);
+
     // show slider element
     this.element.style.visibility = 'visible';
-
-    
 
   },
 
