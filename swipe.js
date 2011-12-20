@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
+  this.onTransitionEnd = this.options.onTransitionEnd || function() {};
   this.delay = this.options.auto || 0;
   this.cache = new Array(length);
 
@@ -243,6 +244,7 @@ Swipe.prototype = {
           this._slide([this.index-1,this.index],this.width,this.speed,0);
           this.index += -1;
         }
+        this.callback(this.index, this.slides[this.index]);
       } else {
         this._slide([this.index-1,this.index,this.index+1],0,this.speed,0);
       }
@@ -300,7 +302,7 @@ Swipe.prototype = {
     
     if (this.delay) this.begin();
 
-    this.callback(e, this.index, this.slides[this.index]);
+    this.onTransitionEnd(e, this.index, this.slides[this.index]);
 
   }  
 
