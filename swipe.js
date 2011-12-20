@@ -102,11 +102,112 @@ Swipe.prototype = {
 
   },
 
+  getPos: function() {
+    
+    // return current index position
+    return this.index;
 
+  },
 
+  prev: function(delay) {
 
+    // cancel slideshow
+    this.delay = delay || 0;
+    clearTimeout(this.interval);
 
+    // if not at first slide
+    if (this.index) this.slide(this.index-1, this.speed);
 
+  },
+
+  next: function(delay) {
+
+    // cancel slideshow
+    this.delay = delay || 0;
+    clearTimeout(this.interval);
+
+    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
+    else this.slide(0, this.speed); //if last slide return to start
+
+  },
+
+  begin: function() {
+
+    var _this = this;
+
+    this.interval = (this.delay)
+      ? setTimeout(function() { 
+        _this.next(_this.delay);
+      }, this.delay)
+      : 0;
+  
+  },
+
+  handleEvent: function(e) {
+    switch (e.type) {
+      case 'touchstart': this.onTouchStart(e); break;
+      case 'touchmove': this.onTouchMove(e); break;
+      case 'touchend': this.onTouchEnd(e); break;
+      case 'webkitTransitionEnd':
+      case 'msTransitionEnd':
+      case 'oTransitionEnd':
+      case 'transitionend': this.transitionEnd(e); break;
+      case 'resize': this.setup(); break;
+    }
+  },
+
+  transitionEnd: function(e) {
+    
+    if (this.delay) this.begin();
+
+    this.callback(e, this.index, this.slides[this.index]);
+
+  },
+
+  slide: function(to, speed) {
+    
+    var from = this.index;
+
+    if (from == to) return; // do nothing if already on requested slide
+
+    var toStack = Math.abs(from-to) - 1,
+        direction = Math.abs(from-to) / (from-to), // 1:right -1:left
+        inBetween = [];
+
+    while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
+
+    // stack em
+    this._slide(inBetween,this.width * direction,0,1);
+
+    // now slide from and to in the proper direction
+    this._slide([from,to],this.width * direction,this.speed,0);
+
+    this.index = to;
+
+  },
+
+  _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
+    
+    var _slides = this.slides,
+        l = nums.length;
+
+    while(l--) {
+
+      var elem = _slides[nums[l]];
+
+      if (elem) { // if the element at slide number exists
+
+        elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
+        elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
+
+        if (_setting == 1) this.cache[nums[l]] = dist;
+        else if (_setting == 0) this.cache[nums[l]] += dist;
+
+      }
+
+    }
+
+  },
 
   onTouchStart: function(e) {
     
@@ -178,157 +279,25 @@ Swipe.prototype = {
     // determine if slide attempt is past start and end
         isPastBounds = 
           !this.index && this.deltaX > 0                          // if first slide and slide amt is greater than 0
-          || this.index == this.length - 1 && this.deltaX < 0;    // or if last slide and slide amt is less than 0
+          || this.index == this.length - 1 && this.deltaX < 0,    // or if last slide and slide amt is less than 0
+        
+        direction = this.deltaX < 0; // true:right false:left
 
     // if not scrolling vertically
     if (!this.isScrolling) {
 
-      // call slide function with slide end value based on isValidSlide and isPastBounds tests
-      this.oldSlide( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? -this.width : this.width) : 0, this.speed );
-
-    }
-
-  },
-
-  oldSlide: function(amt, duration, isTemp) {
-
-    for(var i = -1; i < 2; i++) {
-
-      var index = this.index + i,
-          el = this.slides[index],
-          delta = this.cache[index] + amt;
-      
-      if (el) {
-
-        if (!isTemp) { // if not temporary sliding
-          this.cache[index] += amt;
-          if (this.cache[index] < 0) this.cache[index] = -this.width;
-          else if (this.cache[index] > this.width) this.cache[index] = this.width;
-          delta = this.cache[index];
+      if (isValidSlide && !isPastBounds) {
+        if (direction) {
+          this._slide([this.index-1],-this.width,0,1);
+          this._slide([this.index,this.index+1],-this.width,this.speed,0);
+          this.index += 1;
+        } else {
+          this._slide([this.index+1],this.width,0,1);
+          this._slide([this.index-1,this.index],this.width,this.speed,0);
+          this.index += -1;
         }
-
-        el.style.webkitTransitionDuration = duration + 'ms';
-        el.style.webkitTransform = 'translate3d(' + delta + 'px,0,0)';
-
-      }
-
-    }
-
-    if (!isTemp) this.index -= this.cache[this.index]/this.width;
-
-  },
-
-
-
-
-
-
-
-
-  getPos: function() {
-    
-    // return current index position
-    return this.index;
-
-  },
-
-  prev: function(delay) {
-
-    // cancel slideshow
-    this.delay = delay || 0;
-    clearTimeout(this.interval);
-
-    // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
-
-  },
-
-  next: function(delay) {
-
-    // cancel slideshow
-    this.delay = delay || 0;
-    clearTimeout(this.interval);
-
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
-
-  },
-
-  begin: function() {
-
-    var _this = this;
-
-    this.interval = (this.delay)
-      ? setTimeout(function() { 
-        _this.next(_this.delay);
-      }, this.delay)
-      : 0;
-  
-  },
-
-  handleEvent: function(e) {
-    switch (e.type) {
-      case 'touchstart': this.onTouchStart(e); break;
-      case 'touchmove': this.onTouchMove(e); break;
-      case 'touchend': this.onTouchEnd(e); break;
-      case 'webkitTransitionEnd':
-      case 'msTransitionEnd':
-      case 'oTransitionEnd':
-      case 'transitionend': this.transitionEnd(e); break;
-      case 'resize': this.setup(); break;
-    }
-  },
-
-  transitionEnd: function(e) {
-    
-    if (this.delay) this.begin();
-
-    this.callback(e, this.index, this.slides[this.index]);
-
-  },
-
-
-
-
-  slide: function(to, speed) {
-    
-    var from = this.index;
-
-    if (from == to) return; // do nothing if already on requested slide
-
-    var toStack = Math.abs(from-to) - 1,
-        direction = Math.abs(from-to) / (from-to), // 1:right -1:left
-        inBetween = [];
-
-    while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
-
-    // stack em
-    this._slide(inBetween,this.width * direction,0,1);
-
-    // now slide from and to in the proper direction
-    this._slide([from,to],this.width * direction,this.speed,0);
-
-    this.index = to;
-
-  },
-
-  _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
-    
-    var _slides = this.slides,
-        l = nums.length;
-
-    while(l--) {
-
-      var elem = _slides[nums[l]];
-
-      if (elem) { // if the element at slide number exists
-
-        elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
-        elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
-
-        if (_setting == 1) this.cache[nums[l]] = dist;
-        else if (_setting == 0) this.cache[nums[l]] += dist;
-
+      } else {
+        this._slide([this.index-1,this.index,this.index+1],0,this.speed,0);
       }
 
     }
