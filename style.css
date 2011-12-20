@@ -45,3 +45,11 @@ a {
   font-size:20px;
   text-align:center;
 }
+.slider_control {
+  background-color: #ddd;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 100px;
+}

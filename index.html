@@ -1,7 +1,7 @@
-<!DOCTYPE HTML> 
+<!DOCTYPE HTML>
 <html>
 <head>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
 <link href='style.css' rel='stylesheet'/>
 </head>
 <body>
@@ -46,8 +46,8 @@
   </ul>
 </div>
 
-<a href='#' onclick='slider3.prev();return false;'>prev</a> 
-<a href='#' onclick='slider3.next();return false;'>next</a>
+<a href='#' id="slider3_prev" class="slider_control">prev</a>
+<a href='#' id="slider3_next" class="slider_control">next</a>
 <br><br>
 
 <h2>Arbitrary Elements</h2>
@@ -62,18 +62,52 @@
   </div>
 </div>
 
-<a href='#' onclick='slider4.prev();return false;'>prev</a> 
-<a href='#' onclick='slider4.next();return false;'>next</a>
+<a href='#' id="slider4_prev" class="slider_control">prev</a>
+<a href='#' id="slider4_next" class="slider_control">next</a>
 <br><br>
 
 
 <script src='swipe.js'></script>
 <script>
+
+function is_Touch_Supported( eventName ) {
+  var el = document.createElement('a');
+  eventName = 'on' + eventName;
+  var isSupported = (eventName in el);
+  if (!isSupported) {
+    el.setAttribute(eventName, 'return;');
+    isSupported = typeof el[eventName] == 'function';
+  }
+  el = null;
+  return isSupported;
+}
+
 new Swipe(document.getElementById('slider'));
 new Swipe(document.getElementById('slider2'));
 var slider3 = new Swipe(document.getElementById('slider3'));
 var slider4 = new Swipe(document.getElementById('slider4'));
+
+// bind slider navigation events
+// define event type
+var event_type = (is_Touch_Supported('touchstart')) ? 'touchstart' : 'click',
+    control_elements = document.getElementsByClassName('slider_control'),
+    control_elements_length = control_elements.length;
+
+for( var i = 0; i < control_elements_length; i++ ) {
+  control_elements[i].addEventListener(event_type, function( event ) {
+    // get the event target
+    var target_id = event.target.id,
+        slider_id = target_id.split( '_' )[0], // get from anchor id
+        direction = target_id.split( '_' )[1]; // get from anchor id
+
+    window[slider_id][direction]()
+    event.preventDefault();
+  });
+
+};
+
+
 </script>
 
-</body> 
-</html> 
+</body>
+</html>
