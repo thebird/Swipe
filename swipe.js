@@ -65,7 +65,7 @@ Swipe.prototype = {
     if (this.length < 2) return null;
 
     // determine width of each slide
-    this.width = this.element.getBoundingClientRect().width;
+    this.width = this.element.getBoundingClientRect().width || this.element.offsetWidth;
 
     // return immediately if measurement fails
     if (!this.width) return null;
@@ -81,12 +81,12 @@ Swipe.prototype = {
     for (var index = this.length - 1; index > -1; index--) {
 
       var elem = this.slides[index],
-          height = elem.getBoundingClientRect().height;
+          height = elem.getBoundingClientRect().height || elem.offsetHeight;
 
       elem.style.width = this.width + 'px';
       elem.style.position = 'absolute';
-      elem.style.top = '0';
-      elem.style.left = '0';
+      elem.style.top = '0px';
+      elem.style.left = '0px';
 
       // replace tempHeight if this slides height is greater
       tempHeight = tempHeight < height ? height : tempHeight;
@@ -98,6 +98,8 @@ Swipe.prototype = {
 
     // set height of container based on tallest slide (required with absolute positioning)
     this.element.style.height = tempHeight + 'px';
+
+
 
     // stack left, current, and right slides
     this._slide(refArray[0],-this.width,0,1);
