@@ -14,6 +14,10 @@ window.Swipe = function(element, options) {
   // reference dom elements
   this.element = element;
 
+  // feature detection (hopefully)
+  this.hasTouchFake = true;
+  this.hasTransitionsFake = false;
+
   // retreive options
   this.options = options || {};
   this.index = this.options.startSlide || 0;
@@ -21,6 +25,7 @@ window.Swipe = function(element, options) {
   this.callback = this.options.callback || function() {};
   this.onTransitionEnd = this.options.onTransitionEnd || function() {};
   this.delay = this.options.auto || 0;
+  this.cont = this.options.continuous || true;
   this.cache = new Array(length);
 
   // static css
@@ -81,6 +86,7 @@ Swipe.prototype = {
       elem.style.width = this.width + 'px';
       elem.style.position = 'absolute';
       elem.style.top = '0';
+      elem.style.left = '0';
 
       // replace tempHeight if this slides height is greater
       tempHeight = tempHeight < height ? height : tempHeight;
@@ -118,6 +124,7 @@ Swipe.prototype = {
 
     // if not at first slide
     if (this.index) this.slide(this.index-1, this.speed);
+    else if (this.cont) this.slide(this.length-1, this.speed);
 
   },
 
@@ -128,7 +135,7 @@ Swipe.prototype = {
     clearTimeout(this.interval);
 
     if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
+    else if (this.cont) this.slide(0, this.speed); //if last slide return to start
 
   },
 
@@ -286,8 +293,12 @@ Swipe.prototype = {
 
       if (elem) { // if the element at slide number exists
 
-        elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
-        elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
+        if (this.hasTransitionsFake) {
+          elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
+          elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
+        } else {
+          this._animate(elem, this.cache[nums[l]], dist + ( _setting != 1 ? this.cache[nums[l]] : 0), speed ? speed : 0);
+        }
 
         if (_setting == 1) this.cache[nums[l]] = dist;
         else if (_setting == 0) this.cache[nums[l]] += dist;
@@ -296,7 +307,39 @@ Swipe.prototype = {
 
     }
 
-  },  
+  },
+
+  _animate: function(elem, from, to, speed) {
+
+
+    if (!speed) { // if not an animation, just reposition
+      
+      elem.style.left = to + 'px';
+
+      return;
+
+    }
+    
+    var start = new Date(),
+        timer = setInterval(function() {
+
+          var timeElap = new Date() - start;
+
+          if (timeElap > speed) {
+
+            elem.style.left = to + 'px';  // callback after this line
+            
+            clearInterval(timer);
+
+            return;
+
+          }
+
+          elem.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px'; 
+
+        }, 4);
+
+  },
 
   transitionEnd: function(e) {
     
@@ -307,4 +350,3 @@ Swipe.prototype = {
   }  
 
 };
-
