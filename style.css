@@ -10,6 +10,7 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, del, dfn, em, 
 body {
   -webkit-text-size-adjust:none;
   font-family:sans-serif;
+  min-height:416px;
 }
 h1 {
   font-size:36px;
