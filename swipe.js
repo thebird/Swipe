@@ -15,18 +15,18 @@ window.Swipe = function(element, options) {
   this.element = element;
 
   // feature detection
-  this.hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-  this.hasTransitions = function() {
-    
-    var temp = document.createElement('swipe'),
-        props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
-
-    for ( var i in props ) {
-      if (temp.style[ props[i] ] !== undefined) return true;
+  this.browser = {
+    touch: function() {
+      return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+    },
+    transitions: function() {
+      var temp = document.createElement('swipe'),
+          props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
+      for ( var i in props ) {
+        if (temp.style[ props[i] ] !== undefined) return true;
+      }
+      return false;
     }
-
-    return false;
-  
   };
 
   // retreive options
@@ -51,7 +51,7 @@ window.Swipe = function(element, options) {
 
   // add event listeners
   if (this.element.addEventListener) {
-    if (!!this.hasTouch) {
+    if (!!this.browser.touch) {
       this.element.addEventListener('touchstart', this, false);
       this.element.addEventListener('touchmove', this, false);
       this.element.addEventListener('touchend', this, false);
@@ -309,7 +309,7 @@ Swipe.prototype = {
 
       if (elem) { // if the element at slide number exists
 
-        if (this.hasTransitions) {
+        if (this.browser.transitions) {
           elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
           elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
         } else {
