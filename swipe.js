@@ -87,6 +87,7 @@ Swipe.prototype = {
       elem.style.position = 'absolute';
       elem.style.top = '0px';
       elem.style.left = '0px';
+      elem.setAttribute('data-index', index);
 
       // replace tempHeight if this slides height is greater
       tempHeight = tempHeight < height ? height : tempHeight;
@@ -98,8 +99,6 @@ Swipe.prototype = {
 
     // set height of container based on tallest slide (required with absolute positioning)
     this.element.style.height = tempHeight + 'px';
-
-
 
     // stack left, current, and right slides
     this._slide(refArray[0],-this.width,0,1);
@@ -282,6 +281,8 @@ Swipe.prototype = {
 
     this.index = to;
 
+    this.callback(this.index, this.slides[this.index]);
+
   },
 
   _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
@@ -322,7 +323,8 @@ Swipe.prototype = {
 
     }
     
-    var start = new Date(),
+    var _this = this,
+        start = new Date(),
         timer = setInterval(function() {
 
           var timeElap = new Date() - start;
@@ -330,25 +332,43 @@ Swipe.prototype = {
           if (timeElap > speed) {
 
             elem.style.left = to + 'px';  // callback after this line
+
+            if (_this._getElemIndex(elem) == _this.index) { // only call transition end on the main slide item
+
+              if (_this.delay) _this.begin();
             
+              _this.onTransitionEnd(_this.index, _this.slides[_this.index]);
+
+            }
+
             clearInterval(timer);
 
             return;
 
           }
 
-          elem.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px'; 
+          elem.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px';
 
         }, 4);
 
   },
 
-  transitionEnd: function(e) {
+  _getElemIndex : function(elem) {
     
-    if (this.delay) this.begin();
+    return parseInt(elem.getAttribute('data-index'),10);
 
-    this.onTransitionEnd(e, this.index, this.slides[this.index]);
+  },
 
-  }  
+  transitionEnd: function(e) {
+
+    if (this._getElemIndex(e.target) == this.index) { // only call transition end on the main slide item
+
+      if (this.delay) this.begin();
+
+      this.onTransitionEnd(this.index, this.slides[this.index]);
+
+    }
+
+  }
 
 };
