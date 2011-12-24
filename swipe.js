@@ -34,7 +34,7 @@ window.Swipe = function(element, options) {
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
-  this.onTransitionEnd = this.options.onTransitionEnd || function() {};
+  this.transitionEnd = this.options.transitionEnd || function() {};
   this.delay = this.options.auto || 0;
   this.cont = this.options.continuous || true;
 
@@ -173,7 +173,7 @@ Swipe.prototype = {
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
       case 'oTransitionEnd':
-      case 'transitionend': this.transitionEnd(e); break;
+      case 'transitionend': this.onTransitionEnd(e); break;
       case 'resize': this.setup(); break;
     }
   },
@@ -274,6 +274,18 @@ Swipe.prototype = {
 
   },
 
+  onTransitionEnd: function(e) {
+
+    if (this._getElemIndex(e.target) == this.index) { // only call transition end on the main slide item
+
+      if (this.delay) this.begin();
+
+      this.transitionEnd(this.index, this.slides[this.index]);
+
+    }
+
+  },
+
   slide: function(to, speed) {
     
     var from = this.index;
@@ -350,7 +362,7 @@ Swipe.prototype = {
 
               if (_this.delay) _this.begin();
             
-              _this.onTransitionEnd(_this.index, _this.slides[_this.index]);
+              _this.transitionEnd(_this.index, _this.slides[_this.index]);
 
             }
 
@@ -369,18 +381,6 @@ Swipe.prototype = {
   _getElemIndex : function(elem) {
     
     return parseInt(elem.getAttribute('data-index'),10);
-
-  },
-
-  transitionEnd: function(e) {
-
-    if (this._getElemIndex(e.target) == this.index) { // only call transition end on the main slide item
-
-      if (this.delay) this.begin();
-
-      this.onTransitionEnd(this.index, this.slides[this.index]);
-
-    }
 
   }
 
