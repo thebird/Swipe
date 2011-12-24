@@ -14,9 +14,20 @@ window.Swipe = function(element, options) {
   // reference dom elements
   this.element = element;
 
-  // feature detection (hopefully)
-  this.hasTouchFake = true;
-  this.hasTransitionsFake = false;
+  // feature detection
+  this.hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+  this.hasTransitions = function() {
+    
+    var temp = document.createElement('swipe'),
+        props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
+
+    for ( var i in props ) {
+      if (temp.style[ props[i] ] !== undefined) return true;
+    }
+
+    return false;
+  
+  };
 
   // retreive options
   this.options = options || {};
@@ -26,7 +37,6 @@ window.Swipe = function(element, options) {
   this.onTransitionEnd = this.options.onTransitionEnd || function() {};
   this.delay = this.options.auto || 0;
   this.cont = this.options.continuous || true;
-  this.cache = new Array(length);
 
   // static css
   //this.element.style.overflow = 'hidden';
@@ -41,9 +51,11 @@ window.Swipe = function(element, options) {
 
   // add event listeners
   if (this.element.addEventListener) {
-    this.element.addEventListener('touchstart', this, false);
-    this.element.addEventListener('touchmove', this, false);
-    this.element.addEventListener('touchend', this, false);
+    if (!!this.hasTouch) {
+      this.element.addEventListener('touchstart', this, false);
+      this.element.addEventListener('touchmove', this, false);
+      this.element.addEventListener('touchend', this, false);
+    }
     this.element.addEventListener('webkitTransitionEnd', this, false);
     this.element.addEventListener('msTransitionEnd', this, false);
     this.element.addEventListener('oTransitionEnd', this, false);
@@ -60,6 +72,7 @@ Swipe.prototype = {
     // get and measure amt of slides
     this.slides = this.element.children;
     this.length = this.slides.length;
+    this.cache = new Array(this.length);
 
     // return immediately if their are less than two slides
     if (this.length < 2) return null;
@@ -296,7 +309,7 @@ Swipe.prototype = {
 
       if (elem) { // if the element at slide number exists
 
-        if (this.hasTransitionsFake) {
+        if (this.hasTransitions) {
           elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
           elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
         } else {
