@@ -30,13 +30,13 @@ window.Swipe = function(element, options) {
   };
 
   // retreive options
-  this.options = options || {};
-  this.index = this.options.startSlide || 0;
-  this.speed = this.options.speed || 300;
-  this.callback = this.options.callback || function() {};
-  this.transitionEnd = this.options.transitionEnd || function() {};
-  this.delay = this.options.auto || 0;
-  this.cont = this.options.continuous || true;
+  options = options || {};
+  this.index = options.startSlide || 0;
+  this.speed = options.speed || 300;
+  this.callback = options.callback || function() {};
+  this.transitionEnd = options.transitionEnd || function() {};
+  this.delay = options.auto || 0;
+  this.cont = options.continuous || true;
 
   // static css
   //this.element.style.overflow = 'hidden';
