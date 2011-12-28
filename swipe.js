@@ -16,17 +16,17 @@ window.Swipe = function(element, options) {
 
   // feature detection
   this.browser = {
-    touch: function() {
+    touch: (function() {
       return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-    },
-    transitions: function() {
+    })(),
+    transitions: (function() {
       var temp = document.createElement('swipe'),
           props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
       for ( var i in props ) {
         if (temp.style[ props[i] ] !== undefined) return true;
       }
       return false;
-    }
+    })()
   };
 
   // retreive options
@@ -322,9 +322,19 @@ Swipe.prototype = {
       if (elem) { // if the element at slide number exists
 
         if (this.browser.transitions) {
-          elem.style.webkitTransitionDuration = (speed ? speed : 0) + 'ms';
-          elem.style.webkitTransform = 'translate3d(' + (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) ) + 'px,0,0)';
+          
+          var style = elem.style,
+              xval = (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) );
+
+          // set duration speed (0 represents 1-to-1 scrolling)
+          style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = (speed ? speed : 0) + 'ms';
+
+          // translate to given index position
+          style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
+          style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + xval + 'px)';
+          console.log('before')
         } else {
+          console.log('here')
           this._animate(elem, this.cache[nums[l]], dist + ( _setting != 1 ? this.cache[nums[l]] : 0), speed ? speed : 0);
         }
 
