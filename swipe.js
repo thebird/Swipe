@@ -14,7 +14,7 @@ window.Swipe = function(element, options) {
   // reference dom elements
   this.element = element;
 
-  // feature detection
+  // simple feature detection
   this.browser = {
     touch: (function() {
       return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
