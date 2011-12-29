@@ -57,13 +57,13 @@ Swipe.prototype = {
     this.length = this.slides.length;
 
     // return immediately if their are less than two slides
-    if (this.length < 2) return null;
+    if (this.length < 2) return;
 
     // determine width of each slide
     this.width = this.container.getBoundingClientRect().width;
 
     // return immediately if measurement fails
-    if (!this.width) return null;
+    if (!this.width) return;
 
     // hide slider element but keep positioning during setup
     this.container.style.visibility = 'hidden';
