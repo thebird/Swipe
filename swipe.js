@@ -56,10 +56,12 @@ window.Swipe = function(element, options) {
       this.element.addEventListener('touchmove', this, false);
       this.element.addEventListener('touchend', this, false);
     }
-    this.element.addEventListener('webkitTransitionEnd', this, false);
-    this.element.addEventListener('msTransitionEnd', this, false);
-    this.element.addEventListener('oTransitionEnd', this, false);
-    this.element.addEventListener('transitionend', this, false);
+    if (!!this.browser.transitions) {
+      this.element.addEventListener('webkitTransitionEnd', this, false);
+      this.element.addEventListener('msTransitionEnd', this, false);
+      this.element.addEventListener('oTransitionEnd', this, false);
+      this.element.addEventListener('transitionend', this, false);
+    }
     window.addEventListener('resize', this, false);
   }
 
@@ -332,9 +334,8 @@ Swipe.prototype = {
           // translate to given index position
           style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
           style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + xval + 'px)';
-          console.log('before')
+
         } else {
-          console.log('here')
           this._animate(elem, this.cache[nums[l]], dist + ( _setting != 1 ? this.cache[nums[l]] : 0), speed ? speed : 0);
         }
 
