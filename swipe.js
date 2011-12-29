@@ -9,7 +9,7 @@
 window.Swipe = function(element, options) {
 
   // return immediately if element doesn't exist
-  if (!element) return null;
+  if (!element) return;
 
   var _this = this;
 
