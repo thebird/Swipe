@@ -98,10 +98,9 @@ Swipe.prototype = {
       var elem = this.slides[index],
           height = elem.getBoundingClientRect().height || elem.offsetHeight;
 
-      elem.style.width = this.width + 'px';
+      elem.style.display = 'block';
       elem.style.position = 'absolute';
-      elem.style.top = '0px';
-      elem.style.left = '0px';
+      elem.style.right = elem.style.top = elem.style.left = elem.style.bottom ='0';
       elem.setAttribute('data-index', index);
 
       // replace tempHeight if this slides height is greater
