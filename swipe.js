@@ -65,6 +65,12 @@ window.Swipe = function(element, options) {
     window.addEventListener('resize', this, false);
   }
 
+  // to play nice with old IE
+  else {
+    var _this = this;
+    window.onresize = function() { _this.setup(); };
+  }
+
 };
 
 Swipe.prototype = {
@@ -100,7 +106,8 @@ Swipe.prototype = {
 
       elem.style.display = 'block';
       elem.style.position = 'absolute';
-      elem.style.right = elem.style.top = elem.style.left ='0';
+      elem.style.width = this.width + 'px';
+      elem.style.top = elem.style.left ='0';
       elem.setAttribute('data-index', index);
 
       // replace tempHeight if this slides height is greater
