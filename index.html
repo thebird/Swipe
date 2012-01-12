@@ -6,7 +6,7 @@
 </head>
 <body style='max-width:320px; margin:0 auto'>
 
-<h1><br>Swipe</h1>
+<h1>Swipe</h1>
 
 <div id='swipe'>
   <div><b>0</b></div>
@@ -50,8 +50,21 @@
 
 <script src='swipe.js'></script>
 <script>
+var elem = document.getElementById('console');
+function log(msg) {
+  console.log(msg);
+  elem.innerHTML = msg + '<br>' + elem.innerHTML;
+}
 
-var mySwipe = new Swipe(document.getElementById('swipe'));
+var mySwipe = new Swipe(document.getElementById('swipe'), {
+  auto: 3000,
+  callback: function(index, elem) {
+    log('callback fired, index is ' + index);
+  },
+  transitionEnd: function(index, elem) {
+    log('transition ended');
+  }
+});
 
 document.getElementById('hide').onclick = function() {
   var button = mySwipe.element, overflow = button.style.overflow;

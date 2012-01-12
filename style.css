@@ -13,10 +13,10 @@ body {
   min-height:416px;
 }
 h1 {
-  font-size:36px;
-  margin:15px;
+  font-size:33px;
+  margin:50px 0 15px;
   text-align:center;
-  color:#666;
+  color:#212121;
 }
 h2 {
   font-size:14px;
@@ -39,15 +39,27 @@ a {
 }
 #swipe div {
   overflow:hidden;
+  background:#fff;
 }
 #swipe div b {
-  background:#1db1ff;
   display:block;
   font-weight:bold;
-  color:#fff;
+  color:#14ADE5;
   font-size:20px;
   text-align:center;
   padding:100px 10px;
   margin:10px;
-  border-radius:3px;
+  border:1px solid;
+  border-color:#CDD2D6 #BFC6CB #B3BBC1 #BFC6CB;
+  border-radius:2px;
+  box-shadow:0 1px 1px rgba(0,0,0,.08);
+}
+#console {
+  font-size: 12px;
+  font-family:"Inconsolata", "Monaco", "Consolas", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+  color: #999;
+  line-height: 18px;
+  margin-top: 20px;
+  max-height: 150px;
+  overflow: auto;
 }
