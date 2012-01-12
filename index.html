@@ -51,9 +51,7 @@
 <script src='swipe.js'></script>
 <script>
 
-var mySwipe = new Swipe(document.getElementById('swipe'), {
-  auto:1000
-});
+var mySwipe = new Swipe(document.getElementById('swipe'));
 
 document.getElementById('hide').onclick = function() {
   var button = mySwipe.element, overflow = button.style.overflow;
