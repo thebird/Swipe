@@ -39,7 +39,7 @@ window.Swipe = function(element, options) {
   this.cont = options.continuous || true;
 
   // static css
-  //this.element.style.overflow = 'hidden';
+  this.element.style.overflow = 'hidden';
   this.element.style.listStyle = 'none';
   this.element.style.position = 'relative';
 
@@ -100,7 +100,7 @@ Swipe.prototype = {
 
       elem.style.display = 'block';
       elem.style.position = 'absolute';
-      elem.style.right = elem.style.top = elem.style.left = elem.style.bottom ='0';
+      elem.style.right = elem.style.top = elem.style.left ='0';
       elem.setAttribute('data-index', index);
 
       // replace tempHeight if this slides height is greater
