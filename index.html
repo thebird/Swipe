@@ -1,14 +1,47 @@
-<!DOCTYPE HTML> 
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
-<link href='style.css' rel='stylesheet'/>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Swipe JS</title>
+<meta name="author" content="Brad Birdsall">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="http://bradbirdsall.com/css/style.css">
+<style>
+h1 {
+  font-family: ddt, sans-serif;
+  color:#fff;
+  font-size:40px;
+  text-align:center;
+  margin:60px 0 50px;
+}
+#swipe {
+  padding-bottom:20px;
+}
+#swipe div {
+  overflow:hidden;
+}
+#swipe div b {
+  background:#1db1ff;
+  display:block;
+  font-weight:bold;
+  color:#fff;
+  font-size:20px;
+  text-align:center;
+  padding:100px 10px;
+  margin:10px;
+  border-radius:3px;
+}
+</style>
 </head>
-<body>
+<script src="http://use.typekit.com/fyg6bix.js"></script>
+<script>try{Typekit.load();}catch(e){}</script>
+</head>
+<body class='dark'>
 
-<h1><br>Swipe</h1>
+<h1>Swipe</h1>
 
-<div id='swipe' style='max-width:320px; margin:0 auto'>
+<div id='swipe' style='max-width:500px;margin:0 auto'>
   <div><b>0</b></div>
   <div style='display:none'><b>1</b></div>
   <div style='display:none'><b>2</b></div>
@@ -38,13 +71,14 @@
   
   <button onclick='mySwipe.prev()'>prev</button> 
   <button onclick='mySwipe.next()'>next</button>
-  <button id='hide'>hide overflow</button>
 
   <div id='console'></div>
 
 </div>
 
 
+
+<footer>Brad Birdsall</footer>
 
 
 
