@@ -39,7 +39,7 @@ window.Swipe = function(element, options) {
   this.cont = options.continuous || true;
 
   // static css
-  //this.element.style.overflow = 'hidden';
+  this.element.style.overflow = 'hidden';
   this.element.style.listStyle = 'none';
   this.element.style.position = 'relative';
 
