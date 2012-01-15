@@ -49,8 +49,6 @@ window.Swipe = function(element, options) {
   // begin auto slideshow
   this.begin();
 
-  if (this.delay) log('slideshow started, ' + this.delay + 'ms delay'); //debug
-
   // add event listeners
   if (this.element.addEventListener) {
     if (!!this.browser.touch) {
@@ -95,8 +93,6 @@ Swipe.prototype = {
 
     // hide slider element but keep positioning during setup
     this.element.style.visibility = 'hidden';
-
-    log('setting up Swipe'); //debug
 
     // create variable to find tallest slide
     var tempHeight = 0,
