@@ -1,5 +1,5 @@
 # Swipe 2
-Swipe is a lightweight mobile slider with **1-to-1** touch movement. Check out the demo at [swipejs.com](http://swipejs.com).
+Swipe is a responsive, lightweight slider with accurate **1:1** touch movement. Read more and check out the demo at [swipejs.com](http://swipejs.com).
 
 ## Usage
 Swipe only needs to follow a simple pattern. Here is an example:
