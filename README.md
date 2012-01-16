@@ -45,10 +45,10 @@ Swipe can take an optional second parameter– an object of key/value settings:
 ``` js
 
 window.mySwipe = new Swipe(document.getElementById('slider'), {
-	startSlide: 2,
-	speed: 400,
-    auto: 3000,
-	callback: function(index, elem) {},
+  startSlide: 2,
+  speed: 400,
+  auto: 3000,
+  callback: function(index, elem) {},
   transitionEnd: function(index, elem) {}
 });
 
