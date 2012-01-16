@@ -6,11 +6,9 @@ Swipe only needs to follow a simple pattern. Here is an example:
 
 ``` html
 <div id='slider'>
-	<div></div>
-	<div></div>
-	<div></div>
-	<div></div>
-	<div></div>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
 ```
 
