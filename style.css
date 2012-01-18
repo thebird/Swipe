@@ -34,26 +34,7 @@ a {
   font-size:12px;
   color:#3c3c3c;
 }
-#swipe {
-  padding-bottom:20px;
-}
-#swipe div {
-  overflow:hidden;
-  background:#fff;
-}
-#swipe div b {
-  display:block;
-  font-weight:bold;
-  color:#14ADE5;
-  font-size:20px;
-  text-align:center;
-  padding:100px 10px;
-  margin:10px;
-  border:1px solid;
-  border-color:#CDD2D6 #BFC6CB #B3BBC1 #BFC6CB;
-  border-radius:2px;
-  box-shadow:0 1px 1px rgba(0,0,0,.08);
-}
+
 #console {
   font-size: 12px;
   font-family:"Inconsolata", "Monaco", "Consolas", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;

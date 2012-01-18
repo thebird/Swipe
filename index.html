@@ -3,38 +3,69 @@
 <head>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
 <link href='style.css' rel='stylesheet'/>
+<style>
+/* Swipe 2 required styles */
+.swipe {
+  /*overflow: hidden;*/
+  position: relative;
+}
+.swipe div {
+  display:block;
+  visibility:hidden;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+/* optional */
+#mySwipe div b {
+  display:block;
+  background:#fff;
+  font-weight:bold;
+  color:#14ADE5;
+  font-size:20px;
+  text-align:center;
+  margin:10px;
+  padding:100px 10px;
+  border:1px solid;
+  border-color:#CDD2D6 #BFC6CB #B3BBC1 #BFC6CB;
+  /*border-radius:2px;*/
+  /*box-shadow:0 1px 1px rgba(0,0,0,.08);*/
+}
+</style>
+
 </head>
 <body style='max-width:320px; margin:0 auto'>
 
 <h1>Swipe 2</h1>
 
-<div id='swipe'>
+<div id='mySwipe' class='swipe' style='height:245px'>
   <div><b>0</b></div>
-  <div style='display:none'><b>1</b></div>
-  <div style='display:none'><b>2</b></div>
-  <div style='display:none'><b>3</b></div>
-  <div style='display:none'><b>4</b></div>
-  <div style='display:none'><b>5</b></div>
-  <div style='display:none'><b>6</b></div>
-  <div style='display:none'><b>7</b></div>
-  <div style='display:none'><b>8</b></div>
-  <div style='display:none'><b>9</b></div>
-  <div style='display:none'><b>10</b></div>
-  <div style='display:none'><b>11</b></div>
-  <div style='display:none'><b>12</b></div>
-  <div style='display:none'><b>13</b></div>
-  <div style='display:none'><b>14</b></div>
-  <div style='display:none'><b>15</b></div>
-  <div style='display:none'><b>16</b></div>
-  <div style='display:none'><b>17</b></div>
-  <div style='display:none'><b>18</b></div>
-  <div style='display:none'><b>19</b></div>
-  <div style='display:none'><b>20</b></div>
+  <div><b>1</b></div>
+  <div><b>2</b></div>
+  <div><b>3</b></div>
+  <div><b>4</b></div>
+  <div><b>5</b></div>
+  <div><b>6</b></div>
+  <div><b>7</b></div>
+  <div><b>8</b></div>
+  <div><b>9</b></div>
+  <div><b>10</b></div>
+  <div><b>11</b></div>
+  <div><b>12</b></div>
+  <div><b>13</b></div>
+  <div><b>14</b></div>
+  <div><b>15</b></div>
+  <div><b>16</b></div>
+  <div><b>17</b></div>
+  <div><b>18</b></div>
+  <div><b>19</b></div>
+  <div><b>20</b></div>
 </div>
 
 
 
-<div style='text-align:center'>
+<div style='text-align:center;padding-top:20px;'>
   
   <button onclick='mySwipe.prev()'>prev</button> 
   <button onclick='mySwipe.next()'>next</button>
@@ -53,10 +84,10 @@
 var elem = document.getElementById('console');
 function log(msg) {
   console.log(msg);
-  elem.innerHTML = msg + '<br>' + elem.innerHTML;
+  /*elem.innerHTML = msg + '<br>' + elem.innerHTML;*/
 }
 
-var mySwipe = new Swipe(document.getElementById('swipe'), {
+var mySwipe = new Swipe(document.getElementById('mySwipe'), {
   auto: 3000,
   callback: function(index, elem) {
     log('callback fired, index is ' + index);
