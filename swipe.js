@@ -38,10 +38,8 @@ window.Swipe = function(element, options) {
   this.delay = options.auto || 0;
   this.cont = options.continuous || true;
 
-  // static css
-  this.element.style.overflow = 'hidden';
-  this.element.style.listStyle = 'none';
-  this.element.style.position = 'relative';
+  // check to see if height is available
+  this.height = this.element.getBoundingClientRect().height || this.element.offsetHeight || 0;
 
   // trigger slider initialization
   this.setup();
@@ -91,43 +89,41 @@ Swipe.prototype = {
     // return immediately if measurement fails
     if (!this.width) return null;
 
-    // hide slider element but keep positioning during setup
-    this.element.style.visibility = 'hidden';
+    // if no height given, create variable to find tallest slide
+    if (!this.height) var tempHeight = 0;
 
-    // create variable to find tallest slide
-    var tempHeight = 0,
-        refArray = [[],[],[]]; // determine slides before, current, and after
+    // store array of slides before, current, and after
+    var refArray = [[],[],[]];
 
     // stack elements
     for (var index = this.length - 1; index > -1; index--) {
 
-      var elem = this.slides[index],
-          height = elem.getBoundingClientRect().height || elem.offsetHeight;
-
-      elem.style.display = 'block';
-      elem.style.position = 'absolute';
+      var elem = this.slides[index];
       elem.style.width = this.width + 'px';
-      elem.style.top = elem.style.left ='0';
       elem.setAttribute('data-index', index);
+      elem.style.visibility = 'visible';
 
-      // replace tempHeight if this slides height is greater
-      tempHeight = tempHeight < height ? height : tempHeight;
+      if (!this.height) {
+
+        var height = elem.getBoundingClientRect().height || elem.offsetHeight;
+
+        // replace tempHeight if this slides height is greater
+        tempHeight = tempHeight < height ? height : tempHeight;
+
+      }
 
       // add this index to the reference array
       refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index); // 0:before 1:equal 2:after
 
     }
 
-    // set height of container based on tallest slide (required with absolute positioning)
-    this.element.style.height = tempHeight + 'px';
+    // if no height given, set height of container based on tallest slide (required with absolute positioning)
+    if (!this.height) this.element.style.height = tempHeight + 'px';
 
     // stack left, current, and right slides
     this._slide(refArray[0],-this.width,0,1);
     this._slide(refArray[1],0,0,1);
     this._slide(refArray[2],this.width,0,1);
-
-    // show slider element
-    this.element.style.visibility = 'visible';
 
   },
 
@@ -187,8 +183,10 @@ Swipe.prototype = {
   },
 
   onTouchStart: function(e) {
+
+    var _this = this;
     
-    this.start = {
+    _this.start = {
 
       // get touch coordinates for delta calculations in onTouchMove
       pageX: e.touches[0].pageX,
@@ -200,46 +198,49 @@ Swipe.prototype = {
     };
 
     // used for testing first onTouchMove event
-    this.isScrolling = undefined;
+    _this.isScrolling = undefined;
     
     // reset deltaX
-    this.deltaX = 0;
+    _this.deltaX = 0;
 
   },
 
   onTouchMove: function(e) {
 
+    var _this = this;
+
     // ensure swiping with one touch and not pinching
     if(e.touches.length > 1 || e.scale && e.scale !== 1) return;
 
-    this.deltaX = e.touches[0].pageX - this.start.pageX;
+    _this.deltaX = e.touches[0].pageX - _this.start.pageX;
 
     // determine if scrolling test has run - one time test
-    if ( typeof this.isScrolling == 'undefined') {
-      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) );
+    if ( typeof _this.isScrolling == 'undefined') {
+      _this.isScrolling = !!( _this.isScrolling || Math.abs(_this.deltaX) < Math.abs(e.touches[0].pageY - _this.start.pageY) );
     }
 
     // if user is not trying to scroll vertically
-    if (!this.isScrolling) {
+    if (!_this.isScrolling) {
 
       // prevent native scrolling 
       e.preventDefault();
 
       // cancel slideshow
-      clearTimeout(this.interval);
+      _this.delay = 0;
+      clearTimeout(_this.interval);
 
       // increase resistance if first or last slide
-      this.deltaX = 
-        this.deltaX / 
-          ( (!this.index && this.deltaX > 0               // if first slide and sliding left
-            || this.index == this.length - 1              // or if last slide and sliding right
-            && this.deltaX < 0                            // and if sliding at all
+      _this.deltaX = 
+        _this.deltaX / 
+          ( (!_this.index && _this.deltaX > 0               // if first slide and sliding left
+            || _this.index == _this.length - 1              // or if last slide and sliding right
+            && _this.deltaX < 0                            // and if sliding at all
           ) ?                      
-          ( Math.abs(this.deltaX) / this.width + 1 )      // determine resistance level
+          ( Math.abs(_this.deltaX) / _this.width + 1 )      // determine resistance level
           : 1 );                                          // no resistance if false
       
       // translate immediately 1:1
-      this._slide([this.index-1,this.index,this.index+1],this.deltaX,0,-1);
+      _this._slide([_this.index-1,_this.index,_this.index+1],_this.deltaX,0,-1);
 
     }
 
@@ -247,35 +248,37 @@ Swipe.prototype = {
 
   onTouchEnd: function(e) {
 
+    var _this = this;
+
     // determine if slide attempt triggers next/prev slide
     var isValidSlide = 
-          Number(new Date()) - this.start.time < 250      // if slide duration is less than 250ms
-          && Math.abs(this.deltaX) > 20                   // and if slide amt is greater than 20px
-          || Math.abs(this.deltaX) > this.width/2,        // or if slide amt is greater than half the width
+          Number(new Date()) - _this.start.time < 250      // if slide duration is less than 250ms
+          && Math.abs(_this.deltaX) > 20                   // and if slide amt is greater than 20px
+          || Math.abs(_this.deltaX) > _this.width/2,        // or if slide amt is greater than half the width
 
     // determine if slide attempt is past start and end
         isPastBounds = 
-          !this.index && this.deltaX > 0                          // if first slide and slide amt is greater than 0
-          || this.index == this.length - 1 && this.deltaX < 0,    // or if last slide and slide amt is less than 0
+          !_this.index && _this.deltaX > 0                          // if first slide and slide amt is greater than 0
+          || _this.index == _this.length - 1 && _this.deltaX < 0,    // or if last slide and slide amt is less than 0
         
-        direction = this.deltaX < 0; // true:right false:left
+        direction = _this.deltaX < 0; // true:right false:left
 
     // if not scrolling vertically
-    if (!this.isScrolling) {
+    if (!_this.isScrolling) {
 
       if (isValidSlide && !isPastBounds) {
         if (direction) {
-          this._slide([this.index-1],-this.width,0,1);
-          this._slide([this.index,this.index+1],-this.width,this.speed,0);
-          this.index += 1;
+          _this._slide([_this.index-1],-_this.width,0,1);
+          _this._slide([_this.index,_this.index+1],-_this.width,_this.speed,0);
+          _this.index += 1;
         } else {
-          this._slide([this.index+1],this.width,0,1);
-          this._slide([this.index-1,this.index],this.width,this.speed,0);
-          this.index += -1;
+          _this._slide([_this.index+1],_this.width,0,1);
+          _this._slide([_this.index-1,_this.index],_this.width,_this.speed,0);
+          _this.index += -1;
         }
-        this.callback(this.index, this.slides[this.index]);
+        _this.callback(_this.index, _this.slides[_this.index]);
       } else {
-        this._slide([this.index-1,this.index,this.index+1],0,this.speed,0);
+        _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed,0);
       }
 
     }
