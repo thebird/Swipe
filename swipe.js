@@ -49,6 +49,7 @@ window.Swipe = function(element, options) {
     this.element.addEventListener('oTransitionEnd', this, false);
     this.element.addEventListener('transitionend', this, false);
     window.addEventListener('resize', this, false);
+    window.addEventListener('load', this, false);
   }
 
 };
@@ -190,6 +191,7 @@ Swipe.prototype = {
       case 'oTransitionEnd':
       case 'transitionend': this.transitionEnd(e); break;
       case 'resize': this.setup(); break;
+      case 'load': this.setup(); break;
     }
   },
 
