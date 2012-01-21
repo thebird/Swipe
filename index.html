@@ -62,17 +62,16 @@
   </div>
 </div>
 
-<a href='#' onclick='slider4.prev();return false;'>prev</a> 
-<a href='#' onclick='slider4.next();return false;'>next</a>
+<div style="margin-left: 20px; float: left;"><a href='#' id="prev" onclick='slider4.prev();return false;'>prev</a></div>
+<div style="margin-right: 20px; float: right;"><a href='#' id="next" onclick='slider4.next();return false;'>next</a></div>
 <br><br>
-
 
 <script src='swipe.js'></script>
 <script>
-new Swipe(document.getElementById('slider'));
-new Swipe(document.getElementById('slider2'));
-var slider3 = new Swipe(document.getElementById('slider3'));
-var slider4 = new Swipe(document.getElementById('slider4'));
+    new Swipe(document.getElementById('slider'));
+  new Swipe(document.getElementById('slider2'));
+  var slider3 = new Swipe(document.getElementById('slider3'), { loop: true });
+  var slider4 = new Swipe(document.getElementById('slider4'), { loop: false, prevId: 'prev', nextId: 'next' });
 </script>
 
 </body> 

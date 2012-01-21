@@ -19,6 +19,11 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.loop = this.options.loop || false;
+  
+  // previous/next links
+  this.prevId = this.options.prevId;
+  this.nextId = this.options.nextId;
 
   // reference dom elements
   this.container = element;
@@ -83,7 +88,22 @@ Swipe.prototype = {
 
     // show slider element
     this.container.style.visibility = 'visible';
-
+    
+    this.refreshPagination();
+  },
+  
+  refreshPagination: function() {
+    if (this.prevId != null && this.nextId != null && !this.loop) {    
+      if (this.index == 0)
+        document.getElementById(this.prevId).style.display = "none";
+      else
+        document.getElementById(this.prevId).style.display = "block";
+       
+      if (this.index == this.length - 1)
+        document.getElementById(this.nextId).style.display = "none";
+      else
+        document.getElementById(this.nextId).style.display = "block";
+    }
   },
 
   slide: function(index, duration) {
@@ -116,8 +136,12 @@ Swipe.prototype = {
     clearTimeout(this.interval);
 
     // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
-
+    if (this.index) 
+      this.slide(this.index-1, this.speed);
+    else if (this.loop)
+      this.slide(this.length-1, this.speed);
+    
+    this.refreshPagination();
   },
 
   next: function(delay) {
@@ -126,9 +150,12 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
-
+    if (this.index < this.length - 1)
+      this.slide(this.index+1, this.speed); // if not last slide
+    else if (this.loop)
+      this.slide(0, this.speed); //if last slide return to start
+    
+    this.refreshPagination();
   },
 
   begin: function() {
@@ -257,6 +284,7 @@ Swipe.prototype = {
 
     }
 
+    this.refreshPagination();
   }
 
 };
