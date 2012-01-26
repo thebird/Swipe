@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.navigationOnDisabled = this.options.navigationOnDisabled || false;
 
   // reference dom elements
   this.container = element;
@@ -50,7 +51,19 @@ window.Swipe = function(element, options) {
 
 Swipe.prototype = {
 
+  disable : function(){
+    this.disabled = true;
+  },
+
+  enable : function(){
+    this.disabled = false;
+  },
+
   setup: function() {
+
+    if(this.disabled !== true){
+      this.disabled = false;
+    }
 
     // get and measure amt of slides
     this.slides = this.element.children;
@@ -110,25 +123,25 @@ Swipe.prototype = {
   },
 
   prev: function(delay) {
+    if(this.navigationOnDisabled == true || this.disabled === false){
+      // cancel next scheduled automatic transition, if any
+      this.delay = delay || 0;
+      clearTimeout(this.interval);
 
-    // cancel next scheduled automatic transition, if any
-    this.delay = delay || 0;
-    clearTimeout(this.interval);
-
-    // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
-
+      // if not at first slide
+      if (this.index) this.slide(this.index-1, this.speed);
+    }
   },
 
   next: function(delay) {
+    if(this.navigationOnDisabled == true || this.disabled === false){
+      // cancel next scheduled automatic transition, if any
+      this.delay = delay || 0;
+      clearTimeout(this.interval);
 
-    // cancel next scheduled automatic transition, if any
-    this.delay = delay || 0;
-    clearTimeout(this.interval);
-
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
-
+      if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
+      else this.slide(0, this.speed); //if last slide return to start
+    }
   },
 
   begin: function() {
@@ -154,15 +167,17 @@ Swipe.prototype = {
   },
 
   handleEvent: function(e) {
-    switch (e.type) {
-      case 'touchstart': this.onTouchStart(e); break;
-      case 'touchmove': this.onTouchMove(e); break;
-      case 'touchend': this.onTouchEnd(e); break;
-      case 'webkitTransitionEnd':
-      case 'msTransitionEnd':
-      case 'oTransitionEnd':
-      case 'transitionend': this.transitionEnd(e); break;
-      case 'resize': this.setup(); break;
+    if(this.disabled !== true){
+        switch (e.type) {
+        case 'touchstart': this.onTouchStart(e); break;
+        case 'touchmove': this.onTouchMove(e); break;
+        case 'touchend': this.onTouchEnd(e); break;
+        case 'webkitTransitionEnd':
+        case 'msTransitionEnd':
+        case 'oTransitionEnd':
+        case 'transitionend': this.transitionEnd(e); break;
+        case 'resize': this.setup(); break;
+      }  
     }
   },
 
