@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.items = this.options.items || 1;
 
   // reference dom elements
   this.container = element;
@@ -60,7 +61,7 @@ Swipe.prototype = {
     if (this.length < 2) return null;
 
     // determine width of each slide
-    this.width = this.container.getBoundingClientRect().width;
+    this.width = this.container.getBoundingClientRect().width / this.items;
 
     // return immediately if measurement fails
     if (!this.width) return null;
@@ -126,7 +127,7 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
+    if (this.index < this.length - this.items) this.slide(this.index+1, this.speed); // if not last slide
     else this.slide(0, this.speed); //if last slide return to start
 
   },
@@ -223,7 +224,7 @@ Swipe.prototype = {
       this.deltaX = 
         this.deltaX / 
           ( (!this.index && this.deltaX > 0               // if first slide and sliding left
-            || this.index == this.length - 1              // or if last slide and sliding right
+            || this.index == this.length - this.items     // or if last slide and sliding right
             && this.deltaX < 0                            // and if sliding at all
           ) ?                      
           ( Math.abs(this.deltaX) / this.width + 1 )      // determine resistance level
@@ -247,7 +248,7 @@ Swipe.prototype = {
     // determine if slide attempt is past start and end
         isPastBounds = 
           !this.index && this.deltaX > 0                          // if first slide and slide amt is greater than 0
-          || this.index == this.length - 1 && this.deltaX < 0;    // or if last slide and slide amt is less than 0
+          || this.index == this.length - this.items && this.deltaX < 0;    // or if last slide and slide amt is less than 0
 
     // if not scrolling vertically
     if (!this.isScrolling) {
