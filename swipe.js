@@ -52,6 +52,21 @@ window.Swipe = function(element, options) {
   // begin auto slideshow
   this.begin();
 
+  // debounce resize events
+  var debounce = function(fn) {
+    var timeout;
+    return function debounced() {
+      var obj = this, args = arguments;
+      function delayed() {
+        fn.apply(obj, args);
+        timeout = null;
+      };
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(delayed, 400); 
+    };
+  }
+  this.resize = debounce(function() { _this.setup(); });
+
   // add event listeners
   if (this.element.addEventListener) {
     if (!!this.browser.touch) {
@@ -65,19 +80,12 @@ window.Swipe = function(element, options) {
       this.element.addEventListener('oTransitionEnd', this, false);
       this.element.addEventListener('transitionend', this, false);
     }
-    window.addEventListener('resize', this._debounce(function() {
-      _this.setup();
-    }), false);
-
+    window.addEventListener('resize', this.resize, false);
   }
 
   // to play nice with old IE
   else {
-    window.onresize = function() { 
-      this._debounce(function() {
-        _this.setup();
-      });
-    }
+    window.onresize = this.resize;
   }
 
 };
@@ -139,9 +147,6 @@ Swipe.prototype = {
   },
 
   kill: function() {
-    
-    // :/ uh oh
-    console.log('trying to kill it');
 
     // cancel slideshow
     this.delay = 0;
@@ -171,7 +176,7 @@ Swipe.prototype = {
         this.element.removeEventListener('oTransitionEnd', this, false);
         this.element.removeEventListener('transitionend', this, false);
       }
-      window.removeEventListener('resize', this, false);
+      window.removeEventListener('resize', this.resize, false);
     }
 
     // kill old IE! you can quote me on that ;)
@@ -232,7 +237,7 @@ Swipe.prototype = {
       case 'msTransitionEnd':
       case 'oTransitionEnd':
       case 'transitionend': this.onTransitionEnd(e); break;
-      //case 'resize': this.setup(); break;
+      case 'resize': this.setup(); break;
     }
   },
 
@@ -456,19 +461,6 @@ Swipe.prototype = {
     
     return parseInt(elem.getAttribute('data-index'),10);
 
-  },
-  
-  _debounce: function (fn) {
-    var timeout;
-    return function debounced () {
-      var obj = this, args = arguments;
-      function delayed () {
-        fn.apply(obj, args);
-        timeout = null;
-      };
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(delayed, 400); 
-    };
   }
 
 };
