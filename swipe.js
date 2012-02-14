@@ -15,8 +15,7 @@ window.Swipe = function(element, options) {
   this.element = element;
 
   // add .swipe-active class
-  element.setAttribute('class', 'swipe-active'); 
-  element.setAttribute('className', 'swipe-active'); // IE
+  element.className += ' swipe-active';
 
   // simple feature detection
   this.browser = {
@@ -402,9 +401,52 @@ Swipe.prototype = {
 
   },
 
-  _getElemIndex : function(elem) {
+  _getElemIndex: function(elem) {
     
     return parseInt(elem.getAttribute('data-index'),10);
+
+  },
+
+  kill: function() {
+    
+    // :/ uh oh
+    console.log('trying to kill it');
+
+    // cancel slideshow
+    this.delay = 0;
+    clearTimeout(this.interval);
+
+    // clear all translations
+    var slideArray = [];
+    for (var i = this.slides.length - 1; i >= 0; i--) {
+      this.slides[i].style.width = '';
+      slideArray.push(i);
+    }
+    this._slide(slideArray,0,0,1);
+
+    var elem = this.element;
+    elem.className = elem.className.replace('swipe-active','');
+
+    // remove event listeners
+    if (this.element.removeEventListener) {
+      if (!!this.browser.touch) {
+        this.element.removeEventListener('touchstart', this, false);
+        this.element.removeEventListener('touchmove', this, false);
+        this.element.removeEventListener('touchend', this, false);
+      }
+      if (!!this.browser.transitions) {
+        this.element.removeEventListener('webkitTransitionEnd', this, false);
+        this.element.removeEventListener('msTransitionEnd', this, false);
+        this.element.removeEventListener('oTransitionEnd', this, false);
+        this.element.removeEventListener('transitionend', this, false);
+      }
+      window.removeEventListener('resize', this, false);
+    }
+
+    // kill old IE! you can quote me on that ;)
+    else {
+      window.onresize = null;
+    }
 
   }
 

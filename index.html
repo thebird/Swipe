@@ -56,6 +56,8 @@
   
   <button onclick='mySwipe.prev()'>prev</button> 
   <button onclick='mySwipe.next()'>next</button>
+  <button onclick='create()'>create it</button>
+  <button onclick='mySwipe.kill()'>kill it</button>
   <button id='hide'>hide overflow</button>
 
   <div id='console'></div>
@@ -68,16 +70,18 @@
 
 <script src='swipe.js'></script>
 <script>
+function create() {
+  window.mySwipe = new Swipe(document.getElementById('mySwipe'), {
+    auto: 3000,
+    callback: function(index, elem) {
+      log('callback fired, index is ' + index);
+    },
+    transitionEnd: function(index, elem) {
+      log('transition ended');
+    }
+  });
+}
 
-var mySwipe = new Swipe(document.getElementById('mySwipe'), {
-  auto: 3000,
-  callback: function(index, elem) {
-    log('callback fired, index is ' + index);
-  },
-  transitionEnd: function(index, elem) {
-    log('transition ended');
-  }
-});
 
 
 
