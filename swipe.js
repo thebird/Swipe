@@ -14,6 +14,10 @@ window.Swipe = function(element, options) {
   // reference dom elements
   this.element = element;
 
+  // add .swipe-active class
+  element.setAttribute('class', 'swipe-active'); 
+  element.setAttribute('className', 'swipe-active'); // IE
+
   // simple feature detection
   this.browser = {
     touch: (function() {

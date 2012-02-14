@@ -4,34 +4,21 @@
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
 <link href='style.css' rel='stylesheet'/>
 <style>
+
 /* Swipe 2 required styles */
-.swipe {
-  /*overflow: hidden;*/
-  position: relative;
+.swipe-active {
+  overflow:hidden;
+  position:relative;
 }
-.swipe div {
+.swipe-active div {
   display:block;
   visibility:hidden;
   position:absolute;
   top:0;
   left:0;
 }
+/* END required styles */
 
-/* optional */
-#mySwipe div b {
-  display:block;
-  background:#fff;
-  font-weight:bold;
-  color:#14ADE5;
-  font-size:20px;
-  text-align:center;
-  margin:10px;
-  padding:100px 10px;
-  border:1px solid;
-  border-color:#CDD2D6 #BFC6CB #B3BBC1 #BFC6CB;
-  /*border-radius:2px;*/
-  /*box-shadow:0 1px 1px rgba(0,0,0,.08);*/
-}
 </style>
 
 </head>
@@ -39,7 +26,7 @@
 
 <h1>Swipe 2</h1>
 
-<div id='mySwipe' class='swipe' style='height:245px'>
+<div id='mySwipe' style='height:245px'>
   <div><b>0</b></div>
   <div><b>1</b></div>
   <div><b>2</b></div>
@@ -69,7 +56,7 @@
   
   <button onclick='mySwipe.prev()'>prev</button> 
   <button onclick='mySwipe.next()'>next</button>
-  <button id='hide'>show overflow</button>
+  <button id='hide'>hide overflow</button>
 
   <div id='console'></div>
 
@@ -81,11 +68,6 @@
 
 <script src='swipe.js'></script>
 <script>
-var elem = document.getElementById('console');
-function log(msg) {
-  console.log(msg);
-  /*elem.innerHTML = msg + '<br>' + elem.innerHTML;*/
-}
 
 var mySwipe = new Swipe(document.getElementById('mySwipe'), {
   auto: 3000,
@@ -96,6 +78,18 @@ var mySwipe = new Swipe(document.getElementById('mySwipe'), {
     log('transition ended');
   }
 });
+
+
+
+
+
+/* other crap for the page */
+
+var elem = document.getElementById('console');
+function log(msg) {
+  console.log(msg);
+  elem.innerHTML = msg + '<br>' + elem.innerHTML;
+}
 
 document.getElementById('hide').onclick = function() {
   var button = mySwipe.element, overflow = button.style.overflow;
