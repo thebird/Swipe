@@ -2,7 +2,7 @@
  * Swipe 2.0
  *
  * Brad Birdsall, Prime
- * Copyright 2011, Licensed GPL & MIT
+ * Copyright 2012, Licensed GPL & MIT
  *
 */
 
@@ -16,8 +16,8 @@ window.Swipe = function(element, options) {
   // reference dom elements
   this.element = element;
 
-  // add .swipe-active class
-  element.className += ' swipe-active';
+  // add swipe-active class
+  this._addClass(element, ['swipe-active']);
 
   // simple feature detection
   this.browser = {
@@ -42,9 +42,6 @@ window.Swipe = function(element, options) {
   this.transitionEnd = options.transitionEnd || function() {};
   this.delay = options.auto || 0;
   this.cont = options.continuous || true;
-
-  // check to see if height is available
-  this.height = this.element.getBoundingClientRect().height || this.element.offsetHeight || 0;
 
   // trigger slider initialization
   this.setup();
@@ -108,9 +105,6 @@ Swipe.prototype = {
     // return immediately if measurement fails
     if (!this.width) return null;
 
-    // if no height given, create variable to find tallest slide
-    if (!this.height) var tempHeight = 0;
-
     // store array of slides before, current, and after
     var refArray = [[],[],[]];
 
@@ -118,31 +112,20 @@ Swipe.prototype = {
     for (var index = this.length - 1; index > -1; index--) {
 
       var elem = this.slides[index];
-      elem.style.width = this.width + 'px';
       elem.setAttribute('data-index', index);
-      elem.style.visibility = 'visible';
-
-      if (!this.height) {
-
-        var height = elem.getBoundingClientRect().height || elem.offsetHeight;
-
-        // replace tempHeight if this slides height is greater
-        tempHeight = tempHeight < height ? height : tempHeight;
-
-      }
 
       // add this index to the reference array
       refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index); // 0:before 1:equal 2:after
 
     }
 
-    // if no height given, set height of container based on tallest slide (required with absolute positioning)
-    if (!this.height) this.element.style.height = tempHeight + 'px';
-
     // stack left, current, and right slides
-    this._slide(refArray[0],-this.width,0,1);
-    this._slide(refArray[1],0,0,1);
-    this._slide(refArray[2],this.width,0,1);
+    this._slide(refArray[0],-1,0);
+    this._slide(refArray[1],0,0);
+    this._slide(refArray[2],1,0);
+
+    // make sure the container is visible
+    this.element.style.visibility = 'visible';
 
   },
 
@@ -152,16 +135,9 @@ Swipe.prototype = {
     this.delay = 0;
     clearTimeout(this.interval);
 
-    // clear all translations
-    var slideArray = [];
-    for (var i = this.slides.length - 1; i >= 0; i--) {
-      this.slides[i].style.width = '';
-      slideArray.push(i);
-    }
-    this._slide(slideArray,0,0,1);
-
     var elem = this.element;
-    elem.className = elem.className.replace('swipe-active','');
+    elem.style.webkitTransitionDuration = '0';
+    this._removeClass(elem, ['swipe-active']);
 
     // remove event listeners
     if (this.element.removeEventListener) {
@@ -299,7 +275,7 @@ Swipe.prototype = {
           : 1 );                                          // no resistance if false
       
       // translate immediately 1:1
-      _this._slide([_this.index-1,_this.index,_this.index+1],_this.deltaX,0,-1);
+      _this._slide([_this.index-1,_this.index,_this.index+1],_this.deltaX,-1);
 
     }
 
@@ -320,24 +296,26 @@ Swipe.prototype = {
           !_this.index && _this.deltaX > 0                          // if first slide and slide amt is greater than 0
           || _this.index == _this.length - 1 && _this.deltaX < 0,    // or if last slide and slide amt is less than 0
         
-        direction = _this.deltaX < 0; // true:right false:left
+        direction = _this.deltaX < 0 ? 1 : -1; // 1:right -1:left
 
     // if not scrolling vertically
     if (!_this.isScrolling) {
 
-      if (isValidSlide && !isPastBounds) {
-        if (direction) {
-          _this._slide([_this.index-1],-_this.width,0,1);
-          _this._slide([_this.index,_this.index+1],-_this.width,_this.speed,0);
-          _this.index += 1;
-        } else {
-          _this._slide([_this.index+1],_this.width,0,1);
-          _this._slide([_this.index-1,_this.index],_this.width,_this.speed,0);
-          _this.index += -1;
-        }
+      if (isValidSlide && !isPastBounds) { // if proper slide
+
+        _this._slide([_this.index-direction],-direction,0);
+        _this._slide([_this.index+direction],0,_this.speed);
+        _this._slide([_this.index],direction*-1,_this.speed);
+        
+        _this.index += direction;
         _this.callback(_this.index, _this.slides[_this.index]);
-      } else {
-        _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed,0);
+
+      } else { // reset to original position before last slide
+
+        _this._slide([_this.index-1],-1,_this.speed);
+        _this._slide([_this.index],0,_this.speed);
+        _this._slide([_this.index+1],1,_this.speed);
+
       }
 
     }
@@ -363,16 +341,17 @@ Swipe.prototype = {
     if (from == to) return; // do nothing if already on requested slide
 
     var toStack = Math.abs(from-to) - 1,
-        direction = Math.abs(from-to) / (from-to), // 1:right -1:left
+        pos = Math.abs(from-to) / (from-to), // 1:right -1:left
         inBetween = [];
 
     while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
 
     // stack em
-    this._slide(inBetween,this.width * direction,0,1);
+    this._slide(inBetween,pos,0);
 
     // now slide from and to in the proper direction
-    this._slide([from,to],this.width * direction,this.speed,0);
+    this._slide([from],this.cache[from]+pos,this.speed);
+    this._slide([to],0,this.speed);
 
     this.index = to;
 
@@ -380,7 +359,7 @@ Swipe.prototype = {
 
   },
 
-  _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
+  _slide: function(nums, pos, speed) {
     
     var _slides = this.slides,
         l = nums.length;
@@ -393,22 +372,37 @@ Swipe.prototype = {
 
         if (this.browser.transitions) {
           
-          var style = elem.style,
-              xval = (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) );
+          var style = elem.style;
 
           // set duration speed (0 represents 1-to-1 scrolling)
-          style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = (speed ? speed : 0) + 'ms';
+          style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = ( speed > 0 ? speed : 0 ) + 'ms';
 
-          // translate to given index position
-          style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
-          style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + xval + 'px)';
+          if (speed == -1) { // on touchmove sliding
+
+            var xval = (this.cache[nums[l]] * this.width + pos);
+
+            // translate to given index position
+            style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
+            style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + xval + 'px)';
+            
+          } else {
+            
+            style.webkitTransform = '';
+            style.msTransform = style.MozTransform = style.OTransform = '';
+
+            this._removeClass(elem, ['swipe-left','swipe-current','swipe-right'])
+            this._addClass(elem, ['swipe-' + (pos > 0 ? 'right' : pos < 0 ? 'left' : 'current') ])
+
+          }
 
         } else {
-          this._animate(elem, this.cache[nums[l]], dist + ( _setting != 1 ? this.cache[nums[l]] : 0), speed ? speed : 0);
+
+          this.cache[nums[l]] = this.cache[nums[l]] || 0;
+          this._animate(elem, this.cache[nums[l]] * this.width, pos * this.width, speed ? speed : 0);
+
         }
 
-        if (_setting == 1) this.cache[nums[l]] = dist;
-        else if (_setting == 0) this.cache[nums[l]] += dist;
+        if (speed != -1) this.cache[nums[l]] = pos; // set cache to new position
 
       }
 
@@ -417,7 +411,6 @@ Swipe.prototype = {
   },
 
   _animate: function(elem, from, to, speed) {
-
 
     if (!speed) { // if not an animation, just reposition
       
@@ -460,6 +453,25 @@ Swipe.prototype = {
   _getElemIndex: function(elem) {
     
     return parseInt(elem.getAttribute('data-index'),10);
+
+  },
+
+  _addClass: function(elem, classes) {
+    
+    var l = classes.length;
+    while(l--) {
+      elem.className =  (elem.className.length ? elem.className + ' ' : '') + classes[l];
+    }
+
+  },
+
+  _removeClass: function(elem, classes) {
+    
+    var l = classes.length;
+    while(l--) {
+      var reg = new RegExp('(\\s|^)' + classes[l] + '(\\s|$)');
+      elem.className = elem.className.replace(reg,'').replace(/^\s+|\s+$/g,"");
+    }
 
   }
 
