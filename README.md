@@ -15,16 +15,14 @@ Swipe only needs to follow a simple pattern. Here is an example:
 Above is the initial required structure– a series of elements wrapped in a container. Place any content you want within the items. The containing div will need to be passed to a new Swipe object like so:
 
 ``` js
-
 window.mySwipe = new Swipe(document.getElementById('slider'));
-
 ```
+
 I always place this at the bottom of the page, externally, to verify the page is ready.
 
 Also Swipe needs just a few styles added to your stylesheet:
 
 ``` css
-
 .swipe-active {
   overflow:hidden;
   position:relative;
@@ -36,7 +34,6 @@ Also Swipe needs just a few styles added to your stylesheet:
   top:0;
   left:0;
 }
-
 ```
 
 ## Config Options
