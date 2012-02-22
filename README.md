@@ -63,7 +63,7 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   speed: 400,
   auto: 3000,
   continuous: true,
-  disableScroll: flase,
+  disableScroll: false,
   callback: function(index, elem) {},
   transitionEnd: function(index, elem) {}
 });
