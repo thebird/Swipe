@@ -1,11 +1,13 @@
 <!DOCTYPE HTML> 
 <html>
 <head>
+<title>Swipe 2</title>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
 <link href='style.css' rel='stylesheet'/>
 <style>
 
 /* Swipe 2 required styles */
+
 .swipe-active {
   overflow:hidden;
   position:relative;
@@ -17,6 +19,7 @@
   top:0;
   left:0;
 }
+
 /* END required styles */
 
 </style>
@@ -56,11 +59,7 @@
   
   <button onclick='mySwipe.prev()'>prev</button> 
   <button onclick='mySwipe.next()'>next</button>
-  <button onclick='create()'>create it</button>
-  <button onclick='mySwipe.kill()'>kill it</button>
   <button id='hide'>hide overflow</button>
-
-  <div id='console'></div>
 
 </div>
 
@@ -70,31 +69,28 @@
 
 <script src='swipe.js'></script>
 <script>
-function create() {
-  window.mySwipe = new Swipe(document.getElementById('mySwipe'), {
-    auto: 3000,
-    callback: function(index, elem) {
-      log('callback fired, index is ' + index);
-    },
-    transitionEnd: function(index, elem) {
-      log('transition ended');
-    }
-  });
-}
+
+var elem = document.getElementById('mySwipe'); // $('#mySwipe')[0] in jQuery
+
+window.mySwipe = new Swipe(elem, {
+  startSlide: 5,
+  speed: 500,
+  continuous: false,
+  callback: function(index, elem) {
+    console.log('callback fired, index is ' + index);
+  },
+  transitionEnd: function(index, elem) {
+    console.log('transition ended');
+  }
+});
 
 
 
 
 
 
-/* other crap for the page */
 
-var elem = document.getElementById('console');
-function log(msg) {
-  console.log(msg);
-  elem.innerHTML = msg + '<br>' + elem.innerHTML;
-}
-
+/* show/hide overflow */
 document.getElementById('hide').onclick = function() {
   var button = mySwipe.element, overflow = button.style.overflow;
   if (overflow == 'hidden') {

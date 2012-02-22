@@ -41,7 +41,7 @@ window.Swipe = function(element, options) {
   this.callback = options.callback || function() {};
   this.transitionEnd = options.transitionEnd || function() {};
   this.delay = options.auto || 0;
-  this.cont = options.continuous || true;
+  this.cont = (options.continuous === undefined) ? true : options.continuous;
 
   // check to see if height is available
   this.height = this.element.getBoundingClientRect().height || this.element.offsetHeight || 0;
