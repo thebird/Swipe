@@ -33,6 +33,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
 - **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
+
+- **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
  
 -	**callback** Function - runs at slide change.
 

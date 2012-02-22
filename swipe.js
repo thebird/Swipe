@@ -41,7 +41,8 @@ window.Swipe = function(element, options) {
   this.callback = options.callback || function() {};
   this.transitionEnd = options.transitionEnd || function() {};
   this.delay = options.auto || 0;
-  this.cont = (options.continuous === undefined) ? true : options.continuous;
+  this.cont = !!options.continuous;
+  this.disableScroll = !!options.disableScroll;
 
   // check to see if height is available
   this.height = this.element.getBoundingClientRect().height || this.element.offsetHeight || 0;
@@ -300,6 +301,11 @@ Swipe.prototype = {
       
       // translate immediately 1:1
       _this._slide([_this.index-1,_this.index,_this.index+1],_this.deltaX,0,-1);
+
+    } else if (_this.disableScroll) {
+
+      // prevent native scrolling 
+      e.preventDefault();
 
     }
 
