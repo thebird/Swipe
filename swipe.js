@@ -44,6 +44,9 @@ window.Swipe = function(element, options) {
   this.cont = !!options.continuous;
   this.disableScroll = !!options.disableScroll;
 
+  // verify index is a number not string
+  this.index = parseInt(this.index,10);
+
   // trigger slider initialization
   this.setup();
 
