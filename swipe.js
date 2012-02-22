@@ -11,7 +11,7 @@ window.Swipe = function(element, options) {
   var _this = this;
 
   // return immediately if element doesn't exist
-  if (!element) return null;
+  if (!element) return;
 
   // reference dom elements
   this.element = element;
@@ -101,13 +101,13 @@ Swipe.prototype = {
     this.cache = new Array(this.length);
 
     // return immediately if their are less than two slides
-    if (this.length < 2) return null;
+    if (this.length < 2) return;
 
     // determine width of each slide
     this.width = this.element.getBoundingClientRect().width || this.element.offsetWidth;
 
     // return immediately if measurement fails
-    if (!this.width) return null;
+    if (!this.width) return;
 
     // create variable to find tallest slide
     var tempHeight = 0;
