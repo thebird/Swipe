@@ -36,7 +36,7 @@ window.Swipe = function(element, options) {
 
   // retreive options
   options = options || {};
-  this.index = parseInt(this.options.startSlide,10) || 0;
+  this.index = options.startSlide || 0;
   this.speed = options.speed || 300;
   this.callback = options.callback || function() {};
   this.transitionEnd = options.transitionEnd || function() {};
