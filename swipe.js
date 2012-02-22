@@ -44,9 +44,6 @@ window.Swipe = function(element, options) {
   this.cont = !!options.continuous;
   this.disableScroll = !!options.disableScroll;
 
-  // check to see if height is available
-  this.height = this.element.getBoundingClientRect().height || this.element.offsetHeight || 0;
-
   // trigger slider initialization
   this.setup();
 
@@ -109,8 +106,8 @@ Swipe.prototype = {
     // return immediately if measurement fails
     if (!this.width) return null;
 
-    // if no height given, create variable to find tallest slide
-    if (!this.height) var tempHeight = 0;
+    // create variable to find tallest slide
+    var tempHeight = 0;
 
     // store array of slides before, current, and after
     var refArray = [[],[],[]];
@@ -118,19 +115,15 @@ Swipe.prototype = {
     // stack elements
     for (var index = this.length - 1; index > -1; index--) {
 
-      var elem = this.slides[index];
+      var elem = this.slides[index],
+          height = elem.getBoundingClientRect().height || elem.offsetHeight;
+
       elem.style.width = this.width + 'px';
       elem.setAttribute('data-index', index);
       elem.style.visibility = 'visible';
 
-      if (!this.height) {
-
-        var height = elem.getBoundingClientRect().height || elem.offsetHeight;
-
-        // replace tempHeight if this slides height is greater
-        tempHeight = tempHeight < height ? height : tempHeight;
-
-      }
+      // replace tempHeight if this slides height is greater
+      tempHeight = tempHeight < height ? height : tempHeight;
 
       // add this index to the reference array
       refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index); // 0:before 1:equal 2:after
