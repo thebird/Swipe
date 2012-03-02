@@ -86,6 +86,41 @@ Swipe.prototype = {
 
   },
 
+  teardown: function() {
+    
+    // remove event listeners
+    if (this.element.removeEventListener) {
+      this.element.removeEventListener('touchstart', this, false);
+      this.element.removeEventListener('touchmove', this, false);
+      this.element.removeEventListener('touchend', this, false);
+      this.element.removeEventListener('webkitTransitionEnd', this, false);
+      this.element.removeEventListener('msTransitionEnd', this, false);
+      this.element.removeEventListener('oTransitionEnd', this, false);
+      this.element.removeEventListener('transitionend', this, false);
+      window.removeEventListener('resize', this, false);
+    }    
+    
+    // Return to starting position
+    var initialIndex = this.options.startSlide || 0;
+    this.slide(initialIndex, 0);
+    
+    // Undo styles (not completely non-destructive)
+    var index = this.slides.length;
+    while (index--) {
+      var el = this.slides[index];
+      el.style.removeProperty('display');
+      el.style.removeProperty('vertical-align');
+      el.style.removeProperty('width');
+    }    
+    
+    this.element.style.removeProperty('-webkit-transform');
+    this.element.style.removeProperty('-webkit-transform-duration');
+    this.element.style.removeProperty('ms-transform');
+    this.element.style.removeProperty('width');
+    this.element.style.removeProperty('list-style');
+    this.container.style.removeProperty('overflow');
+  },
+
   slide: function(index, duration) {
 
     var style = this.element.style;
