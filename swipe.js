@@ -63,7 +63,7 @@ window.Swipe = function(element, options) {
         timeout = null;
       };
       if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(delayed, 400); 
+      timeout = setTimeout(delayed, 400);
     };
   }
   this.resize = debounce(function() { _this.setup(); });
@@ -141,6 +141,7 @@ Swipe.prototype = {
     this._slide(refArray[1],0,0,1);
     this._slide(refArray[2],this.width,0,1);
 
+    this._setVisibility();
   },
 
   kill: function() {
@@ -181,10 +182,10 @@ Swipe.prototype = {
       window.onresize = null;
     }
 
-  },  
+  },
 
   getPos: function() {
-    
+
     // return current index position
     return this.index;
 
@@ -218,11 +219,11 @@ Swipe.prototype = {
     var _this = this;
 
     this.interval = (this.delay)
-      ? setTimeout(function() { 
+      ? setTimeout(function() {
         _this.next(_this.delay);
       }, this.delay)
       : 0;
-    
+
   },
 
   handleEvent: function(e) {
@@ -241,7 +242,7 @@ Swipe.prototype = {
   onTouchStart: function(e) {
 
     var _this = this;
-    
+
     _this.start = {
 
       // get touch coordinates for delta calculations in onTouchMove
@@ -255,7 +256,7 @@ Swipe.prototype = {
 
     // used for testing first onTouchMove event
     _this.isScrolling = undefined;
-    
+
     // reset deltaX
     _this.deltaX = 0;
 
@@ -278,7 +279,7 @@ Swipe.prototype = {
     // if user is not trying to scroll vertically
     if (!_this.isScrolling) {
 
-      // prevent native scrolling 
+      // prevent native scrolling
       e.preventDefault();
 
       // cancel slideshow
@@ -286,21 +287,21 @@ Swipe.prototype = {
       clearTimeout(_this.interval);
 
       // increase resistance if first or last slide
-      _this.deltaX = 
-        _this.deltaX / 
+      _this.deltaX =
+        _this.deltaX /
           ( (!_this.index && _this.deltaX > 0               // if first slide and sliding left
             || _this.index == _this.length - 1              // or if last slide and sliding right
             && _this.deltaX < 0                            // and if sliding at all
-          ) ?                      
+          ) ?
           ( Math.abs(_this.deltaX) / _this.width + 1 )      // determine resistance level
           : 1 );                                          // no resistance if false
-      
+
       // translate immediately 1:1
       _this._slide([_this.index-1,_this.index,_this.index+1],_this.deltaX,0,-1);
 
     } else if (_this.disableScroll) {
 
-      // prevent native scrolling 
+      // prevent native scrolling
       e.preventDefault();
 
     }
@@ -312,16 +313,16 @@ Swipe.prototype = {
     var _this = this;
 
     // determine if slide attempt triggers next/prev slide
-    var isValidSlide = 
+    var isValidSlide =
           Number(new Date()) - _this.start.time < 250      // if slide duration is less than 250ms
           && Math.abs(_this.deltaX) > 20                   // and if slide amt is greater than 20px
           || Math.abs(_this.deltaX) > _this.width/2,        // or if slide amt is greater than half the width
 
     // determine if slide attempt is past start and end
-        isPastBounds = 
+        isPastBounds =
           !_this.index && _this.deltaX > 0                          // if first slide and slide amt is greater than 0
           || _this.index == _this.length - 1 && _this.deltaX < 0,    // or if last slide and slide amt is less than 0
-        
+
         direction = _this.deltaX < 0; // true:right false:left
 
     // if not scrolling vertically
@@ -337,6 +338,9 @@ Swipe.prototype = {
           _this._slide([_this.index-1,_this.index],_this.width,_this.speed,0);
           _this.index += -1;
         }
+
+        _this._setVisibility();
+
         _this.callback(_this.index, _this.slides[_this.index]);
       } else {
         _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed,0);
@@ -359,7 +363,7 @@ Swipe.prototype = {
   },
 
   slide: function(to, speed) {
-    
+
     var from = this.index;
 
     if (from == to) return; // do nothing if already on requested slide
@@ -378,12 +382,14 @@ Swipe.prototype = {
 
     this.index = to;
 
+    this._setVisibility();
+
     this.callback(this.index, this.slides[this.index]);
 
   },
 
   _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
-    
+
     var _slides = this.slides,
         l = nums.length;
 
@@ -394,7 +400,7 @@ Swipe.prototype = {
       if (elem) { // if the element at slide number exists
 
         if (this.browser.transitions) {
-          
+
           var style = elem.style,
               xval = (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) );
 
@@ -422,13 +428,13 @@ Swipe.prototype = {
 
 
     if (!speed) { // if not an animation, just reposition
-      
+
       elem.style.left = to + 'px';
 
       return;
 
     }
-    
+
     var _this = this,
         start = new Date(),
         timer = setInterval(function() {
@@ -442,7 +448,7 @@ Swipe.prototype = {
             if (_this._getElemIndex(elem) == _this.index) { // only call transition end on the main slide item
 
               if (_this.delay) _this.begin();
-            
+
               _this.transitionEnd(_this.index, _this.slides[_this.index]);
 
             }
@@ -460,9 +466,21 @@ Swipe.prototype = {
   },
 
   _getElemIndex: function(elem) {
-    
+
     return parseInt(elem.getAttribute('data-index'),10);
 
+  },
+
+  _setVisibility: function() {
+    for (var i = this.slides.length - 1; i >= 0; i--) {
+      if ( i < this.index - 1 || i > this.index + 1) {
+        this.slides[i].style.visibility = 'hidden';
+        this.slides[i].style.display = 'none';
+      } else {
+        this.slides[i].style.display = 'block';
+        this.slides[i].style.visibility = 'visible';
+      }
+    };
   }
 
 };
