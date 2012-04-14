@@ -449,3 +449,15 @@ Swipe.prototype = {
   }
 
 };
+
+
+if ( window.jQuery || window.Zepto ) {
+  (function($) {
+    $.fn.Swipe = function(params) {
+      return this.each(function() {
+        var _this = $(this);
+        _this.data('Swipe', new Swipe(_this[0], params));
+      });
+    }
+  })( window.jQuery || window.Zepto )
+}
