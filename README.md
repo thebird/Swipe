@@ -5,14 +5,16 @@ Swipe is a responsive, lightweight slider with accurate **1:1** touch movement. 
 Swipe only needs to follow a simple pattern. Here is an example:
 
 ``` html
-<div id='slider'>
-  <div></div>
-  <div></div>
-  <div></div>
+<div id='slider' class='swipe'>
+  <div class='swipe-wrap'>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </div>
 ```
 
-Above is the initial required structure– a series of elements wrapped in a container. Place any content you want within the items. The containing div will need to be passed to a new Swipe object like so:
+Above is the initial required structure– a series of elements wrapped in two containers. Place any content you want within the items. The containing div will need to be passed to a new Swipe object like so:
 
 ``` js
 window.mySwipe = new Swipe(document.getElementById('slider'));
@@ -23,16 +25,18 @@ I always place this at the bottom of the page, externally, to verify the page is
 Also Swipe needs just a few styles added to your stylesheet:
 
 ``` css
-.swipe-active {
-  overflow:hidden;
-  position:relative;
+.swipe {
+  overflow: hidden;
+  visibility: hidden;
 }
-.swipe-active > * {
-  display:block;
-  visibility:hidden;
-  position:absolute;
-  top:0;
-  left:0;
+.swipe-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.swipe-wrap div {
+  float:left;
+  width:100%;
+  position: relative;
 }
 ```
 

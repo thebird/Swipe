@@ -46,9 +46,6 @@ a {
 }
 
 
-#mySwipe {
-  overflow: visible;
-}
 #mySwipe div b {
   display:block;
   background:#fff;
@@ -60,6 +57,4 @@ a {
   padding:100px 10px;
   border:1px solid;
   border-color:#CDD2D6 #BFC6CB #B3BBC1 #BFC6CB;
-  /*border-radius:2px;*/
-  /*box-shadow:0 1px 1px rgba(0,0,0,.08);*/
 }

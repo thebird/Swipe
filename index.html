@@ -8,16 +8,18 @@
 
 /* Swipe 2 required styles */
 
-.swipe-active {
-  overflow:hidden;
-  position:relative;
+.swipe {
+  overflow: hidden;
+  visibility: hidden;
 }
-.swipe-active > * {
-  display:block;
-  visibility:hidden;
-  position:absolute;
-  top:0;
-  left:0;
+.swipe-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.swipe-wrap div {
+  float:left;
+  width:100%;
+  position: relative;
 }
 
 /* END required styles */
@@ -29,28 +31,32 @@
 
 <h1>Swipe 2</h1>
 
-<div id='mySwipe' style='height:245px'>
-  <div><b>0</b></div>
-  <div><b>1</b></div>
-  <div><b>2</b></div>
-  <div><b>3</b></div>
-  <div><b>4</b></div>
-  <div><b>5</b></div>
-  <div><b>6</b></div>
-  <div><b>7</b></div>
-  <div><b>8</b></div>
-  <div><b>9</b></div>
-  <div><b>10</b></div>
-  <div><b>11</b></div>
-  <div><b>12</b></div>
-  <div><b>13</b></div>
-  <div><b>14</b></div>
-  <div><b>15</b></div>
-  <div><b>16</b></div>
-  <div><b>17</b></div>
-  <div><b>18</b></div>
-  <div><b>19</b></div>
-  <div><b>20</b></div>
+
+
+<div id='mySwipe' class='swipe'>
+  <div class='swipe-wrap'>
+    <div><b>0</b></div>
+    <div><b>1</b></div>
+    <div><b>2</b></div>
+    <div><b>3</b></div>
+    <div><b>4</b></div>
+    <div><b>5</b></div>
+    <div><b>6</b></div>
+    <div><b>7</b></div>
+    <div><b>8</b></div>
+    <div><b>9</b></div>
+    <div><b>10</b></div>
+    <div><b>11</b></div>
+    <div><b>12</b></div>
+    <div><b>13</b></div>
+    <div><b>14</b></div>
+    <div><b>15</b></div>
+    <div><b>16</b></div>
+    <div><b>17</b></div>
+    <div><b>18</b></div>
+    <div><b>19</b></div>
+    <div><b>20</b></div>
+  </div>
 </div>
 
 
@@ -59,7 +65,6 @@
   
   <button onclick='mySwipe.prev()'>prev</button> 
   <button onclick='mySwipe.next()'>next</button>
-  <button id='hide'>hide overflow</button>
 
 </div>
 
@@ -72,35 +77,6 @@
 
 var elem = document.getElementById('mySwipe'); // $('#mySwipe')[0] in jQuery
 
-window.mySwipe = new Swipe(elem, {
-  startSlide: 5,
-  speed: 500,
-  continuous: false,
-  disableScroll: true,
-  callback: function(index, elem) {
-    console.log('callback fired, index is ' + index);
-  },
-  transitionEnd: function(index, elem) {
-    console.log('transition ended');
-  }
-});
-
-
-
-
-
-
-
-/* show/hide overflow */
-document.getElementById('hide').onclick = function() {
-  var button = mySwipe.element, overflow = button.style.overflow;
-  if (overflow == 'hidden') {
-    button.style.overflow = 'visible';
-    this.innerHTML = 'hide overflow';
-  } else {
-    button.style.overflow = 'hidden';
-    this.innerHTML = 'show overflow';
-  }
-}
+window.mySwipe = new Swipe(elem);
 
 </script>

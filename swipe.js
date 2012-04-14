@@ -2,7 +2,7 @@
  * Swipe 2.0
  *
  * Brad Birdsall, Prime
- * Copyright 2011, Licensed GPL & MIT
+ * Copyright 2012, Licensed GPL & MIT
  *
 */
 
@@ -14,10 +14,8 @@ window.Swipe = function(element, options) {
   if (!element) return;
 
   // reference dom elements
-  this.element = element;
-
-  // add .swipe-active class
-  element.className += ' swipe-active';
+  this.container = element;
+  this.element = this.container.children[0];
 
   // simple feature detection
   this.browser = {
@@ -53,21 +51,6 @@ window.Swipe = function(element, options) {
   // begin auto slideshow
   this.begin();
 
-  // debounce resize events
-  var debounce = function(fn) {
-    var timeout;
-    return function debounced() {
-      var obj = this, args = arguments;
-      function delayed() {
-        fn.apply(obj, args);
-        timeout = null;
-      };
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(delayed, 400); 
-    };
-  }
-  this.resize = debounce(function() { _this.setup(); });
-
   // add event listeners
   if (this.element.addEventListener) {
     if (!!this.browser.touch) {
@@ -81,12 +64,12 @@ window.Swipe = function(element, options) {
       this.element.addEventListener('oTransitionEnd', this, false);
       this.element.addEventListener('transitionend', this, false);
     }
-    window.addEventListener('resize', this.resize, false);
+    window.addEventListener('resize', this, false);
   }
 
   // to play nice with old IE
   else {
-    window.onresize = this.resize;
+    window.onresize = this.setup;
   }
 
 };
@@ -104,42 +87,41 @@ Swipe.prototype = {
     if (this.length < 2) return;
 
     // determine width of each slide
-    this.width = this.element.getBoundingClientRect().width || this.element.offsetWidth;
+    this.width = this.container.getBoundingClientRect().width || this.container.offsetWidth;
 
     // return immediately if measurement fails
     if (!this.width) return;
 
-    // create variable to find tallest slide
-    var tempHeight = 0;
-
     // store array of slides before, current, and after
     var refArray = [[],[],[]];
+
+    this.element.style.width = (this.slides.length * this.width) + 'px';
 
     // stack elements
     for (var index = this.length - 1; index > -1; index--) {
 
-      var elem = this.slides[index],
-          height = elem.getBoundingClientRect().height || elem.offsetHeight;
+      var elem = this.slides[index];
 
       elem.style.width = this.width + 'px';
       elem.setAttribute('data-index', index);
-      elem.style.visibility = 'visible';
 
-      // replace tempHeight if this slides height is greater
-      tempHeight = tempHeight < height ? height : tempHeight;
+      if (this.browser.transitions) {
+        elem.style.left = (index * -this.width) + 'px';
+      }
 
-      // add this index to the reference array
-      refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index); // 0:before 1:equal 2:after
+      // add this index to the reference array    0:before 1:equal 2:after
+      refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index);
 
     }
 
-    // if no height given, set height of container based on tallest slide (required with absolute positioning)
-    if (!this.height) this.element.style.height = tempHeight + 'px';
+    if (this.browser.transitions) {
+      // stack left, current, and right slides
+      this._slide(refArray[0],-this.width,0,1);
+      this._slide(refArray[1],0,0,1);
+      this._slide(refArray[2],this.width,0,1);
+    }
 
-    // stack left, current, and right slides
-    this._slide(refArray[0],-this.width,0,1);
-    this._slide(refArray[1],0,0,1);
-    this._slide(refArray[2],this.width,0,1);
+    this.container.style.visibility = 'visible';
 
   },
 
@@ -364,17 +346,23 @@ Swipe.prototype = {
 
     if (from == to) return; // do nothing if already on requested slide
 
-    var toStack = Math.abs(from-to) - 1,
-        direction = Math.abs(from-to) / (from-to), // 1:right -1:left
-        inBetween = [];
+    
+    if (this.browser.transitions) {
+      var toStack = Math.abs(from-to) - 1,
+          direction = Math.abs(from-to) / (from-to), // 1:right -1:left
+          inBetween = [];
 
-    while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
+      while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
 
-    // stack em
-    this._slide(inBetween,this.width * direction,0,1);
+      // stack em
+      this._slide(inBetween,this.width * direction,0,1);
 
-    // now slide from and to in the proper direction
-    this._slide([from,to],this.width * direction,this.speed,0);
+      // now slide from and to in the proper direction
+      this._slide([from,to],this.width * direction,this.speed,0);
+    }
+    else {
+      this._animate(from*-this.width, to * -this.width, this.speed)
+    }
 
     this.index = to;
 
@@ -392,22 +380,16 @@ Swipe.prototype = {
       var elem = _slides[nums[l]];
 
       if (elem) { // if the element at slide number exists
-
-        if (this.browser.transitions) {
           
-          var style = elem.style,
-              xval = (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) );
+        var style = elem.style,
+            xval = (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) );
 
-          // set duration speed (0 represents 1-to-1 scrolling)
-          style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = (speed ? speed : 0) + 'ms';
+        // set duration speed (0 represents 1-to-1 scrolling)
+        style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = (speed ? speed : 0) + 'ms';
 
-          // translate to given index position
-          style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
-          style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + xval + 'px)';
-
-        } else {
-          this._animate(elem, this.cache[nums[l]], dist + ( _setting != 1 ? this.cache[nums[l]] : 0), speed ? speed : 0);
-        }
+        // translate to given index position
+        style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
+        style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + xval + 'px)';
 
         if (_setting == 1) this.cache[nums[l]] = dist;
         else if (_setting == 0) this.cache[nums[l]] += dist;
@@ -418,8 +400,9 @@ Swipe.prototype = {
 
   },
 
-  _animate: function(elem, from, to, speed) {
+  _animate: function(from, to, speed) {
 
+    var elem = this.element;
 
     if (!speed) { // if not an animation, just reposition
       
