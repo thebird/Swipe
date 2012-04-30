@@ -39,7 +39,7 @@ window.Swipe = function(element, options) {
   this.callback = options.callback || function() {};
   this.transitionEnd = options.transitionEnd || function() {};
   this.delay = options.auto || 0;
-  this.cont = !!options.continuous;
+  this.cont = (options.continuous != undefined) ? !!options.continuous : true;
   this.disableScroll = !!options.disableScroll;
 
   // verify index is a number not string
