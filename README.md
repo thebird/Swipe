@@ -39,6 +39,12 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
+- **loop** Boolean *(default:false)* - Whether or the rotation should loop after reaching the end
+
+- **prevId** String - Document ID of the element serving as your "Previous" link.  When loop=false and the first slide is the current slide this element will be hidden.
+
+- **nextId** String - Document ID of the element serving as your "Next" link.  When loop=false and the final slide is the current slide this element will be hidden.
+
 -	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
 
 ### Example
