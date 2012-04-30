@@ -10,7 +10,7 @@ Swipe only needs to follow a simple pattern. Here is an example:
 ``` html
 <div id='slider'>
   <ul>
-  	<li style='display:block'></li>
+    <li style='display:block'></li>
   	<li style='display:none'></li>
   	<li style='display:none'></li>
   	<li style='display:none'></li>
