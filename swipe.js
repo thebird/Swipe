@@ -90,6 +90,11 @@ Swipe.prototype = {
 
     var style = this.element.style;
 
+    // fallback to default speed
+    if (duration == undefined) {
+        duration = this.speed;
+    }
+
     // set duration speed (0 represents 1-to-1 scrolling)
     style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = duration + 'ms';
 
