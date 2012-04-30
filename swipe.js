@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.loop = this.options.loop || 'onlyNext';
 
   // reference dom elements
   this.container = element;
@@ -120,9 +121,12 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
-
+        // if not at first slide
+    if (this.index) {
+        this.slide(this.index-1, this.speed);
+    } else if (this.loop === 'onlyPrev' || this.loop === 'both') {
+        this.slide(this.length - 1, this.speed); //go to the last slide
+    }
   },
 
   next: function(delay) {
@@ -131,9 +135,11 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
-
+    if (this.index < this.length - 1) {
+        this.slide(this.index+1, this.speed); // if not last slide
+    } else if (this.loop === 'onlyNext' || this.loop === 'both') {
+        this.slide(0, this.speed); //if last slide return to start
+    }
   },
 
   begin: function() {
