@@ -69,7 +69,9 @@ window.Swipe = function(element, options) {
 
   // to play nice with old IE
   else {
-    window.onresize = this.setup;
+    window.onresize = function () {
+      _this.setup();
+    };
   }
 
 };
