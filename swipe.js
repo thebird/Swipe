@@ -94,8 +94,8 @@ Swipe.prototype = {
     style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = duration + 'ms';
 
     // translate to given index position
-    style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
-    style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + -(index * this.width) + 'px)';
+    style.MozTransform = style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
+    style.msTransform = style.OTransform = 'translateX(' + -(index * this.width) + 'px)';
 
     // set new index to allow for expression arguments
     this.index = index;
@@ -194,7 +194,7 @@ Swipe.prototype = {
     this.deltaX = 0;
 
     // set transition time to 0 for 1-to-1 touch movement
-    this.element.style.webkitTransitionDuration = 0;
+    this.element.style.MozTransitionDuration = this.element.style.webkitTransitionDuration = 0;
 
   },
 
@@ -230,7 +230,7 @@ Swipe.prototype = {
           : 1 );                                          // no resistance if false
       
       // translate immediately 1-to-1
-      this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
+      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
 
     }
 
