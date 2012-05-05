@@ -1,7 +1,7 @@
 /*
  * Swipe 2.0
  *
- * Brad Birdsall, Prime
+ * Brad Birdsall
  * Copyright 2012, Licensed GPL & MIT
  *
 */
@@ -117,10 +117,12 @@ Swipe.prototype = {
     }
 
     if (this.browser.transitions) {
+      
       // stack left, current, and right slides
-      this._slide(refArray[0],-this.width,0,1);
-      this._slide(refArray[1],0,0,1);
-      this._slide(refArray[2],this.width,0,1);
+      this._stack(refArray[0],-1);
+      this._stack(refArray[1],0);
+      this._stack(refArray[2],1);
+
     }
 
     this.container.style.visibility = 'visible';
@@ -139,7 +141,7 @@ Swipe.prototype = {
       this.slides[i].style.width = '';
       slideArray.push(i);
     }
-    this._slide(slideArray,0,0,1);
+    this._stack(slideArray,0);
 
     var elem = this.element;
     elem.className = elem.className.replace('swipe-active','');
@@ -280,7 +282,7 @@ Swipe.prototype = {
           : 1 );                                          // no resistance if false
       
       // translate immediately 1:1
-      _this._slide([_this.index-1,_this.index,_this.index+1],_this.deltaX,0,-1);
+      _this._move([_this.index-1,_this.index,_this.index+1],_this.deltaX);
 
     } else if (_this.disableScroll) {
 
@@ -313,17 +315,17 @@ Swipe.prototype = {
 
       if (isValidSlide && !isPastBounds) {
         if (direction) {
-          _this._slide([_this.index-1],-_this.width,0,1);
-          _this._slide([_this.index,_this.index+1],-_this.width,_this.speed,0);
+          _this._stack([_this.index-1],-1);
+          _this._slide([_this.index,_this.index+1],-_this.width,_this.speed);
           _this.index += 1;
         } else {
-          _this._slide([_this.index+1],_this.width,0,1);
-          _this._slide([_this.index-1,_this.index],_this.width,_this.speed,0);
+          _this._stack([_this.index+1],1);
+          _this._slide([_this.index-1,_this.index],_this.width,_this.speed);
           _this.index += -1;
         }
         _this.callback(_this.index, _this.slides[_this.index]);
       } else {
-        _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed,0);
+        _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed);
       }
 
     }
@@ -347,7 +349,6 @@ Swipe.prototype = {
     var from = this.index;
 
     if (from == to) return; // do nothing if already on requested slide
-
     
     if (this.browser.transitions) {
       var toStack = Math.abs(from-to) - 1,
@@ -357,10 +358,10 @@ Swipe.prototype = {
       while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
 
       // stack em
-      this._slide(inBetween,this.width * direction,0,1);
+      this._stack(inBetween,direction);
 
       // now slide from and to in the proper direction
-      this._slide([from,to],this.width * direction,this.speed,0);
+      this._slide([from,to],this.width * direction,this.speed);
     }
     else {
       this._animate(from*-this.width, to * -this.width, this.speed)
@@ -372,33 +373,70 @@ Swipe.prototype = {
 
   },
 
-  _slide: function(nums, dist, speed, _setting) { // _setting => -1:temp, 0:full, 1:absolute
+  _slide: function(nums, dist, speed) {
     
+    if (nums.length) console.log('Slide:', nums)
+
     var _slides = this.slides,
         l = nums.length;
 
     while(l--) {
 
-      var elem = _slides[nums[l]];
+      this._translate(_slides[nums[l]], dist + this.cache[nums[l]], speed ? speed : 0);
 
-      if (elem) { // if the element at slide number exists
-          
-        var style = elem.style,
-            xval = (dist + ( _setting != 1 ? this.cache[nums[l]] : 0) );
-
-        // set duration speed (0 represents 1-to-1 scrolling)
-        style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = (speed ? speed : 0) + 'ms';
-
-        // translate to given index position
-        style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
-        style.msTransform = style.MozTransform = style.OTransform = 'translateX(' + xval + 'px)';
-
-        if (_setting == 1) this.cache[nums[l]] = dist;
-        else if (_setting == 0) this.cache[nums[l]] += dist;
-
-      }
+      this.cache[nums[l]] += dist;
 
     }
+
+  },
+
+  _stack: function(nums, pos) {  // pos: -1:left 0:center 1:right
+
+    if (nums.length) console.log('Stack:', nums, pos)
+
+    var _slides = this.slides,
+        l = nums.length,
+        dist = this.width * pos;
+
+    while(l--) {
+      
+      this._translate(_slides[nums[l]], dist, 0);
+
+      this.cache[nums[l]] = dist;
+
+    }
+
+  },
+
+  _move: function(nums, dist) { // 1:1 scrolling
+
+    if (nums.length) console.log('Move:', nums, dist)
+
+    var _slides = this.slides,
+        l = nums.length;
+
+    while(l--) this._translate(_slides[nums[l]], dist + this.cache[nums[l]], 0);
+
+  },
+
+  _translate: function(elem, xval, speed) {
+    
+    if (!elem) return;
+
+    var style = elem.style;
+
+    // set duration speed to 0
+    style.webkitTransitionDuration = 
+    style.MozTransitionDuration = 
+    style.msTransitionDuration = 
+    style.OTransitionDuration = 
+    style.transitionDuration = speed + 'ms';
+
+    // translate to given position
+    style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
+    style.msTransform = 
+    style.MozTransform = 
+    style.OTransform = 'translateX(' + xval + 'px)';
 
   },
 
