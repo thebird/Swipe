@@ -374,8 +374,6 @@ Swipe.prototype = {
   },
 
   _slide: function(nums, dist, speed) {
-    
-    if (nums.length) console.log('Slide:', nums)
 
     var _slides = this.slides,
         l = nums.length;
@@ -392,8 +390,6 @@ Swipe.prototype = {
 
   _stack: function(nums, pos) {  // pos: -1:left 0:center 1:right
 
-    if (nums.length) console.log('Stack:', nums, pos)
-
     var _slides = this.slides,
         l = nums.length,
         dist = this.width * pos;
@@ -409,8 +405,6 @@ Swipe.prototype = {
   },
 
   _move: function(nums, dist) { // 1:1 scrolling
-
-    if (nums.length) console.log('Move:', nums, dist)
 
     var _slides = this.slides,
         l = nums.length;
