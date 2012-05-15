@@ -5,7 +5,7 @@
  * Copyright 2011, Licensed GPL & MIT
  *
 */
-
+if (!(window.on_resize)) { function on_resize(c,t){onresize=function(){clearTimeout(t);t=setTimeout(c,500)};return c}; }
 window.Swipe = function(element, options) {
 
   // return immediately if element doesn't exist
@@ -43,8 +43,11 @@ window.Swipe = function(element, options) {
     this.element.addEventListener('msTransitionEnd', this, false);
     this.element.addEventListener('oTransitionEnd', this, false);
     this.element.addEventListener('transitionend', this, false);
-    window.addEventListener('resize', this, false);
   }
+  
+  on_resize(function(){
+    _this.setup();
+	});
 
 };
 
@@ -167,7 +170,6 @@ Swipe.prototype = {
       case 'msTransitionEnd':
       case 'oTransitionEnd':
       case 'transitionend': this.transitionEnd(e); break;
-      case 'resize': this.setup(); break;
     }
   },
 
