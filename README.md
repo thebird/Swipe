@@ -28,6 +28,7 @@ Also Swipe needs just a few styles added to your stylesheet:
 .swipe {
   overflow: hidden;
   visibility: hidden;
+  position: relative;
 }
 .swipe-wrap {
   overflow: hidden;
