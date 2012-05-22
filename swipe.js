@@ -17,6 +17,7 @@ window.Swipe = function(element, options) {
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
+  this.secondaryAnim = this.options.secondaryAnim || function() {};
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
 
@@ -102,6 +103,9 @@ Swipe.prototype = {
     style.MozTransform = style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
     style.msTransform = style.OTransform = 'translateX(' + -(index * this.width) + 'px)';
 
+    // trigger secondary animation
+    this.secondaryAnim(this.index);
+    
     // set new index to allow for expression arguments
     this.index = index;
 
