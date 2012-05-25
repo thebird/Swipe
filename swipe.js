@@ -18,6 +18,8 @@ window.Swipe = function(element, options) {
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
+  this.endcallback = this.options.endcallback || function() {};
+  this.begincallback = this.options.begincallback || function() {};
   this.delay = this.options.auto || 0;
 
   // reference dom elements
@@ -176,6 +178,12 @@ Swipe.prototype = {
     if (this.delay) this.begin();
 
     this.callback(e, this.index, this.slides[this.index]);
+    
+    if(this.index == this.length -1 ){
+      this.endcallback(e, this.index, this.slides[this.index]);
+    } else if (this.index == 0) {
+      this.begincallback(e, this.index, this.slides[this.index]);
+    }
 
   },
 
