@@ -85,8 +85,8 @@ Swipe.prototype = {
     this.length = this.slides.length;
     this.cache = new Array(this.length);
 
-    // return immediately if their are less than two slides
-    if (this.length < 2) return;
+    // return immediately if there are no slides
+    if (this.length < 1) return;
 
     // determine width of each slide
     this.width = this.container.getBoundingClientRect().width || this.container.offsetWidth;
