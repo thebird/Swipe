@@ -21,6 +21,7 @@ window.Swipe = function(element, options) {
   this.endcallback = this.options.endcallback || function() {};
   this.begincallback = this.options.begincallback || function() {};
   this.delay = this.options.auto || 0;
+  this.stopatend = this.options.stopatend || 0;
 
   // reference dom elements
   this.container = element;
@@ -134,7 +135,7 @@ Swipe.prototype = {
     clearTimeout(this.interval);
 
     if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
+    else if (this.options.stopatend == 0) this.slide(0, this.speed); //if last slide return to start if stopatend is not set
 
   },
 
