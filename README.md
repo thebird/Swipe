@@ -41,6 +41,9 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 -	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
 
+-	**endcallback** Function - fires on reaching the end of slideshow after a transition.
+
+-	**begincallback** Function - fires on reaching the begining of slideshow after a transition.
 ### Example
 
 ``` js

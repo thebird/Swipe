@@ -18,7 +18,10 @@ window.Swipe = function(element, options) {
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
+  this.endcallback = this.options.endcallback || function() {};
+  this.begincallback = this.options.begincallback || function() {};
   this.delay = this.options.auto || 0;
+  this.stopatend = this.options.stopatend || 0;
 
   // reference dom elements
   this.container = element;
@@ -132,7 +135,7 @@ Swipe.prototype = {
     clearTimeout(this.interval);
 
     if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
+    else if (this.options.stopatend == 0) this.slide(0, this.speed); //if last slide return to start if stopatend is not set
 
   },
 
@@ -176,6 +179,12 @@ Swipe.prototype = {
     if (this.delay) this.begin();
 
     this.callback(e, this.index, this.slides[this.index]);
+    
+    if(this.index == this.length -1 ){
+      this.endcallback(e, this.index, this.slides[this.index]);
+    } else if (this.index == 0) {
+      this.begincallback(e, this.index, this.slides[this.index]);
+    }
 
   },
 
