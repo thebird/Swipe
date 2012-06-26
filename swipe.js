@@ -17,6 +17,7 @@ window.Swipe = function(element, options) {
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
+  this.secondaryAnimation = this.options.secondaryAnimation || function() {};
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
 
@@ -104,7 +105,7 @@ Swipe.prototype = {
 
     // set new index to allow for expression arguments
     this.index = index;
-
+    this.secondaryAnimation(this.index);
   },
 
   getPos: function() {
