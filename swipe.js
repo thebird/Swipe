@@ -60,7 +60,11 @@ Swipe.prototype = {
     if (this.length < 2) return null;
 
     // determine width of each slide
-    this.width = this.container.getBoundingClientRect().width;
+    if("getBoundingClientRect" in this.container) {
+        this.width = this.container.getBoundingClientRect().width ;
+    }else {
+        this.width = this.container.offsetWidth;    //http://help.dottoro.com/ljvmcrrn.php
+    }
 
     // return immediately if measurement fails
     if (!this.width) return null;
