@@ -3,6 +3,21 @@
 <head>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
 <link href='style.css' rel='stylesheet'/>
+
+<style type="text/css">
+@-webkit-keyframes secondaryAnimation {
+	0%   { opacity: 1; }
+        50%  { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+.secondaryAnimation
+{
+  -webkit-animation-name: secondaryAnimation;
+  -webkit-animation-duration:1s;
+  
+}
+</style>
 </head>
 <body>
 
@@ -67,12 +82,36 @@
 <br><br>
 
 
+<h2>Secondary Animation</h2>
+
+<div id='slider5' class='swipe'>
+  <ul>
+    <li style='display:block' class="slider5"><div>1</div></li>
+    <li style='display:none' class="slider5"><div>2</div></li>
+    <li style='display:none' class="slider5"><div>3</div></li>
+    <li style='display:none' class="slider5"><div>4</div></li>
+    <li style='display:none' class="slider5"><div>5</div></li>
+  </ul>
+</div>
+<a href='#' onclick='slider5.prev();return false;'>prev</a> 
+<a href='#' onclick='slider5.next();return false;'>next</a>
+<br><br>
+
 <script src='swipe.js'></script>
 <script>
 new Swipe(document.getElementById('slider'));
 new Swipe(document.getElementById('slider2'));
 var slider3 = new Swipe(document.getElementById('slider3'));
 var slider4 = new Swipe(document.getElementById('slider4'));
+var slider5 = new Swipe(document.getElementById('slider5'),{
+                        secondaryAnimation: function(index){
+                          currentItem = document.getElementById('slider5').children[0].children[index];
+                          currentItem.className += " secondaryAnimation";
+                          setTimeout(function(){
+                            var reg = new RegExp('(\\s|^)'+'secondaryAnimation'+'(\\s|$)');
+                            currentItem.className = currentItem.className.replace(reg, ' ');
+                          },1000);
+                        }});
 </script>
 
 </body> 
