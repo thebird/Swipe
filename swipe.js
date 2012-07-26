@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.isDisabled = false;
 
   // reference dom elements
   this.container = element;
@@ -106,6 +107,18 @@ Swipe.prototype = {
     this.index = index;
 
   },
+  
+  disable: function() {
+  
+		this.isDisabled = true;
+  
+  }
+  
+  enable: function() {
+  
+		this.isDisabled = false;
+  
+  }
 
   getPos: function() {
     
@@ -180,6 +193,10 @@ Swipe.prototype = {
   },
 
   onTouchStart: function(e) {
+  
+  	if (this.isDisabled) {
+  		return false;
+  	}
     
     this.start = {
 
@@ -204,6 +221,10 @@ Swipe.prototype = {
   },
 
   onTouchMove: function(e) {
+  
+  	if (this.isDisabled) {
+  		return false;
+  	}
 
     // ensure swiping with one touch and not pinching
     if(e.touches.length > 1 || e.scale && e.scale !== 1) return;
@@ -242,6 +263,10 @@ Swipe.prototype = {
   },
 
   onTouchEnd: function(e) {
+  
+  	if (this.isDisabled) {
+  		return false;
+  	}
 
     // determine if slide attempt triggers next/prev slide
     var isValidSlide = 
