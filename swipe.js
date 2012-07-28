@@ -6,10 +6,10 @@
  *
 */
 
-window.Swipe = function(element, options) {
+var Swipe = function(element, options) {
 
   // return immediately if element doesn't exist
-  if (!element) return null;
+  if (!element) {return null;}
 
   var _this = this;
 
@@ -19,10 +19,11 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.supportTouch = 'createTouch' in document;
 
   // reference dom elements
   this.container = element;
-  this.element = this.container.children[0]; // the slide pane
+  this.element = this.container.children[0]; // the slide panel
 
   // static css
   this.container.style.overflow = 'hidden';
@@ -36,13 +37,13 @@ window.Swipe = function(element, options) {
 
   // add event listeners
   if (this.element.addEventListener) {
-    this.element.addEventListener('touchstart', this, false);
-    this.element.addEventListener('touchmove', this, false);
-    this.element.addEventListener('touchend', this, false);
-    this.element.addEventListener('webkitTransitionEnd', this, false);
-    this.element.addEventListener('msTransitionEnd', this, false);
-    this.element.addEventListener('oTransitionEnd', this, false);
-    this.element.addEventListener('transitionend', this, false);
+    var events = ['mousedown', 'mousemove', 'mouseup',
+                'touchstart', 'touchmove','touchend',
+                'webkitTransitionEnd', 'msTransitionEnd', 'oTransitionEnd', 'transitionend'];
+    for(var i=0; i<events.length; i++){
+      this.element.addEventListener(events[i] , this, false);
+    }
+
     window.addEventListener('resize', this, false);
   }
 
@@ -57,13 +58,13 @@ Swipe.prototype = {
     this.length = this.slides.length;
 
     // return immediately if their are less than two slides
-    if (this.length < 2) return null;
+    if (this.length < 2) {return null;}
 
     // determine width of each slide
     this.width = ("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth;
 
     // return immediately if measurement fails
-    if (!this.width) return null;
+    if (!this.width) {return null;}
 
     // hide slider element but keep positioning during setup
     this.container.style.visibility = 'hidden';
@@ -71,6 +72,7 @@ Swipe.prototype = {
     // dynamic css
     this.element.style.width = (this.slides.length * this.width) + 'px';
     var index = this.slides.length;
+
     while (index--) {
       var el = this.slides[index];
       el.style.width = this.width + 'px';
@@ -79,7 +81,7 @@ Swipe.prototype = {
     }
 
     // set start position and force translate to remove initial flickering
-    this.slide(this.index, 0); 
+    this.slide(this.index, 0);
 
     // show slider element
     this.container.style.visibility = 'visible';
@@ -108,7 +110,7 @@ Swipe.prototype = {
   },
 
   getPos: function() {
-    
+
     // return current index position
     return this.index;
 
@@ -141,18 +143,18 @@ Swipe.prototype = {
     var _this = this;
 
     this.interval = (this.delay)
-      ? setTimeout(function() { 
+      ? setTimeout(function() {
         _this.next(_this.delay);
       }, this.delay)
       : 0;
-  
+
   },
-  
+
   stop: function() {
     this.delay = 0;
     clearTimeout(this.interval);
   },
-  
+
   resume: function() {
     this.delay = this.options.auto || 0;
     this.begin();
@@ -160,8 +162,11 @@ Swipe.prototype = {
 
   handleEvent: function(e) {
     switch (e.type) {
+      case 'mousedown':
       case 'touchstart': this.onTouchStart(e); break;
+      case 'mousemove':
       case 'touchmove': this.onTouchMove(e); break;
+      case 'mouseup':
       case 'touchend': this.onTouchEnd(e); break;
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
@@ -172,20 +177,22 @@ Swipe.prototype = {
   },
 
   transitionEnd: function(e) {
-    
-    if (this.delay) this.begin();
+    this.mouseDown = false;
+    if (this.delay) {this.begin();}
 
     this.callback(e, this.index, this.slides[this.index]);
 
   },
 
   onTouchStart: function(e) {
-    
+
+    this.mouseDown = true;
+
     this.start = {
 
       // get touch coordinates for delta calculations in onTouchMove
-      pageX: e.touches[0].pageX,
-      pageY: e.touches[0].pageY,
+      pageX: this.supportTouch ? e.touches[0].pageX : e.pageX,
+      pageY: this.supportTouch ? e.touches[0].pageY : e.pageY,
 
       // set initial timestamp of touch sequence
       time: Number( new Date() )
@@ -194,65 +201,69 @@ Swipe.prototype = {
 
     // used for testing first onTouchMove event
     this.isScrolling = undefined;
-    
+
     // reset deltaX
     this.deltaX = 0;
 
     // set transition time to 0 for 1-to-1 touch movement
     this.element.style.MozTransitionDuration = this.element.style.webkitTransitionDuration = 0;
-    
+
     e.stopPropagation();
   },
 
   onTouchMove: function(e) {
+    var x = this.supportTouch ? e.touches[0].pageX : e.pageX;
+    var y = this.supportTouch ? e.touches[0].pageY : e.pageY;
 
     // ensure swiping with one touch and not pinching
-    if(e.touches.length > 1 || e.scale && e.scale !== 1) return;
+    if( this.supportTouch && e.touches.length > 1) {return;}
+    if( e.scale && e.scale !== 1) {return;}
+    if(!this.supportTouch && !this.mouseDown) {return;}
 
-    this.deltaX = e.touches[0].pageX - this.start.pageX;
+    this.deltaX = x - this.start.pageX;
 
     // determine if scrolling test has run - one time test
     if ( typeof this.isScrolling == 'undefined') {
-      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) );
+      this.isScrolling = Math.abs(this.deltaX) < Math.abs(y - this.start.pageY);
     }
 
     // if user is not trying to scroll vertically
     if (!this.isScrolling) {
 
-      // prevent native scrolling 
+      // prevent native scrolling
       e.preventDefault();
 
       // cancel slideshow
       clearTimeout(this.interval);
 
       // increase resistance if first or last slide
-      this.deltaX = 
-        this.deltaX / 
+      this.deltaX =
+        this.deltaX /
           ( (!this.index && this.deltaX > 0               // if first slide and sliding left
             || this.index == this.length - 1              // or if last slide and sliding right
             && this.deltaX < 0                            // and if sliding at all
-          ) ?                      
+          ) ?
           ( Math.abs(this.deltaX) / this.width + 1 )      // determine resistance level
           : 1 );                                          // no resistance if false
-      
+
       // translate immediately 1-to-1
       this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
-      
+
       e.stopPropagation();
     }
 
   },
 
   onTouchEnd: function(e) {
-
+    this.mouse = false;
     // determine if slide attempt triggers next/prev slide
-    var isValidSlide = 
+    var isValidSlide =
           Number(new Date()) - this.start.time < 250      // if slide duration is less than 250ms
           && Math.abs(this.deltaX) > 20                   // and if slide amt is greater than 20px
           || Math.abs(this.deltaX) > this.width/2,        // or if slide amt is greater than half the width
 
     // determine if slide attempt is past start and end
-        isPastBounds = 
+        isPastBounds =
           !this.index && this.deltaX > 0                          // if first slide and slide amt is greater than 0
           || this.index == this.length - 1 && this.deltaX < 0;    // or if last slide and slide amt is less than 0
 
