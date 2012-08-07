@@ -263,7 +263,8 @@ Swipe.prototype = {
       this.slide( this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed );
 
     }
-
+    
+    e.stopPropagation();
   }
 
 };
