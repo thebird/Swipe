@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.desiredEndWidth = this.options.width || false;
 
   // reference dom elements
   this.container = element;
@@ -83,6 +84,9 @@ Swipe.prototype = {
 
     // show slider element
     this.container.style.visibility = 'visible';
+    if (this.desiredEndWidth) {
+        this.container.style.width = this.desiredEndWidth;
+    }
 
   },
 
@@ -249,22 +253,33 @@ Swipe.prototype = {
     var isValidSlide = 
           Number(new Date()) - this.start.time < 250      // if slide duration is less than 250ms
           && Math.abs(this.deltaX) > 20                   // and if slide amt is greater than 20px
-          || Math.abs(this.deltaX) > this.width/2,        // or if slide amt is greater than half the width
-
-    // determine if slide attempt is past start and end
-        isPastBounds = 
-          !this.index && this.deltaX > 0                          // if first slide and slide amt is greater than 0
-          || this.index == this.length - 1 && this.deltaX < 0;    // or if last slide and slide amt is less than 0
+          || Math.abs(this.deltaX) > this.width/2;        // or if slide amt is greater than half the width
 
     // if not scrolling vertically
     if (!this.isScrolling) {
-
-      // call slide function with slide end value based on isValidSlide and isPastBounds tests
-      this.slide( this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed );
-
+      this.slide( ( isValidSlide 
+              ? this.findSlideToMoveTo() 
+              : 0 ),
+          this.speed
+      );
     }
-    
-    e.stopPropagation();
+  },
+
+  findSlideToMoveTo : function() {
+    var containerWidth = this.element.parentElement.clientWidth;
+    var slidesThatFit = Math.floor(containerWidth / this.width);
+    var movementWanted = Math.ceil( Math.abs(this.deltaX) / this.width);
+    if (this.deltaX > 0) { //moving backwards 
+        if ( this.index - movementWanted < 0 ) { //past bounds
+            return 0; //return first
+        }
+        return this.index - movementWanted; 
+    } else { //moving forwards
+        if ( this.index + movementWanted > this.length - slidesThatFit) { //past bounds
+            return this.length - slidesThatFit; //return last acceptable slide
+        }
+        return this.index + movementWanted; 
+    }
   }
 
 };
