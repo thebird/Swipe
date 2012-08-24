@@ -159,7 +159,7 @@ Swipe.prototype = {
         this.element.removeEventListener('oTransitionEnd', this, false);
         this.element.removeEventListener('transitionend', this, false);
       }
-      window.removeEventListener('resize', this.resize, false);
+      window.removeEventListener('resize', this, false);
     }
 
     // kill old IE! you can quote me on that ;)
