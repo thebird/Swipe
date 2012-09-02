@@ -222,6 +222,8 @@ Swipe.prototype = {
       case 'transitionend': this.onTransitionEnd(e); break;
       case 'resize': this.setup(); break;
     }
+    
+    e.stopPropagation();
   },
 
   onTouchStart: function(e) {
