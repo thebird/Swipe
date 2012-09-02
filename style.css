@@ -35,6 +35,11 @@ a {
   color:#3c3c3c;
 }
 
+
+html, body {
+  background: #f3f3f3;
+}
+
 #console {
   font-size: 12px;
   font-family:"Inconsolata", "Monaco", "Consolas", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
@@ -48,13 +53,15 @@ a {
 
 #mySwipe div b {
   display:block;
-  background:#fff;
   font-weight:bold;
   color:#14ADE5;
   font-size:20px;
   text-align:center;
   margin:10px;
   padding:100px 10px;
-  border:1px solid;
-  border-color:#CDD2D6 #BFC6CB #B3BBC1 #BFC6CB;
+  box-shadow: 0 1px #EBEBEB;
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid;
+  border-color: #E5E5E5 #D3D3D3 #B9C1C6;
 }
