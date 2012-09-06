@@ -21,6 +21,7 @@ window.Swipe = function(element, options) {
   this.delay = this.options.auto || 0;
 
   // reference dom elements
+  this.parent = this.options.parent || null;
   this.container = element;
   this.element = this.container.children[0]; // the slide pane
 
@@ -61,7 +62,13 @@ Swipe.prototype = {
     if (this.length < 2) return null;
 
     // determine width of each slide
-    this.width = ("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth;
+    // If we've defined a parent, get the width from that element.
+    // We're doing this incase this.content was ever display:none, in which case getBoundingClientRect().width || offsetWidth isn't populated.
+    if( !this.parent ){
+      this.width = ("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth;
+    }else{
+      this.width = ("getBoundingClientRect" in this.parent) ? this.parent.getBoundingClientRect().width : this.parent.offsetWidth;
+    }
 
     // return immediately if measurement fails
     if (!this.width) return null;
