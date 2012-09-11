@@ -37,7 +37,9 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 -	**speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
 
-- **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
+-	**auto** Integer - begin with auto slideshow (time in milliseconds between slides)
+
+-	**slidecalled** Function - runs at the start of any slide change. *(effective for updating position indicators/counters)*
 
 -	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
 
