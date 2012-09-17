@@ -1,5 +1,5 @@
 /*
- * Swipe 1.0
+ * Swipe 1.1
  *
  * Brad Birdsall, Prime
  * Copyright 2011, Licensed GPL & MIT
@@ -115,6 +115,13 @@ Swipe.prototype = {
 
   },
 
+  getZoom: function() {
+
+    // return the current zoom/scale level
+    return document.documentElement.clientWidth / window.innerWidth;
+
+  },
+
   prev: function(delay) {
 
     // cancel next scheduled automatic transition, if any
@@ -217,8 +224,8 @@ Swipe.prototype = {
       this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) );
     }
 
-    // if user is not trying to scroll vertically
-    if (!this.isScrolling) {
+    // if user is not trying to scroll vertically and viewport is not zoomed/scaled
+    if ( !this.isScrolling && this.getZoom() == 1 ) {
 
       // prevent native scrolling 
       e.preventDefault();
@@ -257,8 +264,8 @@ Swipe.prototype = {
           !this.index && this.deltaX > 0                          // if first slide and slide amt is greater than 0
           || this.index == this.length - 1 && this.deltaX < 0;    // or if last slide and slide amt is less than 0
 
-    // if not scrolling vertically
-    if (!this.isScrolling) {
+    // if not scrolling vertically and viewport is not zoomed/scaled
+    if ( ! this.isScrolling && this.getZoom() == 1 ) {
 
       // call slide function with slide end value based on isValidSlide and isPastBounds tests
       this.slide( this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed );
