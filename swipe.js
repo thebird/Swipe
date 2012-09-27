@@ -429,7 +429,7 @@ Swipe.prototype = {
     style.transitionDuration = speed + 'ms';
 
     // translate to given position
-    style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
+    style.webkitTransform = 'translate(' + xval + 'px,0)' + 'translateZ(0)';
     style.msTransform = 
     style.MozTransform = 
     style.OTransform = 'translateX(' + xval + 'px)';
