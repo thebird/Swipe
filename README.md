@@ -39,6 +39,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
+- **infinite** Boolean *(default:false)* - infinitely loops the slides, so that after the last slide you are on the first as if it was the next in line
+
 -	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
 
 ### Example

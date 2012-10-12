@@ -11,6 +11,7 @@ window.Swipe = function(element, options) {
   // return immediately if element doesn't exist
   if (!element) return null;
 
+
   var _this = this;
 
   // retreive options
@@ -19,10 +20,26 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.infinite = this.options.infinite || false;
+
+  // if we are doing infinite scrolling we want to start 
+  // past our created buffer slide
+  if(this.infinite) this.index = 1;
 
   // reference dom elements
   this.container = element;
   this.element = this.container.children[0]; // the slide pane
+
+  // clone the first and last items on the list so we have a buffer 
+  // for loop around
+  if(this.infinite){
+    var list = $(this.container).find('ul');
+    var firstElem = list.find('li:first').clone();
+
+    list.find('li:last-child').clone().prependTo(list);
+    firstElem.appendTo(list);
+  }
+
 
   // static css
   this.container.style.overflow = 'hidden';
@@ -121,8 +138,10 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
+
     // if not at first slide
     if (this.index) this.slide(this.index-1, this.speed);
+    else if (this.infinite) this.slide(this.length-2,0); // if first slide return to end
 
   },
 
@@ -132,8 +151,13 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
+    if(this.infinite){
+      if (this.index < this.length - 2) this.slide(this.index+1, this.speed); // if not last slide
+      else this.slide(0, 0); //if last slide return to start
+    } else {
+      if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
+      else this.slide(0, this.speed); //if last slide return to start
+    }
 
   },
 
@@ -175,6 +199,14 @@ Swipe.prototype = {
   transitionEnd: function(e) {
     
     if (this.delay) this.begin();
+
+    // infinite scroll begin
+    if (this.index == (this.length - 2)) {
+      this.next();
+    } else if(this.index == 0) {
+      this.prev();
+    }
+    // infinite scroll end
 
     this.callback(e, this.index, this.slides[this.index]);
 
