@@ -61,7 +61,7 @@ Swipe.prototype = {
     if (this.length < 2) return null;
 
     // determine width of each slide
-    this.width = ("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth;
+    this.width = Math.ceil(("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth);
 
     // return immediately if measurement fails
     if (!this.width) return null;
@@ -70,7 +70,7 @@ Swipe.prototype = {
     this.container.style.visibility = 'hidden';
 
     // dynamic css
-    this.element.style.width = (this.slides.length * this.width) + 'px';
+    this.element.style.width = Math.ceil(this.slides.length * this.width) + 'px';
     var index = this.slides.length;
     while (index--) {
       var el = this.slides[index];
