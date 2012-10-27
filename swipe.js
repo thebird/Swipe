@@ -67,6 +67,7 @@ Swipe.prototype = {
     if (!this.width) return null;
 
     // hide slider element but keep positioning during setup
+    var origVisibility = this.container.style.visibility;
     this.container.style.visibility = 'hidden';
 
     // dynamic css
@@ -82,8 +83,8 @@ Swipe.prototype = {
     // set start position and force translate to remove initial flickering
     this.slide(this.index, 0); 
 
-    // show slider element
-    this.container.style.visibility = 'visible';
+    // restore the visibility of the slider element
+    this.container.style.visibility = origVisibility;
 
   },
 
