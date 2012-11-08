@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
+  this.moveCallback = this.options.moveCallback || function() {};
   this.delay = this.options.auto || 0;
 
   // reference dom elements
@@ -241,6 +242,8 @@ Swipe.prototype = {
 
       // translate immediately 1-to-1
       this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
+
+      this.moveCallback(e, this.index, this.slides[this.index], this.deltaX);
 
       e.stopPropagation();
     }
