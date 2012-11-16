@@ -17,6 +17,7 @@ window.Swipe = function(element, options) {
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
+  this.slidecalled = this.options.slidecalled || function() {};
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
 
@@ -81,14 +82,14 @@ Swipe.prototype = {
     }
 
     // set start position and force translate to remove initial flickering
-    this.slide(this.index, 0); 
+    this.slide(this.index, 0, true); 
 
     // show slider element
     this.container.style.visibility = 'visible';
 
   },
 
-  slide: function(index, duration) {
+  slide: function(index, duration, initSlide) {
 
     var style = this.element.style;
 
@@ -107,6 +108,9 @@ Swipe.prototype = {
     // set new index to allow for expression arguments
     this.index = index;
 
+	// fire slidecalled function if set
+    if (!initSlide) this.slidecalled(this.index, this.slides[this.index]);
+
   },
 
   getPos: function() {
@@ -122,8 +126,8 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
+    if (this.index) this.slide(this.index-1, this.speed); // if not at first slide
+	else this.slide(this.length-1, this.speed); // if first slide, loop to end
 
   },
 
