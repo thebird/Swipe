@@ -40,6 +40,7 @@ window.Swipe = function(element, options) {
     this.element.addEventListener('touchstart', this, false);
     this.element.addEventListener('touchmove', this, false);
     this.element.addEventListener('touchend', this, false);
+    this.element.addEventListener('touchcancel', this, false);
     this.element.addEventListener('webkitTransitionEnd', this, false);
     this.element.addEventListener('msTransitionEnd', this, false);
     this.element.addEventListener('oTransitionEnd', this, false);
@@ -163,6 +164,7 @@ Swipe.prototype = {
     switch (e.type) {
       case 'touchstart': this.onTouchStart(e); break;
       case 'touchmove': this.onTouchMove(e); break;
+      case 'touchcancel' :
       case 'touchend': this.onTouchEnd(e); break;
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
