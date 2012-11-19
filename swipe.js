@@ -64,6 +64,11 @@ Swipe.prototype = {
     // determine width of each slide
     this.width = Math.ceil(("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth);
 
+    // Fix width for Android WebView (i.e. PhoneGap) 
+    if (this.width === 0 && typeof window.getComputedStyle === 'function') {
+      this.width = window.getComputedStyle(this.container, null).width;
+    }
+
     // return immediately if measurement fails
     if (!this.width) return null;
 
