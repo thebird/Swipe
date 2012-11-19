@@ -160,6 +160,12 @@ Swipe.prototype = {
     this.begin();
   },
 
+  goTo: function(index, duration) {
+    this.delay = 0;
+    clearTimeout(this.interval);
+  	this.slide(index, duration);
+	},
+
   handleEvent: function(e) {
     switch (e.type) {
       case 'touchstart': this.onTouchStart(e); break;
