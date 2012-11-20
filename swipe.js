@@ -66,7 +66,7 @@ Swipe.prototype = {
 
     // Fix width for Android WebView (i.e. PhoneGap) 
     if (this.width === 0 && typeof window.getComputedStyle === 'function') {
-      this.width = window.getComputedStyle(this.container, null).width;
+      this.width = window.getComputedStyle(this.container, null).width.replace('px','');
     }
 
     // return immediately if measurement fails
