@@ -19,6 +19,7 @@ window.Swipe = function(element, options) {
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.scroll = this.options.autoScroll || 0;
 
   // reference dom elements
   this.container = element;
@@ -90,6 +91,9 @@ Swipe.prototype = {
 
     // show slider element
     this.container.style.visibility = 'visible';
+	
+	// offset top
+	this.offsetTop = this.container.offsetTop;
 
   },
 
@@ -248,6 +252,12 @@ Swipe.prototype = {
       
       e.stopPropagation();
     }
+	
+	// auto scroll
+	var scrollTop = this.offsetTop - ( this.scroll > 1 ? this.scroll : 0 );
+	if ( this.scroll > 0 && window.scrollY > scrollTop ) {
+		window.scroll(0, scrollTop );
+	}
 
   },
 
