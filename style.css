@@ -37,6 +37,8 @@ a {
   padding-bottom:20px;
   position:relative;
   z-index:1;
+  -webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
 }
 .swipe li div, .swipe div div div {
   margin:0 10px;
