@@ -17,7 +17,7 @@ describe('Swipe', function() {
   });
   
   describe('when calling next', function(){
-    it('should move to the next index 1', function(){
+    it('should move to the next index 1 from 0', function(){
       swipe.next();
       expect(swipe.getPos()).toBe(1);
     });
@@ -30,6 +30,15 @@ describe('Swipe', function() {
   });
   
   describe('when calling prev', function(){
+    it('should move to the prev index 1 from 2', function(){
+      swipe.next();
+      swipe.next();
+      expect(swipe.getPos()).toBe(2);
+      
+      swipe.prev();
+      expect(swipe.getPos()).toBe(1);
+    });
+    
     it('should not move to the prev index when there is none', function(){
       swipe.prev();
       expect(swipe.getPos()).toBe(0);
