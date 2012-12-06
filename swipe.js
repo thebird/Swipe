@@ -17,9 +17,9 @@ window.Swipe = function(element, options) {
   this.options = options || {};
   this.index = this.options.startSlide || 0;
   this.speed = this.options.speed || 300;
-  this.callback = this.options.callback || function() {};
-  this.moved_callback = this.options.moved_callback || function() {};
+  this.callbacks = this.options.callbacks || {after: this.options.callback || function () {}}
   this.delay = this.options.auto || 0;
+  this.loop = this.options.loop || 0;
 
   // reference dom elements
   this.container = element;
@@ -41,6 +41,7 @@ window.Swipe = function(element, options) {
     this.element.addEventListener('touchstart', this, false);
     this.element.addEventListener('touchmove', this, false);
     this.element.addEventListener('touchend', this, false);
+    this.element.addEventListener('touchcancel', this, false);
     this.element.addEventListener('webkitTransitionEnd', this, false);
     this.element.addEventListener('msTransitionEnd', this, false);
     this.element.addEventListener('oTransitionEnd', this, false);
@@ -54,6 +55,14 @@ Swipe.prototype = {
 
   setup: function() {
 
+    // If looping, duplicate first child as last child and last as first.
+    // After sliding into a cloned node we will jump invisibly to its original.
+    if (this.loop && this.element.children.length > 1) {
+      this.element.appendChild(this.element.children[0].cloneNode(true))
+      this.element.insertBefore(this.element.children[this.element.children.length-2].cloneNode(true), this.element.firstChild);
+      this.index++;
+    }
+
     // get and measure amt of slides
     this.slides = this.element.children;
     this.length = this.slides.length;
@@ -62,7 +71,12 @@ Swipe.prototype = {
     if (this.length < 2) return null;
 
     // determine width of each slide
-    this.width = ("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth;
+    this.width = Math.ceil(("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth);
+
+    // Fix width for Android WebView (i.e. PhoneGap) 
+    if (this.width === 0 && typeof window.getComputedStyle === 'function') {
+      this.width = window.getComputedStyle(this.container, null).width.replace('px','');
+    }
 
     // return immediately if measurement fails
     if (!this.width) return null;
@@ -71,7 +85,7 @@ Swipe.prototype = {
     this.container.style.visibility = 'hidden';
 
     // dynamic css
-    this.element.style.width = (this.slides.length * this.width) + 'px';
+    this.element.style.width = Math.ceil(this.slides.length * this.width) + 'px';
     var index = this.slides.length;
     while (index--) {
       var el = this.slides[index];
@@ -96,6 +110,9 @@ Swipe.prototype = {
     if (duration == undefined) {
         duration = this.speed;
     }
+    
+    // before callback gets the previous (ie the current) slide
+    if (this.callbacks.before) this.callbacks.before(null, this.index, this.slides[this.index]);
 
     // set duration speed (0 represents 1-to-1 scrolling)
     style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = duration + 'ms';
@@ -164,6 +181,7 @@ Swipe.prototype = {
     switch (e.type) {
       case 'touchstart': this.onTouchStart(e); break;
       case 'touchmove': this.onTouchMove(e); break;
+      case 'touchcancel' :
       case 'touchend': this.onTouchEnd(e); break;
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
@@ -175,13 +193,20 @@ Swipe.prototype = {
 
   transitionEnd: function(e) {
     
+    // if looping and we've reached a cloned slide, jump to the original from which it was cloned.
+    if (this.loop) {
+      if (this.index == 0) this.slide(this.slides.length-2, 0)
+      if (this.index == this.slides.length-1) this.slide(1, 0)
+    }
+    
     if (this.delay) this.begin();
-
-    this.callback(e, this.index, this.slides[this.index]);
+    if (this.callbacks.after) this.callbacks.after(e, this.index, this.slides[this.index]);
 
   },
 
   onTouchStart: function(e) {
+    // touch_start callback gets the previous (ie the current) slide
+    if (this.callbacks.touch_start) this.callbacks.touch_start(e, this.index, this.slides[this.index]);
     
     this.start = {
 
@@ -265,9 +290,8 @@ Swipe.prototype = {
       this.slide( this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed );
 
     }
-    
-    this.moved_callback(e, this.index, this.slides[this.index]);
-    
+    // touch_end callback gets the newly arrived slide and index
+    if (this.callbacks.touch_end) this.callbacks.touch_end(e, this.index, this.slides[this.index]);
     e.stopPropagation();
   }
 

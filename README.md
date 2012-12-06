@@ -39,7 +39,19 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
--	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
+-	**callbacks** Object *(default:{})* - a set of functions called at different stages of the transition between slides. 
+
+-	**loop** Boolean - *(default: false)* - if true, the slideshow will be looped such that swiping past the end takes the user imperceptibly back to the beginning.
+
+### Callbacks
+
+Callbacks are passed in as an object with the trigger name as key and the callback function as value. Three triggers are currently supported:
+
+* **after** fires after a transition between slides, and receives three arguments: the event, index of the new slide, DOM element of the new slide;
+
+* **before** fires before the transition between slides, and receives almost the same three arguments: null, index of the old slide, DOM element of the old slide.
+
+* **touch_end** fires after a touch event and receives the usual three arguments. It is typically used to disable automatic scrolling.
 
 ### Example
 
@@ -49,10 +61,16 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
 	startSlide: 2,
 	speed: 400,
     auto: 3000,
-	callback: function(event, index, elem) {
-
-	  // do something cool
-
+	callbacks: {
+	    before: function (e, index, elem) { 
+	        // hide old caption
+	    },
+	    after: function (e, index, elem) {
+	        // show new caption
+	    },
+	    touch_end: function () { 
+	        window.mySwipe.stop();
+	    },
 	}
 });
 
@@ -71,6 +89,9 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
 
+`stop()` stops automatic transitions
+
+`resume()` resumes automatic transitions using the existing delay setting
 
 ## Requirements
 Swipe requires a device that supports CSS transforms and works best with devices that support touch. Both of these are not required for the code to run since Swipe does not include any feature detection in the core code. This decision was made due to the fact that all mobile web development should already have some sort of feature detection built into the page. I recommend using a custom build of [Modernizr](http://modernizr.com), don't recreate the wheel.
@@ -91,4 +112,4 @@ I would love to hear more about how to improve Swipe. Play with it and let me kn
 
 
 ## License
-Swipe mobile slider is &copy; 2011 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of GPL &amp; MIT licenses. 
+Swipe mobile slider is &copy; 2011 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of GPL &amp; MIT licenses.
