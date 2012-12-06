@@ -39,7 +39,25 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
--	**callback** Function - runs at the end of any slide change. *(effective for updating position indicators/counters)*
+-	**callbacks** Object *(default:{})* - a set of functions called at different stages of the transition between slides. 
+
+-	**loop** Boolean - *(default: false)* - if true, the slideshow will be looped such that swiping past the end takes the user imperceptibly back to the beginning.
+
+### Callbacks
+
+Callbacks are passed in as an object with the trigger name as key and the callback function as value. Three triggers are currently supported:
+
+* **after** fires after a transition between slides;
+
+* **before** fires before the transition between slides;
+
+* **touch_end** fires at the start of a touch event;
+
+* **touch_end** fires at the end of a touch event;
+
+The callback functions always receive the same three arguments: the current event, the current slide index (as integer) and the current slide element (and DOM node). The exception is the `before` callback, which at the moment gets `null` as the event argument.
+
+The touch callbacks are useful if you want to change out of automatic mode on user input. The before and after callbacks give you a way to manipulate other elements on the page - such as image captions - and keep them in sync with the slider.
 
 ### Example
 
@@ -49,10 +67,16 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
 	startSlide: 2,
 	speed: 400,
     auto: 3000,
-	callback: function(event, index, elem) {
-
-	  // do something cool
-
+	callbacks: {
+	    before: function (e, index, elem) { 
+	        // hide old caption
+	    },
+	    after: function (e, index, elem) {
+	        // show new caption
+	    },
+	    touch_end: function () { 
+	        window.mySwipe.stop();
+	    },
 	}
 });
 
@@ -71,6 +95,9 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
 
+`stop()` stops automatic transitions
+
+`resume()` resumes automatic transitions using the existing delay setting
 
 ## Requirements
 Swipe requires a device that supports CSS transforms and works best with devices that support touch. Both of these are not required for the code to run since Swipe does not include any feature detection in the core code. This decision was made due to the fact that all mobile web development should already have some sort of feature detection built into the page. I recommend using a custom build of [Modernizr](http://modernizr.com), don't recreate the wheel.
@@ -91,4 +118,4 @@ I would love to hear more about how to improve Swipe. Play with it and let me kn
 
 
 ## License
-Swipe mobile slider is &copy; 2011 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of GPL &amp; MIT licenses. 
+Swipe mobile slider is &copy; 2011 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of GPL &amp; MIT licenses.
