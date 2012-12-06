@@ -47,11 +47,17 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 Callbacks are passed in as an object with the trigger name as key and the callback function as value. Three triggers are currently supported:
 
-* **after** fires after a transition between slides, and receives three arguments: the event, index of the new slide, DOM element of the new slide;
+* **after** fires after a transition between slides;
 
-* **before** fires before the transition between slides, and receives almost the same three arguments: null, index of the old slide, DOM element of the old slide.
+* **before** fires before the transition between slides;
 
-* **touch_end** fires after a touch event and receives the usual three arguments. It is typically used to disable automatic scrolling.
+* **touch_end** fires at the start of a touch event;
+
+* **touch_end** fires at the end of a touch event;
+
+The callback functions always receive the same three arguments: the current event, the current slide index (as integer) and the current slide element (and DOM node). The exception is the `before` callback, which at the moment gets `null` as the event argument.
+
+The touch callbacks are useful if you want to change out of automatic mode on user input. The before and after callbacks give you a way to manipulate other elements on the page - such as image captions - and keep them in sync with the slider.
 
 ### Example
 

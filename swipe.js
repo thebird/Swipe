@@ -290,7 +290,7 @@ Swipe.prototype = {
       this.slide( this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed );
 
     }
-    // touch_end callback gets the newly arrived slide and index
+    // touch_end callback gets the newly arrived slide.
     if (this.callbacks.touch_end) this.callbacks.touch_end(e, this.index, this.slides[this.index]);
     e.stopPropagation();
   }
