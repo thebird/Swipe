@@ -100,9 +100,15 @@ Swipe.prototype = {
     style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = duration + 'ms';
 
     // translate to given index position
-    style.MozTransform = style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
+    var oldPropValue = style.webkitTransform;
+    var newPropValue = 'translate3d(' + -(index * this.width) + 'px, 0px, 0px)';
+    style.MozTransform = style.webkitTransform = newPropValue;
     style.msTransform = style.OTransform = 'translateX(' + -(index * this.width) + 'px)';
 
+    if(oldPropValue == newPropValue){   // Condition is true when auto=(small value, eg: 1000) and an orientation change happens.  
+    	this.transitionEnd();           // When the old transition-property is equal to the new one, Webkit will not trigger a transitionEndEvent.
+    }
+    
     // set new index to allow for expression arguments
     this.index = index;
 
