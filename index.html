@@ -66,6 +66,45 @@
 <a href='#' onclick='slider4.next();return false;'>next</a>
 <br><br>
 
+<h2>3 slides per page</h2>
+<div id='slider5' class='swipe'>
+  <div>
+    <div style='display:block'><div>1</div></div>
+    <div style='display:none'><div>2</div></div>
+    <div style='display:none'><div>3</div></div>
+    <div style='display:none'><div>4</div></div>
+    <div style='display:none'><div>5</div></div>
+    <div style='display:none'><div>6</div></div>
+    <div style='display:none'><div>7</div></div>
+    <div style='display:none'><div>8</div></div>
+    <div style='display:none'><div>9</div></div>
+    <div style='display:none'><div>10</div></div>
+  </div>
+</div>
+
+<a href='#' onclick='slider5.prev();return false;'>prev</a> 
+<a href='#' onclick='slider5.next();return false;'>next</a>
+<br><br>
+
+<h2>3 slides per page/swipe one slide at once</h2>
+<div id='slider6' class='swipe'>
+  <div>
+    <div style='display:block'><div>1</div></div>
+    <div style='display:none'><div>2</div></div>
+    <div style='display:none'><div>3</div></div>
+    <div style='display:none'><div>4</div></div>
+    <div style='display:none'><div>5</div></div>
+    <div style='display:none'><div>6</div></div>
+    <div style='display:none'><div>7</div></div>
+    <div style='display:none'><div>8</div></div>
+    <div style='display:none'><div>9</div></div>
+    <div style='display:none'><div>10</div></div>
+  </div>
+</div>
+
+<a href='#' onclick='slider6.prev();return false;'>prev</a> 
+<a href='#' onclick='slider6.next();return false;'>next</a>
+<br><br>
 
 <script src='swipe.js'></script>
 <script>
@@ -73,6 +112,17 @@ new Swipe(document.getElementById('slider'));
 new Swipe(document.getElementById('slider2'));
 var slider3 = new Swipe(document.getElementById('slider3'));
 var slider4 = new Swipe(document.getElementById('slider4'));
+var slider5 = new Swipe(document.getElementById('slider5'), {
+    perPage: 3,
+    slideSize: 3
+});
+var slider6 = new Swipe(document.getElementById('slider6'), {
+    perPage: 3,
+    slideSize: 1,
+    moveCallback: function(e, pos, el, dx) {
+        //console.log(arguments);
+    }
+});
 </script>
 
 </body> 
