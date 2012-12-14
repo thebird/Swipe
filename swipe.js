@@ -15,7 +15,7 @@ window.Swipe = function(element, options) {
 
   // retreive options
   this.options = options || {};
-  this.index = this.options.startSlide || 0;
+  this.index = parseInt(this.options.startSlide) || 0;
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
@@ -128,7 +128,7 @@ Swipe.prototype = {
     clearTimeout(this.interval);
 
     // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
+    if (this.index) this.slide(parseInt(this.index)-1, this.speed);
 
   },
 
@@ -138,7 +138,7 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
+    if (this.index < this.length - 1) this.slide(parseInt(this.index)+1, this.speed); // if not last slide
     else this.slide(0, this.speed); //if last slide return to start
 
   },
@@ -268,7 +268,7 @@ Swipe.prototype = {
     if (!this.isScrolling) {
 
       // call slide function with slide end value based on isValidSlide and isPastBounds tests
-      this.slide( this.index + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed );
+      this.slide( parseInt(this.index) + ( isValidSlide && !isPastBounds ? (this.deltaX < 0 ? 1 : -1) : 0 ), this.speed );
 
     }
     
