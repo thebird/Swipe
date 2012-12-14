@@ -207,6 +207,9 @@ Swipe.prototype = {
     // reset deltaX
     this.deltaX = 0;
 
+    // screen was touched
+    this.onStart = true;
+
     // set transition time to 0 for 1-to-1 touch movement
     this.element.style.MozTransitionDuration = this.element.style.webkitTransitionDuration = 0;
     
@@ -243,9 +246,15 @@ Swipe.prototype = {
           ) ?                      
           ( Math.abs(this.deltaX) / this.width + 1 )      // determine resistance level
           : 1 );                                          // no resistance if false
-      
+
+      // Calculate difference between first touch and start of slide
+      if(this.onStart) {
+          this.onStart = false;
+          this.delay = e.touches[0].pageX - this.start.pageX;
+      }
+
       // translate immediately 1-to-1
-      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
+      this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.delay - this.index * this.width) + 'px,0,0)';
       
       e.stopPropagation();
     }
