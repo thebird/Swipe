@@ -41,6 +41,7 @@ window.Swipe = function(element, options) {
   this.delay = options.auto || 0;
   this.cont = (options.continuous != undefined) ? !!options.continuous : true;
   this.disableScroll = !!options.disableScroll;
+  this.gutter = options.gutter || 0;
 
   // verify index is a number not string
   this.index = parseInt(this.index,10);
@@ -89,7 +90,7 @@ Swipe.prototype = {
     if (this.length < 2) return;
 
     // determine width of each slide
-    this.width = this.container.getBoundingClientRect().width || this.container.offsetWidth;
+    this.width = this.container.getBoundingClientRect().width + (this.gutter * 2) || this.container.offsetWidth;
 
     // return immediately if measurement fails
     if (!this.width) return;
@@ -104,11 +105,13 @@ Swipe.prototype = {
 
       var elem = this.slides[index];
 
-      elem.style.width = this.width + 'px';
+      elem.style.width = this.width - (this.gutter * 2) + 'px';
       elem.setAttribute('data-index', index);
+      elem.style.marginLeft = this.gutter +'px';
+      elem.style.marginRight = this.gutter + 'px';
 
       if (this.browser.transitions) {
-        elem.style.left = (index * -this.width) + 'px';
+        elem.style.left = (index * -this.width) - this.gutter + 'px';
       }
 
       // add this index to the reference array    0:before 1:equal 2:after
