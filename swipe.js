@@ -37,17 +37,22 @@
 
   // add event listeners
   if (this.element.addEventListener) {
-    this.element.addEventListener('touchstart', this, false);
-    this.element.addEventListener('touchmove', this, false);
-    this.element.addEventListener('touchend', this, false);
-    this.element.addEventListener('touchcancel', this, false);
-    this.element.addEventListener('webkitTransitionEnd', this, false);
-    this.element.addEventListener('msTransitionEnd', this, false);
-    this.element.addEventListener('oTransitionEnd', this, false);
-    this.element.addEventListener('transitionend', this, false);
-    window.addEventListener('resize', this, false);
-  }
-
+  if (window.navigator.msPointerEnabled) {
+	  this.element.addEventListener("MSPointerDown", this, false);
+	  this.element.addEventListener("MSPointerMove", this, false);
+   	  this.element.addEventListener("MSPointerUp", this, false);
+	} else {	
+      this.element.addEventListener('touchstart', this, false);
+      this.element.addEventListener('touchmove', this, false);
+      this.element.addEventListener('touchend', this, false);
+      this.element.addEventListener('touchcancel', this, false);
+      this.element.addEventListener('webkitTransitionEnd', this, false);
+      this.element.addEventListener('msTransitionEnd', this, false);
+      this.element.addEventListener('oTransitionEnd', this, false);
+      this.element.addEventListener('transitionend', this, false);
+      window.addEventListener('resize', this, false);
+   }
+ }
 };
 
 Swipe.prototype = {
@@ -110,6 +115,9 @@ Swipe.prototype = {
     style.MozTransform = style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
     style.msTransform = style.OTransform = 'translateX(' + -(index * this.width) + 'px)';
 
+    if(window.jQuery){
+    	$('body').css('background-position-x',  + -(index * this.width)/10 + 'px' );
+    }
     // set new index to allow for expression arguments
     this.index = index;
 
@@ -169,9 +177,12 @@ Swipe.prototype = {
   handleEvent: function(e) {
     switch (e.type) {
       case 'touchstart': this.onTouchStart(e); break;
+      case 'MSPointerDown': this.onTouchStart(e); break;
       case 'touchmove': this.onTouchMove(e); break;
+      case 'MSPointerMove': this.onTouchMove(e); break
       case 'touchcancel' :
       case 'touchend': this.onTouchEnd(e); break;
+      case 'MSPointerUp': this.onTouchEnd(e); break;
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
       case 'oTransitionEnd':
@@ -189,18 +200,26 @@ Swipe.prototype = {
   },
 
   onTouchStart: function(e) {
-    
-    this.start = {
+    if (window.navigator.msPointerEnabled) {
+      this.start = {
+        // get touch coordinates for delta calculations in onTouchMove
+        pageX: e.pageX,
+        pageY: e.pageY,
 
-      // get touch coordinates for delta calculations in onTouchMove
-      pageX: e.touches[0].pageX,
-      pageY: e.touches[0].pageY,
+        // set initial timestamp of touch sequence
+        time: Number( new Date() )
 
-      // set initial timestamp of touch sequence
-      time: Number( new Date() )
+      };
+    } else{
+      this.start = {
+        // get touch coordinates for delta calculations in onTouchMove
+        pageX: e.touches[0].pageX,
+        pageY: e.touches[0].pageY,
 
-    };
-
+        // set initial timestamp of touch sequence
+        time: Number( new Date() )
+      };
+	};
     // used for testing first onTouchMove event
     this.isScrolling = undefined;
     
@@ -209,20 +228,33 @@ Swipe.prototype = {
 
     // set transition time to 0 for 1-to-1 touch movement
     this.element.style.MozTransitionDuration = this.element.style.webkitTransitionDuration = 0;
-    
+   	this.element.style.msTransitionDuration = 0;   
     e.stopPropagation();
   },
 
   onTouchMove: function(e) {
 
-    // ensure swiping with one touch and not pinching
-    if(e.touches.length > 1 || e.scale && e.scale !== 1) return;
-
-    this.deltaX = e.touches[0].pageX - this.start.pageX;
+	if (window.navigator.msPointerEnabled) {
+	   if(e.pointerType == 2){
+		   if ( typeof this.isScrolling == 'undefined') {
+			  this.isScrolling = !! ( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.pageY - this.start.pageY) );
+			}
+			this.deltaX = e.pageX - this.start.pageX;
+			} else { return; }
+	} else { 
+		// ensure swiping with one touch and not pinching
+	    if(e.touches.length > 1 || e.scale && e.scale !== 1) return;
+	    this.deltaX = e.touches[0].pageX - this.start.pageX;
+    }
+    
 
     // determine if scrolling test has run - one time test
     if ( typeof this.isScrolling == 'undefined') {
-      this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) );
+	  if (window.navigator.msPointerEnabled) {
+		this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.pageY - this.start.pageY) );
+	  } else {
+	    this.isScrolling = !!( this.isScrolling || Math.abs(this.deltaX) < Math.abs(e.touches[0].pageY - this.start.pageY) );	
+	  }
     }
 
     // if user is not trying to scroll vertically
@@ -246,9 +278,13 @@ Swipe.prototype = {
       
       // translate immediately 1-to-1
       this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
-      
+	  this.element.style.msTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
       e.stopPropagation();
     }
+    // background parallax effect (requires jQuery)
+    if(window.jQuery){
+  		$('body').css('background-position-x', (this.deltaX - this.index * this.width)/10 +'px');
+  	}
 
   },
 
