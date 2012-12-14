@@ -6,7 +6,7 @@
  *
 */
 
-window.Swipe = function(element, options) {
+;window.Swipe = function(element, options) {
 
   // return immediately if element doesn't exist
   if (!element) return null;
@@ -127,8 +127,8 @@ Swipe.prototype = {
     this.delay = delay || 0;
     clearTimeout(this.interval);
 
-    // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
+    if (this.index) this.slide(this.index-1, this.speed); // if not at first slide
+    else this.slide(this.length - 1, this.speed); //if first slide return to end
 
   },
 
