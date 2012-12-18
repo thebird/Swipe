@@ -11,7 +11,7 @@
 #   - dist/**/*.js
 #
 src_files:
-  - swipe.js
+  - src/swipe.js
 
 # stylesheets
 #
@@ -25,7 +25,6 @@ src_files:
 #   - stylesheets/*.css
 #
 stylesheets:
-  - style.css
 
 # helpers
 #
