@@ -218,7 +218,8 @@ Swipe.prototype = {
       case 'touchend': this.onTouchEnd(e); break;
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
-      case 'oTransitionEnd':
+      case 'oTransitionEnd': // opera 11 and below
+      case 'otransitionend': // opera 12 (and above?)
       case 'transitionend': this.onTransitionEnd(e); break;
       case 'resize': this.setup(); break;
     }
