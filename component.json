@@ -1,0 +1,5 @@
+{
+  "name": "Swipe",
+  "version": "1.0",
+  "main": ["./style.css", "./swipe.js", "./swipe.min.js"]
+}
