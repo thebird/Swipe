@@ -116,7 +116,6 @@ Swipe.prototype = {
 	 
       // make main slide visible
       if (this.index === index) {
-        console.log('showing slide '+index+': setup');
         elem.style.visibility = 'visible';
       }
       
@@ -240,7 +239,6 @@ Swipe.prototype = {
     
     // show slides immediately before and after the current one
     for (var index = Math.max(0,this.index-1); index < Math.min(this.slides.length,this.index+2); index++) {
-      console.log('showing slide '+index+': onTouchStart');
       this.slides[index].style.visibility = 'visible';
     }
     
@@ -354,7 +352,6 @@ Swipe.prototype = {
     if (resetVisibility === true) {
       for (var index = 0; index < _this.slides.length; index++) {
         if (index !== _this.index) {
-          console.log(' hiding slide '+index+': onTouchEnd');
           _this.slides[index].style.visibility = '';
         }
       }
@@ -376,11 +373,9 @@ Swipe.prototype = {
       // hide other slides
       if (typeof this.start === "undefined") {
         for (var i = 0; i < index; i++) {
-          console.log(' hiding slide '+i+': ontransitionend');
           this.slides[i].style.visibility = "";
         }
         for( var i = index+1; i < this.slides.length; i++) {
-          console.log(' hiding slide '+i+': ontransitionend');
           this.slides[i].style.visibility = "";
         }
       }
@@ -424,7 +419,6 @@ Swipe.prototype = {
 
     while(l--) {
       if (nums[l] >= 0 && nums[l] < _slides.length) {
-        console.log('showing slide '+nums[l]+': _slide');
         _slides[nums[l]].style.visibility = 'visible';
       }
       this._translate(_slides[nums[l]], dist + this.cache[nums[l]], speed ? speed : 0);
@@ -495,7 +489,6 @@ Swipe.prototype = {
     
     // make all slides visible during animation
     for (var index = 0; index < this.slides.length; index++) {
-      console.log('showing slide '+index+': _animate');
       this.slides[index].style.visibility = 'visible';
     }
     
@@ -512,7 +505,6 @@ Swipe.prototype = {
             // make slides invisible again
             for (index = 0; index < _this.slides.length; index++) {
               if (index !== _this.index) {
-                console.log(' hiding slide '+index+': _animate');
                 _this.slides[index].style.visibility = '';
               }
             }
