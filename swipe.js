@@ -465,22 +465,18 @@ window.Swipe.prototype = {
   _translate: function(elem, xval, speed) {
     
     if (!elem) return;
-
-    var style = elem.style;
-
-    // set duration speed to 0
-    style.webkitTransitionDuration = 
-    style.MozTransitionDuration = 
-    style.msTransitionDuration = 
-    style.OTransitionDuration = 
-    style.transitionDuration = speed + 'ms';
-
-    // translate to given position
-    style.webkitTransform = 'translate(' + xval + 'px,0)' + 'translateZ(0)';
-    style.msTransform = 
-    style.MozTransform = 
-    style.OTransform = 'translateX(' + xval + 'px)';
-
+    
+    var prefixes = ['webkitT','MozT','msT','OT','t'], i;
+    
+    elem.style['webkitTransform'] = 'translate(' + xval + 'px,0)' + 'translateZ(0)';
+    
+    // set duration speed and translate to a given position
+    for (i = 0; i < prefixes.length; i++) {
+      elem.style[prefixes[i] + 'ransitionDuration'] = speed + 'ms';
+      if (i > 0) {
+        elem.style[prefixes[i] + 'ransform'] = 'translateX(' + xval + 'px)';
+      }
+    }
   },
 
   _animate: function(from, to, speed) {
@@ -545,6 +541,8 @@ window.Swipe.prototype = {
 
 };
 
+// for closure compiler
+window.Swipe.prototype["handleEvent"] = window.Swipe.prototype.handleEvent;
 
 if ( window.jQuery || window.Zepto ) {
   (function($) {
