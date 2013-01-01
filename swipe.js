@@ -76,10 +76,18 @@ window.Swipe = function(element, options) {
 
 };
 
-Swipe.prototype = {
+window.Swipe.prototype = {
 
   setup: function() {
-
+  
+    // determine width of each slide
+    var width = this.container.getBoundingClientRect().width || this.container.offsetWidth;
+    
+    // if this new width matches the old one then we don't need to do more work
+    if (width && width === this.width) {
+      return;
+    }
+  
     // get and measure amt of slides
     this.slides = this.element.children;
     this.length = this.slides.length;
@@ -88,8 +96,8 @@ Swipe.prototype = {
     // return immediately if their are less than two slides
     if (this.length < 2) return;
 
-    // determine width of each slide
-    this.width = this.container.getBoundingClientRect().width || this.container.offsetWidth;
+    // save new width
+    this.width = width;
 
     // return immediately if measurement fails
     if (!this.width) return;
