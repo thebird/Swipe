@@ -76,10 +76,18 @@ window.Swipe = function(element, options) {
 
 };
 
-Swipe.prototype = {
+window.Swipe.prototype = {
 
   setup: function() {
-
+  
+    // determine width of each slide
+    var width = this.container.getBoundingClientRect().width || this.container.offsetWidth;
+    
+    // if this new width matches the old one then we don't need to do more work
+    if (width && width === this.width) {
+      return;
+    }
+  
     // get and measure amt of slides
     this.slides = this.element.children;
     this.length = this.slides.length;
@@ -88,8 +96,8 @@ Swipe.prototype = {
     // return immediately if their are less than two slides
     if (this.length < 2) return;
 
-    // determine width of each slide
-    this.width = this.container.getBoundingClientRect().width || this.container.offsetWidth;
+    // save new width
+    this.width = width;
 
     // return immediately if measurement fails
     if (!this.width) return;
@@ -113,6 +121,12 @@ Swipe.prototype = {
 
       // add this index to the reference array    0:before 1:equal 2:after
       refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index);
+	 
+      // make main slide visible
+      if (this.index === index) {
+        elem.style.visibility = 'visible';
+      }
+      
 
     }
 
@@ -234,6 +248,11 @@ Swipe.prototype = {
 
     var _this = this;
     
+    // show slides immediately before and after the current one
+    for (var index = Math.max(0,this.index-1); index < Math.min(this.slides.length,this.index+2); index++) {
+      this.slides[index].style.visibility = 'visible';
+    }
+    
     _this.start = {
 
       // get touch coordinates for delta calculations in onTouchMove
@@ -301,7 +320,7 @@ Swipe.prototype = {
 
   onTouchEnd: function(e) {
 
-    var _this = this;
+    var _this = this, resetVisibility = false;
 
     // determine if slide attempt triggers next/prev slide
     var isValidSlide = 
@@ -331,21 +350,46 @@ Swipe.prototype = {
         }
         _this.callback(_this.index, _this.slides[_this.index]);
       } else {
-        _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed);
+        if (_this.deltaX === 0) {
+          resetVisibility = true;
+        } else {
+          _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed);
+        }
       }
 
+    } else {
+      resetVisibility = true;
     }
+    if (resetVisibility === true) {
+      for (var index = 0; index < _this.slides.length; index++) {
+        if (index !== _this.index) {
+          _this.slides[index].style.visibility = '';
+        }
+      }
+    }
+    
+    // invalidate start
+    delete this.start;
 
   },
 
   onTransitionEnd: function(e) {
-
-    if (this._getElemIndex(e.target) == this.index) { // only call transition end on the main slide item
-
+    var index = this._getElemIndex(e.target);
+    
+    if (index == this.index) { // only call transition end on the main slide item
       if (this.delay) this.begin();
 
       this.transitionEnd(this.index, this.slides[this.index]);
-
+      
+      // hide other slides
+      if (typeof this.start === "undefined") {
+        for (var i = 0; i < index; i++) {
+          this.slides[i].style.visibility = "";
+        }
+        for( var i = index+1; i < this.slides.length; i++) {
+          this.slides[i].style.visibility = "";
+        }
+      }
     }
 
   },
@@ -385,7 +429,9 @@ Swipe.prototype = {
         l = nums.length;
 
     while(l--) {
-
+      if (nums[l] >= 0 && nums[l] < _slides.length) {
+        _slides[nums[l]].style.visibility = 'visible';
+      }
       this._translate(_slides[nums[l]], dist + this.cache[nums[l]], speed ? speed : 0);
 
       this.cache[nums[l]] += dist;
@@ -422,22 +468,18 @@ Swipe.prototype = {
   _translate: function(elem, xval, speed) {
     
     if (!elem) return;
-
-    var style = elem.style;
-
-    // set duration speed to 0
-    style.webkitTransitionDuration = 
-    style.MozTransitionDuration = 
-    style.msTransitionDuration = 
-    style.OTransitionDuration = 
-    style.transitionDuration = speed + 'ms';
-
-    // translate to given position
-    style.webkitTransform = 'translate(' + xval + 'px,0)' + 'translateZ(0)';
-    style.msTransform = 
-    style.MozTransform = 
-    style.OTransform = 'translateX(' + xval + 'px)';
-
+    
+    var prefixes = ['webkitT','MozT','msT','OT','t'], i;
+    
+    elem.style['webkitTransform'] = 'translate(' + xval + 'px,0)' + 'translateZ(0)';
+    
+    // set duration speed and translate to a given position
+    for (i = 0; i < prefixes.length; i++) {
+      elem.style[prefixes[i] + 'ransitionDuration'] = speed + 'ms';
+      if (i > 0) {
+        elem.style[prefixes[i] + 'ransform'] = 'translateX(' + xval + 'px)';
+      }
+    }
   },
 
   _animate: function(from, to, speed) {
@@ -452,6 +494,11 @@ Swipe.prototype = {
 
     }
     
+    // make all slides visible during animation
+    for (var index = 0; index < this.slides.length; index++) {
+      this.slides[index].style.visibility = 'visible';
+    }
+    
     var _this = this,
         start = new Date(),
         timer = setInterval(function() {
@@ -461,6 +508,13 @@ Swipe.prototype = {
           if (timeElap > speed) {
 
             elem.style.left = to + 'px';  // callback after this line
+            
+            // make slides invisible again
+            for (index = 0; index < _this.slides.length; index++) {
+              if (index !== _this.index) {
+                _this.slides[index].style.visibility = '';
+              }
+            }
 
             if (_this._getElemIndex(elem) == _this.index) { // only call transition end on the main slide item
 
@@ -490,6 +544,8 @@ Swipe.prototype = {
 
 };
 
+// for closure compiler
+window.Swipe.prototype["handleEvent"] = window.Swipe.prototype.handleEvent;
 
 if ( window.jQuery || window.Zepto ) {
   (function($) {
