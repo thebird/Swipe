@@ -137,6 +137,9 @@ window.Swipe.prototype = {
       this._stack(refArray[1],0);
       this._stack(refArray[2],1);
 
+    } else {
+      // move "viewport" to put current slide into view
+      this.element.style.left = (this.index * -this.width)+"px";
     }
 
     this.container.style.visibility = 'visible';
