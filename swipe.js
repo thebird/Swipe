@@ -113,6 +113,13 @@ Swipe.prototype = {
 
       // add this index to the reference array    0:before 1:equal 2:after
       refArray[this.index > index ? 0 : (this.index < index ? 2 : 1)].push(index);
+	 
+      // make main slide visible
+      if (this.index === index) {
+        console.log('showing slide '+index+': setup');
+        elem.style.visibility = 'visible';
+      }
+      
 
     }
 
@@ -234,6 +241,12 @@ Swipe.prototype = {
 
     var _this = this;
     
+    // show slides immediately before and after the current one
+    for (var index = Math.max(0,this.index-1); index < Math.min(this.slides.length,this.index+2); index++) {
+      console.log('showing slide '+index+': onTouchStart');
+      this.slides[index].style.visibility = 'visible';
+    }
+    
     _this.start = {
 
       // get touch coordinates for delta calculations in onTouchMove
@@ -301,7 +314,7 @@ Swipe.prototype = {
 
   onTouchEnd: function(e) {
 
-    var _this = this;
+    var _this = this, resetVisibility = false;
 
     // determine if slide attempt triggers next/prev slide
     var isValidSlide = 
@@ -331,21 +344,49 @@ Swipe.prototype = {
         }
         _this.callback(_this.index, _this.slides[_this.index]);
       } else {
-        _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed);
+        if (_this.deltaX === 0) {
+          resetVisibility = true;
+        } else {
+          _this._slide([_this.index-1,_this.index,_this.index+1],0,_this.speed);
+        }
       }
 
+    } else {
+      resetVisibility = true;
     }
+    if (resetVisibility === true) {
+      for (var index = 0; index < _this.slides.length; index++) {
+        if (index !== _this.index) {
+          console.log(' hiding slide '+index+': onTouchEnd');
+          _this.slides[index].style.visibility = '';
+        }
+      }
+    }
+    
+    // invalidate start
+    delete this.start;
 
   },
 
   onTransitionEnd: function(e) {
-
-    if (this._getElemIndex(e.target) == this.index) { // only call transition end on the main slide item
-
+    var index = this._getElemIndex(e.target);
+    
+    if (index == this.index) { // only call transition end on the main slide item
       if (this.delay) this.begin();
 
       this.transitionEnd(this.index, this.slides[this.index]);
-
+      
+      // hide other slides
+      if (typeof this.start === "undefined") {
+        for (var i = 0; i < index; i++) {
+          console.log(' hiding slide '+i+': ontransitionend');
+          this.slides[i].style.visibility = "";
+        }
+        for( var i = index+1; i < this.slides.length; i++) {
+          console.log(' hiding slide '+i+': ontransitionend');
+          this.slides[i].style.visibility = "";
+        }
+      }
     }
 
   },
@@ -385,7 +426,10 @@ Swipe.prototype = {
         l = nums.length;
 
     while(l--) {
-
+      if (nums[l] >= 0 && nums[l] < _slides.length) {
+        console.log('showing slide '+nums[l]+': _slide');
+        _slides[nums[l]].style.visibility = 'visible';
+      }
       this._translate(_slides[nums[l]], dist + this.cache[nums[l]], speed ? speed : 0);
 
       this.cache[nums[l]] += dist;
@@ -452,6 +496,12 @@ Swipe.prototype = {
 
     }
     
+    // make all slides visible during animation
+    for (var index = 0; index < this.slides.length; index++) {
+      console.log('showing slide '+index+': _animate');
+      this.slides[index].style.visibility = 'visible';
+    }
+    
     var _this = this,
         start = new Date(),
         timer = setInterval(function() {
@@ -461,6 +511,14 @@ Swipe.prototype = {
           if (timeElap > speed) {
 
             elem.style.left = to + 'px';  // callback after this line
+            
+            // make slides invisible again
+            for (index = 0; index < _this.slides.length; index++) {
+              if (index !== _this.index) {
+                console.log(' hiding slide '+index+': _animate');
+                _this.slides[index].style.visibility = '';
+              }
+            }
 
             if (_this._getElemIndex(elem) == _this.index) { // only call transition end on the main slide item
 
