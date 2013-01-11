@@ -459,13 +459,10 @@ Swipe.prototype = {
 
             elem.style.left = to + 'px';  // callback after this line
 
-            if (_this._getElemIndex(elem) == _this.index) { // only call transition end on the main slide item
+            if (_this.delay) _this.begin();
+          
+            _this.transitionEnd(_this.index, _this.slides[_this.index]);
 
-              if (_this.delay) _this.begin();
-            
-              _this.transitionEnd(_this.index, _this.slides[_this.index]);
-
-            }
 
             clearInterval(timer);
 
