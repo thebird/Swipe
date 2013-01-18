@@ -180,7 +180,6 @@ Swipe.prototype = {
 
     // cancel slideshow
     this.delay = delay || 0;
-    clearTimeout(this.interval);
 
     // if not at first slide
     if (this.index) this.slide(this.index-1, this.speed);
@@ -192,7 +191,6 @@ Swipe.prototype = {
 
     // cancel slideshow
     this.delay = delay || 0;
-    clearTimeout(this.interval);
 
     if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
     else if (this.cont) this.slide(0, this.speed); //if last slide return to start
@@ -347,6 +345,8 @@ Swipe.prototype = {
   },
 
   slide: function(to, speed) {
+    
+    clearTimeout(this.interval);
     
     var from = this.index;
 
