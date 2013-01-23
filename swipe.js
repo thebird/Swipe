@@ -19,7 +19,11 @@
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.looping = typeof( this.options.looping ) !== 'undefined' ? this.options.looping : true;
 
+  // check if there is an EventEmitter, if so, use it
+  this.events = ( typeof EventEmitter === 'function' ) ? new EventEmitter() : null;
+  
   // reference dom elements
   this.container = element;
   this.element = this.container.children[0]; // the slide pane
@@ -112,9 +116,22 @@ Swipe.prototype = {
 
     // set new index to allow for expression arguments
     this.index = index;
+    this.events && this.events.emit( 'slide', this.index, this.slides[this.index]);
 
   },
 
+  slideTo: function(id, duration) {
+    for (var index = 0; index < this.slides.length; ++index)
+    {
+        var element = this.slides[index];
+        if (element.id == id)
+        {
+            this.slide(index, duration);
+            return;
+        }
+    }
+  },
+  
   getPos: function() {
     
     // return current index position
@@ -129,8 +146,8 @@ Swipe.prototype = {
     clearTimeout(this.interval);
 
     if (this.index) this.slide(this.index-1, this.speed); // if not at first slide
-    else this.slide(this.length - 1, this.speed); //if first slide return to end
-
+    else if (this.looping) this.slide(this.length - 1, this.speed); //if first slide return to end
+    this.events && this.events.emit( 'prev' );
   },
 
   next: function(delay) {
@@ -140,8 +157,8 @@ Swipe.prototype = {
     clearTimeout(this.interval);
 
     if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else this.slide(0, this.speed); //if last slide return to start
-
+    else if (this.looping) this.slide(0, this.speed); //if last slide return to start
+    this.events && this.events.emit( 'next' );
   },
 
   begin: function() {
@@ -153,17 +170,21 @@ Swipe.prototype = {
         _this.next(_this.delay);
       }, this.delay)
       : 0;
+
+    this.events && this.events.emit( 'begin' );
   
   },
   
   stop: function() {
     this.delay = 0;
     clearTimeout(this.interval);
+    this.events && this.events.emit( 'stop' );
   },
   
   resume: function() {
     this.delay = this.options.auto || 0;
     this.begin();
+    this.events && this.events.emit( 'resume' );
   },
 
   handleEvent: function(e) {
@@ -185,6 +206,7 @@ Swipe.prototype = {
     if (this.delay) this.begin();
 
     this.callback(e, this.index, this.slides[this.index]);
+    this.events && this.events.emit( 'transitioned', this.index, this.slides[this.index]);
 
   },
 
