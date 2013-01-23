@@ -107,7 +107,7 @@ Swipe.prototype = {
     style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = duration + 'ms';
 
     // translate to given index position
-    style.MozTransform = style.webkitTransform = 'translate3d(' + -(index * this.width) + 'px,0,0)';
+    style.MozTransform = style.webkitTransform = 'translateX(' + -(index * this.width) + 'px)';
     style.msTransform = style.OTransform = 'translateX(' + -(index * this.width) + 'px)';
 
     // set new index to allow for expression arguments
