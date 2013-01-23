@@ -115,6 +115,18 @@ Swipe.prototype = {
 
   },
 
+  slideTo: function(id, duration) {
+    for (var index = 0; index < this.slides.length; ++index)
+    {
+        var element = this.slides[index];
+        if (element.id == id)
+        {
+            this.slide(index, duration);
+            return;
+        }
+    }
+  },
+  
   getPos: function() {
     
     // return current index position
