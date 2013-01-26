@@ -356,6 +356,8 @@ Swipe.prototype = {
 
     if (from == to) return; // do nothing if already on requested slide
     
+    var speed = (typeof speed === "Undefined") ? this.speed : speed;
+    
     if (this.browser.transitions) {
       var toStack = Math.abs(from-to) - 1,
           direction = Math.abs(from-to) / (from-to), // 1:right -1:left
@@ -367,10 +369,10 @@ Swipe.prototype = {
       this._stack(inBetween,direction);
 
       // now slide from and to in the proper direction
-      this._slide([from,to],this.width * direction,this.speed);
+      this._slide([from,to],this.width * direction,speed);
     }
     else {
-      this._animate(from*-this.width, to * -this.width, this.speed)
+      this._animate(from*-this.width, to * -this.width, speed)
     }
 
     this.index = to;
