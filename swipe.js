@@ -5,8 +5,9 @@
  * Copyright 2011, Licensed GPL & MIT
  *
 */
+( function() {
 
-;window.Swipe = function(element, options) {
+var Swipe = function(element, options) {
 
   // return immediately if element doesn't exist
   if (!element) return null;
@@ -277,3 +278,13 @@ Swipe.prototype = {
   }
 
 };
+
+if (typeof(define) === "function" && define.amd) {
+  define( function() { return Swipe; } );
+} else if (typeof(module) === "object" && module.exports) {
+  module.exports = Swipe;
+} else {
+  window.Swipe = Swipe;
+}
+
+} )();
