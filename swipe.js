@@ -41,6 +41,7 @@ window.Swipe = function(element, options) {
   this.delay = options.auto || 0;
   this.cont = (options.continuous != undefined) ? !!options.continuous : true;
   this.disableScroll = !!options.disableScroll;
+  this.itemsDelay = options.itemsDelay || [];
 
   // verify index is a number not string
   this.index = parseInt(this.index,10);
@@ -106,7 +107,6 @@ Swipe.prototype = {
 
       elem.style.width = this.width + 'px';
       elem.setAttribute('data-index', index);
-
       if (this.browser.transitions) {
         elem.style.left = (index * -this.width) + 'px';
       }
@@ -194,7 +194,11 @@ Swipe.prototype = {
   },
   stop: function(delay) {
 
-     // cancel slideshow
+     // checks if it has to cancel slideshow
+    // item delay overrides general delay
+     if(delay != 0 && this.itemsDelay.length >= this.length) 
+      this.delay = this.itemsDelay[this.index];
+    else
      this.delay = delay || 0;
     clearTimeout(this.interval);
     
@@ -202,7 +206,13 @@ Swipe.prototype = {
   begin: function(delay) {
 
     var _this = this;
-    _this.delay = _this.delay || delay || 0;
+    // item delay overrides general delay
+     if(delay != 0 && this.itemsDelay.length >= this.length) 
+      _this.delay = this.itemsDelay[this.index];
+    else
+     _this.delay = _this.delay || delay || 0;
+   
+    
 
     this.interval = (this.delay)
       ? setTimeout(function() { 
@@ -489,6 +499,7 @@ Swipe.prototype = {
     return parseInt(elem.getAttribute('data-index'),10);
 
   }
+
 
 };
 
