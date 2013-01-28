@@ -200,7 +200,7 @@ Swipe.prototype = {
     
   },
   begin: function(delay) {
-    
+
     var _this = this;
     _this.delay = _this.delay || delay || 0;
 
