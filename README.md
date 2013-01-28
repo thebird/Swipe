@@ -59,6 +59,9 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **transitionEnd** Function - runs at the end slide transition.
 
+- **itemsDelay** Function - overrides the value set in auto at an item value. You can specifiy the time between slide transitions by item
+
+
 ### Example
 
 ``` js
@@ -70,7 +73,8 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   continuous: true,
   disableScroll: false,
   callback: function(index, elem) {},
-  transitionEnd: function(index, elem) {}
+  transitionEnd: function(index, elem) {},
+  itemsDelay : [1000, 2000, 1500]
 });
 
 ```
@@ -87,6 +91,10 @@ Swipe exposes a few functions that can be useful for script control of your slid
 `getPos()` returns current slide index position
 
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
+
+`stop()` stops the slideshow
+
+`begin(delay)` starts the slideshow (delay: time in milliseconds between slides)
 
 ## Browser Support
 Swipe is now compatable with all browsers, including IE6. Swipe works best on devices that supports CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
