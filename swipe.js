@@ -5,7 +5,7 @@
  * Copyright 2011, Licensed GPL & MIT
  *
 */
-( function() {
+(function(global) {
 
   "use strict";
 
@@ -48,7 +48,10 @@
       this.element.addEventListener('msTransitionEnd', this, false);
       this.element.addEventListener('oTransitionEnd', this, false);
       this.element.addEventListener('transitionend', this, false);
-      window.addEventListener('resize', this, false);
+    }
+
+    if (global && global.addEventListener) {
+      global.addEventListener('resize', this, false);
     }
 
   };
@@ -68,8 +71,8 @@
       this.width = Math.ceil(("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth);
 
       // Fix width for Android WebView (i.e. PhoneGap) 
-      if (this.width === 0 && typeof window.getComputedStyle === 'function') {
-        this.width = window.getComputedStyle(this.container, null).width.replace('px','');
+      if (this.width === 0 && typeof global.getComputedStyle === 'function') {
+        this.width = global.getComputedStyle(this.container, null).width.replace('px','');
       }
 
       // return immediately if measurement fails
@@ -286,7 +289,7 @@
   } else if (typeof(module) === "object" && module.exports) {
     module.exports = Swipe;
   } else {
-    window["Swipe"] = Swipe;
+    global["Swipe"] = Swipe;
   }
 
-} )();
+})(window);
