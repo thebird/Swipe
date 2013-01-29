@@ -352,28 +352,62 @@ Swipe.prototype = {
 
   slide: function(to, speed) {
     
+    var toIndex = -1;
+
+    if ( typeof( to ) === 'number' )
+    {
+      toIndex = to;
+    }
+    else if ( typeof( to ) === 'string' )
+    {
+      for (var index = 0; index < this.slides.length; ++index)
+      {
+        var element = this.slides[index];
+        if (element.id === to)
+        {
+          toIndex = index;
+          break;
+        }
+      }      
+    }
+    else if ( to instanceof Element )
+    {
+      toIndex = this._getElemIndex(to);
+      if ( isNaN( toIndex ) )
+      {
+        toIndex = Array.prototype.slice.call( this.container.children ).indexOf( to );
+      }
+    }
+    else
+    {
+      throw "Invalid target type."
+    }
+    
+    // return if we can't find the element they're talking about
+    if ( toIndex == -1 ) return;
+    
     var from = this.index;
 
-    if (from == to) return; // do nothing if already on requested slide
+    if (from == toIndex) return; // do nothing if already on requested slide
     
     if (this.browser.transitions) {
-      var toStack = Math.abs(from-to) - 1,
-          direction = Math.abs(from-to) / (from-to), // 1:right -1:left
+      var toStack = Math.abs(from-toIndex) - 1,
+          direction = Math.abs(from-toIndex) / (from-toIndex), // 1:right -1:left
           inBetween = [];
 
-      while (toStack--) inBetween.push( (to > from ? to : from) - toStack - 1 );
+      while (toStack--) inBetween.push( (toIndex > from ? toIndex : from) - toStack - 1 );
 
       // stack em
       this._stack(inBetween,direction);
 
       // now slide from and to in the proper direction
-      this._slide([from,to],this.width * direction,this.speed);
+      this._slide([from,toIndex],this.width * direction,this.speed);
     }
     else {
-      this._animate(from*-this.width, to * -this.width, this.speed)
+      this._animate(from*-this.width, toIndex * -this.width, this.speed)
     }
 
-    this.index = to;
+    this.index = toIndex;
 
     this.callback(this.index, this.slides[this.index]);
 
