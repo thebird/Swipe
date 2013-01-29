@@ -41,6 +41,7 @@ window.Swipe = function(element, options) {
   this.delay = options.auto || 0;
   this.cont = (options.continuous != undefined) ? !!options.continuous : true;
   this.disableScroll = !!options.disableScroll;
+  this.itemsDelay = options.itemsDelay || [];
 
   // verify index is a number not string
   this.index = parseInt(this.index,10);
@@ -181,30 +182,38 @@ Swipe.prototype = {
 
   prev: function(delay) {
 
-    // cancel slideshow
-    this.delay = delay || 0;
-    clearTimeout(this.interval);
-
     // if not at first slide
-    if (this.index) this.slide(this.index-1, this.speed);
-    else if (this.cont) this.slide(this.length-1, this.speed);
+    if (this.index) this.slide(this.index-1, this.speed,delay);
+    else if (this.cont) this.slide(this.length-1, this.speed,delay);
 
   },
 
   next: function(delay) {
 
+    if (this.index < this.length - 1) this.slide(this.index+1, this.speed,delay); // if not last slide
+    else if (this.cont) this.slide(0, this.speed,delay); //if last slide return to start
+
+  },
+
+  stop: function(delay) {
+
     // cancel slideshow
-    this.delay = delay || 0;
+    // item delay overrides general delay
+    if(delay != 0 && this.itemsDelay.length >= this.length) 
+      this.delay = this.itemsDelay[this.index];
+    else
+      this.delay = delay || 0;
     clearTimeout(this.interval);
-
-    if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
-    else if (this.cont) this.slide(0, this.speed); //if last slide return to start
-
+    
   },
 
   begin: function() {
 
-    var _this = this;
+    // item delay overrides general delay
+    if(delay != 0 && this.itemsDelay.length >= this.length) 
+      _this.delay = this.itemsDelay[this.index];
+    else
+      _this.delay = _this.delay || delay || 0;
 
     this.interval = (this.delay)
       ? setTimeout(function() { 
@@ -350,7 +359,9 @@ Swipe.prototype = {
 
   },
 
-  slide: function(to, speed) {
+  slide: function(to, speed, delay) {
+    
+    this.stop(delay);
     
     var from = this.index;
 
