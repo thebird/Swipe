@@ -207,8 +207,9 @@ Swipe.prototype = {
     
   },
 
-  begin: function() {
+  begin: function(delay) {
 
+    var _this = this;
     // item delay overrides general delay
     if(delay != 0 && this.itemsDelay.length >= this.length) 
       _this.delay = this.itemsDelay[this.index];
