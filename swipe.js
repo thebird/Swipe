@@ -286,7 +286,7 @@ if (typeof(define) === "function" && define.amd) {
 } else if (typeof(module) === "object" && module.exports) {
   module.exports = Swipe;
 } else {
-  window.Swipe = Swipe;
+  window["Swipe"] = Swipe;
 }
 
 } )();
