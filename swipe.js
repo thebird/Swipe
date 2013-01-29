@@ -42,6 +42,9 @@ window.Swipe = function(element, options) {
   this.cont = (options.continuous != undefined) ? !!options.continuous : true;
   this.disableScroll = !!options.disableScroll;
 
+  // check if there is an EventEmitter, if so, use it
+  this.events = ( typeof EventEmitter === 'function' ) ? new EventEmitter() : null;
+
   // verify index is a number not string
   this.index = parseInt(this.index,10);
 
@@ -170,6 +173,7 @@ Swipe.prototype = {
       window.onresize = null;
     }
 
+    this.events && this.events.emit( 'kill' );
   },  
 
   getPos: function() {
@@ -188,6 +192,7 @@ Swipe.prototype = {
     // if not at first slide
     if (this.index) this.slide(this.index-1, this.speed);
     else if (this.cont) this.slide(this.length-1, this.speed);
+    this.events && this.events.emit( 'prev' );
 
   },
 
@@ -199,6 +204,7 @@ Swipe.prototype = {
 
     if (this.index < this.length - 1) this.slide(this.index+1, this.speed); // if not last slide
     else if (this.cont) this.slide(0, this.speed); //if last slide return to start
+    this.events && this.events.emit( 'next' );
 
   },
 
@@ -212,6 +218,7 @@ Swipe.prototype = {
       }, this.delay)
       : 0;
     
+    this.events && this.events.emit( 'begin' );
   },
 
   handleEvent: function(e) {
@@ -345,6 +352,7 @@ Swipe.prototype = {
       if (this.delay) this.begin();
 
       this.transitionEnd(this.index, this.slides[this.index]);
+      this.events && this.events.emit( 'transitioned', this.index, this.slides[this.index]);
 
     }
 
@@ -376,6 +384,7 @@ Swipe.prototype = {
     this.index = to;
 
     this.callback(this.index, this.slides[this.index]);
+    this.events && this.events.emit( 'slide', this.index, this.slides[this.index]);
 
   },
 
