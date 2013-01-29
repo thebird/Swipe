@@ -7,6 +7,8 @@
 */
 ( function() {
 
+"use strict";
+
 var Swipe = function(element, options) {
 
   // return immediately if element doesn't exist
