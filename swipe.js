@@ -352,7 +352,7 @@ Swipe.prototype = {
       if (this.delay) this.begin();
 
       this.transitionEnd(this.index, this.slides[this.index]);
-      this.events && this.events.emit( 'transitioned', this.index, this.slides[this.index]);
+      this.events && this.events.emit( 'transitionEnd', this.index, this.slides[this.index]);
 
     }
 
