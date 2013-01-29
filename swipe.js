@@ -107,6 +107,7 @@ Swipe.prototype = {
 
       elem.style.width = this.width + 'px';
       elem.setAttribute('data-index', index);
+
       if (this.browser.transitions) {
         elem.style.left = (index * -this.width) + 'px';
       }
@@ -123,6 +124,9 @@ Swipe.prototype = {
       this._stack(refArray[1],0);
       this._stack(refArray[2],1);
 
+    } else {
+      // move "viewport" to put current slide into view
+      this.element.style.left = (this.index * -this.width)+"px";
     }
 
     this.container.style.visibility = 'visible';
@@ -159,7 +163,7 @@ Swipe.prototype = {
         this.element.removeEventListener('oTransitionEnd', this, false);
         this.element.removeEventListener('transitionend', this, false);
       }
-      window.removeEventListener('resize', this.resize, false);
+      window.removeEventListener('resize', this, false);
     }
 
     // kill old IE! you can quote me on that ;)
@@ -178,7 +182,6 @@ Swipe.prototype = {
 
   prev: function(delay) {
 
-
     // if not at first slide
     if (this.index) this.slide(this.index-1, this.speed,delay);
     else if (this.cont) this.slide(this.length-1, this.speed,delay);
@@ -192,10 +195,10 @@ Swipe.prototype = {
     else if (this.cont) this.slide(0, this.speed,delay); //if last slide return to start
 
   },
-  stop: function(delay) {
+    stop: function(delay) {
 
-     // checks if it has to cancel slideshow
-    // item delay overrides general delay
+     // cancel slideshow
+          // item delay overrides general delay
      if(delay != 0 && this.itemsDelay.length >= this.length) 
       this.delay = this.itemsDelay[this.index];
     else
@@ -206,7 +209,7 @@ Swipe.prototype = {
   begin: function(delay) {
 
     var _this = this;
-    // item delay overrides general delay
+              // item delay overrides general delay
      if(delay != 0 && this.itemsDelay.length >= this.length) 
       _this.delay = this.itemsDelay[this.index];
     else
@@ -359,9 +362,9 @@ Swipe.prototype = {
   },
 
   slide: function(to, speed, delay) {
-  
-    this.stop(delay);
 
+    this.stop(delay);
+    
     var from = this.index;
 
     if (from == to) return; // do nothing if already on requested slide
@@ -474,13 +477,10 @@ Swipe.prototype = {
 
             elem.style.left = to + 'px';  // callback after this line
 
-            if (_this._getElemIndex(elem) == _this.index) { // only call transition end on the main slide item
+            if (_this.delay) _this.begin();
+          
+            _this.transitionEnd(_this.index, _this.slides[_this.index]);
 
-              if (_this.delay) _this.begin();
-            
-              _this.transitionEnd(_this.index, _this.slides[_this.index]);
-
-            }
 
             clearInterval(timer);
 
@@ -499,7 +499,6 @@ Swipe.prototype = {
     return parseInt(elem.getAttribute('data-index'),10);
 
   }
-
 
 };
 
