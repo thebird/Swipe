@@ -24,7 +24,7 @@ window.Swipe = function(element, options) {
     })(),
     transitions: (function() {
       var temp = document.createElement('swipe'),
-          props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
+          props = ['transformProperty', 'WebkitTransform', 'MozTransform', 'OTransform', 'msTransform'];
       for ( var i in props ) {
         if (temp.style[ props[i] ] !== undefined) return true;
       }
