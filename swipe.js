@@ -19,6 +19,7 @@
   this.speed = this.options.speed || 300;
   this.callback = this.options.callback || function() {};
   this.delay = this.options.auto || 0;
+  this.noPropagation = this.options.noPropagation || false;
 
   // reference dom elements
   this.container = element;
@@ -64,7 +65,7 @@ Swipe.prototype = {
     // determine width of each slide
     this.width = Math.ceil(("getBoundingClientRect" in this.container) ? this.container.getBoundingClientRect().width : this.container.offsetWidth);
 
-    // Fix width for Android WebView (i.e. PhoneGap) 
+    // Fix width for Android WebView (i.e. PhoneGap)
     if (this.width === 0 && typeof window.getComputedStyle === 'function') {
       this.width = window.getComputedStyle(this.container, null).width.replace('px','');
     }
@@ -87,7 +88,7 @@ Swipe.prototype = {
     }
 
     // set start position and force translate to remove initial flickering
-    this.slide(this.index, 0); 
+    this.slide(this.index, 0);
 
     // restore the visibility of the slider element
     this.container.style.visibility = origVisibility;
@@ -99,7 +100,7 @@ Swipe.prototype = {
     var style = this.element.style;
 
     // fallback to default speed
-    if (duration == undefined) {
+    if (duration === undefined) {
         duration = this.speed;
     }
 
@@ -148,8 +149,8 @@ Swipe.prototype = {
 
     var _this = this;
 
-    this.interval = (this.delay)
-      ? setTimeout(function() { 
+    this.interval = (this.delay) ?
+      setTimeout(function() {
         _this.next(_this.delay);
       }, this.delay)
       : 0;
@@ -197,7 +198,7 @@ Swipe.prototype = {
       pageY: e.touches[0].pageY,
 
       // set initial timestamp of touch sequence
-      time: Number( new Date() )
+      time: +( new Date() )
 
     };
 
@@ -210,7 +211,7 @@ Swipe.prototype = {
     // set transition time to 0 for 1-to-1 touch movement
     this.element.style.MozTransitionDuration = this.element.style.webkitTransitionDuration = 0;
     
-    e.stopPropagation();
+    if (this.noPropagation) e.stopPropagation();
   },
 
   onTouchMove: function(e) {
@@ -228,26 +229,26 @@ Swipe.prototype = {
     // if user is not trying to scroll vertically
     if (!this.isScrolling) {
 
-      // prevent native scrolling 
+      // prevent native scrolling
       e.preventDefault();
 
       // cancel slideshow
       clearTimeout(this.interval);
 
       // increase resistance if first or last slide
-      this.deltaX = 
-        this.deltaX / 
-          ( (!this.index && this.deltaX > 0               // if first slide and sliding left
-            || this.index == this.length - 1              // or if last slide and sliding right
-            && this.deltaX < 0                            // and if sliding at all
-          ) ?                      
+      this.deltaX =
+        this.deltaX /
+          ( (!this.index && this.deltaX > 0 ||            // if first slide and sliding left
+              this.index == this.length - 1 &&            // or if last slide and sliding right
+              this.deltaX < 0                             // and if sliding at all
+          ) ?
           ( Math.abs(this.deltaX) / this.width + 1 )      // determine resistance level
           : 1 );                                          // no resistance if false
       
       // translate immediately 1-to-1
       this.element.style.MozTransform = this.element.style.webkitTransform = 'translate3d(' + (this.deltaX - this.index * this.width) + 'px,0,0)';
       
-      e.stopPropagation();
+      if (this.noPropagation) e.stopPropagation();
     }
 
   },
@@ -255,15 +256,15 @@ Swipe.prototype = {
   onTouchEnd: function(e) {
 
     // determine if slide attempt triggers next/prev slide
-    var isValidSlide = 
-          Number(new Date()) - this.start.time < 250      // if slide duration is less than 250ms
-          && Math.abs(this.deltaX) > 20                   // and if slide amt is greater than 20px
-          || Math.abs(this.deltaX) > this.width/2,        // or if slide amt is greater than half the width
+    var isValidSlide =
+          +(new Date()) - this.start.time < 250 &&       // if slide duration is less than 250ms
+            Math.abs(this.deltaX) > 20 ||                // and if slide amt is greater than 20px
+            Math.abs(this.deltaX) > this.width/2,        // or if slide amt is greater than half the width
 
     // determine if slide attempt is past start and end
-        isPastBounds = 
-          !this.index && this.deltaX > 0                          // if first slide and slide amt is greater than 0
-          || this.index == this.length - 1 && this.deltaX < 0;    // or if last slide and slide amt is less than 0
+        isPastBounds =
+          !this.index && this.deltaX > 0 ||                    // if first slide and slide amt is greater than 0
+          this.index == this.length - 1 && this.deltaX < 0;    // or if last slide and slide amt is less than 0
 
     // if not scrolling vertically
     if (!this.isScrolling) {
@@ -273,7 +274,7 @@ Swipe.prototype = {
 
     }
     
-    e.stopPropagation();
+    if (this.noPropagation) e.stopPropagation();
   }
 
 };
