@@ -82,6 +82,7 @@ Swipe.prototype = {
     while (index--) {
       var el = this.slides[index];
       el.style.width = this.width + 'px';
+      el.style.maxWidth = this.width + 'px';
       el.style.display = 'table-cell';
       el.style.verticalAlign = 'top';
     }
