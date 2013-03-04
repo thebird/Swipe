@@ -97,4 +97,4 @@ I would love to hear more about how to improve Swipe. Play with it and let me kn
 
 
 ## License
-Swipe mobile slider is &copy; 2012 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of GPL &amp; MIT licenses. 
+Swipe mobile slider is &copy; 2013 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of MIT licenses. 

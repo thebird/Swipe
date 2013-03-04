@@ -2,7 +2,7 @@
  * Swipe 2.0
  *
  * Brad Birdsall
- * Copyright 2012, Licensed GPL & MIT
+ * Copyright 2013, Licensed MIT
  *
 */
 
