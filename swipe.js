@@ -24,7 +24,7 @@ window.Swipe = function(element, options) {
     })(),
     transitions: (function() {
       var temp = document.createElement('swipe'),
-          props = ['perspectiveProperty', 'WebkitPerspective', 'MozPerspective', 'OPerspective', 'msPerspective'];
+          props = ['transformProperty', 'WebkitTransform', 'MozTransform', 'OTransform', 'msTransform'];
       for ( var i in props ) {
         if (temp.style[ props[i] ] !== undefined) return true;
       }
@@ -41,6 +41,7 @@ window.Swipe = function(element, options) {
   this.delay = options.auto || 0;
   this.cont = (options.continuous != undefined) ? !!options.continuous : true;
   this.disableScroll = !!options.disableScroll;
+  this.noPropagation = options.noPropagation || false;
 
   // verify index is a number not string
   this.index = parseInt(this.index,10);
@@ -123,6 +124,9 @@ Swipe.prototype = {
       this._stack(refArray[1],0);
       this._stack(refArray[2],1);
 
+    } else {
+      // move "viewport" to put current slide into view
+      this.element.style.left = (this.index * -this.width)+"px";
     }
 
     this.container.style.visibility = 'visible';
@@ -159,7 +163,7 @@ Swipe.prototype = {
         this.element.removeEventListener('oTransitionEnd', this, false);
         this.element.removeEventListener('transitionend', this, false);
       }
-      window.removeEventListener('resize', this.resize, false);
+      window.removeEventListener('resize', this, false);
     }
 
     // kill old IE! you can quote me on that ;)
@@ -218,12 +222,13 @@ Swipe.prototype = {
       case 'touchend': this.onTouchEnd(e); break;
       case 'webkitTransitionEnd':
       case 'msTransitionEnd':
-      case 'oTransitionEnd':
+      case 'oTransitionEnd': // opera 11 and below
+      case 'otransitionend': // opera 12 (and above?)
       case 'transitionend': this.onTransitionEnd(e); break;
       case 'resize': this.setup(); break;
     }
     
-    e.stopPropagation();
+    if (this.noPropagation) e.stopPropagation();
   },
 
   onTouchStart: function(e) {
@@ -352,6 +357,8 @@ Swipe.prototype = {
 
     if (from == to) return; // do nothing if already on requested slide
     
+    var speed = (typeof speed === "undefined") ? this.speed : speed;
+    
     if (this.browser.transitions) {
       var toStack = Math.abs(from-to) - 1,
           direction = Math.abs(from-to) / (from-to), // 1:right -1:left
@@ -363,10 +370,10 @@ Swipe.prototype = {
       this._stack(inBetween,direction);
 
       // now slide from and to in the proper direction
-      this._slide([from,to],this.width * direction,this.speed);
+      this._slide([from,to],this.width * direction,speed);
     }
     else {
-      this._animate(from*-this.width, to * -this.width, this.speed)
+      this._animate(from*-this.width, to * -this.width, speed)
     }
 
     this.index = to;
@@ -429,7 +436,7 @@ Swipe.prototype = {
     style.transitionDuration = speed + 'ms';
 
     // translate to given position
-    style.webkitTransform = 'translate3d(' + xval + 'px,0,0)';
+    style.webkitTransform = 'translate(' + xval + 'px,0)' + 'translateZ(0)';
     style.msTransform = 
     style.MozTransform = 
     style.OTransform = 'translateX(' + xval + 'px)';
@@ -458,13 +465,10 @@ Swipe.prototype = {
 
             elem.style.left = to + 'px';  // callback after this line
 
-            if (_this._getElemIndex(elem) == _this.index) { // only call transition end on the main slide item
+            if (_this.delay) _this.begin();
+          
+            _this.transitionEnd(_this.index, _this.slides[_this.index]);
 
-              if (_this.delay) _this.begin();
-            
-              _this.transitionEnd(_this.index, _this.slides[_this.index]);
-
-            }
 
             clearInterval(timer);
 
