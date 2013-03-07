@@ -14,10 +14,10 @@ Swipe only needs to follow a simple pattern. Here is an example:
 </div>
 ```
 
-Above is the initial required structure– a series of elements wrapped in two containers. Place any content you want within the items. The containing div will need to be passed to a new Swipe object like so:
+Above is the initial required structure– a series of elements wrapped in two containers. Place any content you want within the items. The containing div will need to be passed to the Swipe function like so:
 
 ``` js
-window.mySwipe = new Swipe(document.getElementById('slider'));
+window.mySwipe = Swipe(document.getElementById('slider'));
 ```
 
 I always place this at the bottom of the page, externally, to verify the page is ready.
@@ -54,6 +54,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
 
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
+
+- **stopPropagation** Boolean *(default:false)* - stop event propagation
  
 -	**callback** Function - runs at slide change.
 
@@ -69,6 +71,7 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   auto: 3000,
   continuous: true,
   disableScroll: false,
+  stopPropagation: false,
   callback: function(index, elem) {},
   transitionEnd: function(index, elem) {}
 });
@@ -89,7 +92,7 @@ Swipe exposes a few functions that can be useful for script control of your slid
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
 
 ## Browser Support
-Swipe is now compatable with all browsers, including IE6. Swipe works best on devices that supports CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
+Swipe is now compatable with all browsers, including IE7+. Swipe works best on devices that supports CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
 
 
 ## Let's Make It Better
@@ -97,4 +100,4 @@ I would love to hear more about how to improve Swipe. Play with it and let me kn
 
 
 ## License
-Swipe mobile slider is &copy; 2013 [Brad Birdsall](http://bradbirdsall.com) and is licensed under the terms of MIT licenses. 
+MIT license - go crazy ;)
