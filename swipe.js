@@ -8,6 +8,8 @@
 
 function Swipe(container, options) {
 
+  "use strict";
+
   // utilities
   var noop = function() {}; // simple no operation function
   var offloadFn = function(fn) { setTimeout(fn || noop, 0) }; // offload a functions execution
