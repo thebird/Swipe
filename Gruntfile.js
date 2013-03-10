@@ -4,55 +4,25 @@ module.exports = function( grunt ) {
   'use strict';
 
   grunt.initConfig({
-    pkg: '<json:component.json>',
-    meta: {
-      banner: '/*!\n' +
-        ' * <%= pkg.name %> v<%= pkg.version %>\n' +
-        ' * swipejs.com\n *\n' +
-        ' * Copyright (c) <%= pkg.author %>\n' +
-        ' * <%= pkg.license %> License\n */'
-    },
-    lint: {
-      files: [
-        'grunt.js',
-        'swipe.js'
-      ]
-    },
-    min: {
-      dist: {
-        src: [
-          'swipe.js'
-        ],
-        dest: 'dist/swipe.min.js'
-      }
-    },
-    // uglify : {
-    jshint: {
+
+    uglify: {
       options: {
-        boss: true,
-        browser: true,
-        curly: false,
-        devel: true,
-        eqeqeq: false,
-        eqnull: true,
-        expr: true,
-        evil: true,
-        immed: false,
-        laxcomma: true,
-        newcap: false,
-        noarg: true,
-        smarttabs: true,
-        sub: true,
-        undef: true
+        mangle: {
+          except: ['Swipe']
+        }
       },
-      globals: {
-        // Swipe: true,
+      dist: {
+        files: {
+          'build/swipe.min.js': 'swipe.js'
+        }
       }
     }
+
   });
 
-  // Build
+  // build
   grunt.loadNpmTasks('grunt-contrib');
-  grunt.registerTask('build', 'min');
+  grunt.registerTask('build', 'uglify');
   grunt.registerTask('default', 'build');
+
 };
