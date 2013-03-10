@@ -190,7 +190,8 @@ function Swipe(container, options) {
 
 
   // setup initial vars
-  var start = delta = {};
+  var start = {};
+  var delta = {};
   var isScrolling;      
 
   // setup event capturing
