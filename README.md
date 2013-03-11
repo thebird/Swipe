@@ -34,7 +34,7 @@ Also Swipe needs just a few styles added to your stylesheet:
   overflow: hidden;
   position: relative;
 }
-.swipe-wrap div {
+.swipe-wrap > div {
   float:left;
   width:100%;
   position: relative;
