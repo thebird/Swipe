@@ -87,6 +87,8 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
 
+`auto(time)` auto slideshow (time in milliseconds between slides - use 0 to disable auto slideshow)
+
 ## Browser Support
 Swipe is now compatable with all browsers, including IE7+. Swipe works best on devices that supports CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
 

@@ -422,6 +422,15 @@ function Swipe(container, options) {
       return index;
 
     },
+	auto: function(auto) {
+		
+		stop();
+		
+		delay = auto;
+		
+		// start auto slideshow if applicable
+		if (delay) begin();
+	},
     kill: function() {
 
       // cancel slideshow
