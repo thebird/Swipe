@@ -1,6 +1,3 @@
-# Swipe 2
-Swipe is a responsive, lightweight slider with accurate **1:1** touch movement. Read more and check out the demo at [swipejs.com](http://swipejs.com).
-
 ## Usage
 Swipe only needs to follow a simple pattern. Here is an example:
 
@@ -78,7 +75,6 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
 
 ```
 
-
 ## Swipe API
 
 Swipe exposes a few functions that can be useful for script control of your slider.
@@ -94,10 +90,10 @@ Swipe exposes a few functions that can be useful for script control of your slid
 ## Browser Support
 Swipe is now compatable with all browsers, including IE7+. Swipe works best on devices that supports CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
 
+## Who's using Swipe
+<img src='http://swipejs.com/assets/swipe-cnn.png' width='170'>
+<img src='http://swipejs.com/assets/swipe-airbnb.png' width='170'>
+<img src='http://swipejs.com/assets/swipe-nhl.png' width='170'>
+<img src='http://swipejs.com/assets/swipe-thinkgeek.png' width='170'>
 
-## Let's Make It Better
-I would love to hear more about how to improve Swipe. Play with it and let me know how you use and please fork away. If you have any questions, contact me on [Twitter](http://twitter.com/bradbirdsall) or [GitHub](http://github.com/bradbirdsall).
-
-
-## License
-MIT license - go crazy ;)
+Shoot me a [note](mailto:brad@birdsall.co) if you want you're logo here
