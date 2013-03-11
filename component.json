@@ -3,5 +3,10 @@
   "version": "2.0",
   "main": ["./swipe.js"],
   "author": "Brad Birdsall",
-  "license": "MIT"
+  "license": "MIT",
+  "ignore": [
+    "**/*.html",
+    "**/*.css",
+    "Gruntfile.js"
+  ]
 }
