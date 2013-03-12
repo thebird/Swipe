@@ -68,20 +68,23 @@ Swipe can take an optional second parameter– an object of key/value settings:
   
   Eg:
   
-    var carouselEvents = new EventEmitter();
+``` js
 
-    var carousel = new Swipe( document.getElementById( 'carousel' ), {
-        events: carouselEvents
-    });
+var carouselEvents = new EventEmitter();
 
-    carouselEvents.on( 'begin', function( theCarousel ) {
-        console.log( 'begin event' );
-    });
+var carousel = new Swipe( document.getElementById( 'carousel' ), {
+    events: carouselEvents
+});
 
-    carouselEvents.on( 'slide', function( theCarousel, index, slide ) {
-        console.log( 'slide event: index: ' + index );
-    });
+carouselEvents.on( 'begin', function( theCarousel ) {
+    console.log( 'begin event' );
+});
 
+carouselEvents.on( 'slide', function( theCarousel, index, slide ) {
+    console.log( 'slide event: index: ' + index );
+});
+
+```
 
 ### Example
 
