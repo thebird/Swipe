@@ -84,29 +84,64 @@ function Swipe(container, options) {
 
   function slide(to, slideSpeed) {
 
-    // do nothing if already on requested slide
-    if (index == to) return;
+    var toIndex = -1;
+
+    if ( typeof( to ) === 'number' )
+    {
+      toIndex = to;
+    }
+    else if ( typeof( to ) === 'string' )
+    {
+      for (var slideIndex = 0; slideIndex < slides.length; ++slideIndex)
+      {
+        var element = slides[slideIndex];
+        if (element.id === to)
+        {
+          toIndex = slideIndex;
+          break;
+        }
+      }      
+    }
+    else if ( to instanceof Element )
+    {
+      for (var slideIndex = 0; slideIndex < slides.length; ++slideIndex)
+      {
+        var element = slides[slideIndex];
+        if (element.id == id)
+        {
+          toIndex = slideIndex;
+          break;
+        }
+      }
+    }
+    else
+    {
+      throw "Invalid target type."
+    }
+    
+    // return if we can't find the element they're talking about, or if we're already there
+    if ( toIndex == -1 || toIndex == index ) return false;
     
     if (browser.transitions) {
 
-      var diff = Math.abs(index-to) - 1;
-      var direction = Math.abs(index-to) / (index-to); // 1:right -1:left
+      var diff = Math.abs(index-toIndex) - 1;
+      var direction = Math.abs(index-toIndex) / (index-toIndex); // 1:right -1:left
 
-      while (diff--) move((to > index ? to : index) - diff - 1, width * direction, 0);
+      while (diff--) move((toIndex > index ? toIndex : index) - diff - 1, width * direction, 0);
 
       move(index, width * direction, slideSpeed || speed);
-      move(to, 0, slideSpeed || speed);
+      move(toIndex, 0, slideSpeed || speed);
 
     } else {
 
-      animate(index * -width, to * -width, slideSpeed || speed);
+      animate(index * -width, toIndex * -width, slideSpeed || speed);
 
     }
 
-    index = to;
+    index = toIndex;
 
     offloadFn(options.callback && options.callback(index, slides[index]));
-
+    return true;
   }
 
   function move(index, dist, speed) {
