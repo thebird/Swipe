@@ -85,7 +85,17 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 `getPos()` returns current slide index position
 
-`slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
+`slide(<index|id|element>, duration)` slide to specified index, element id or element (duration: speed of transition in milliseconds)
+
+Eg:
+
+``` js
+
+window.mySwipe.slide( 1 ); // slide to slide index 1
+window.mySwipe.slide( 'foo' ); // slide to slide with id 'foo'
+window.mySwipe.slide( document.getElementById( 'bar' ) ); // slide to the specified slide element
+
+```
 
 ## Browser Support
 Swipe is now compatable with all browsers, including IE7+. Swipe works best on devices that supports CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
