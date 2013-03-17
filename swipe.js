@@ -84,6 +84,8 @@ function Swipe(container, options) {
 
   function slide(to, slideSpeed) {
 
+    clearTimeout(interval);
+        
     // do nothing if already on requested slide
     if (index == to) return;
     
