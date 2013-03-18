@@ -398,13 +398,15 @@ function Swipe(container, options) {
 
     },
     slide: function(to, speed) {
-
+      
+      // cancel slideshow
+      stop();
+      
       slide(to, speed);
 
     },
     prev: function() {
 
-      // cancel slideshow
       stop();
 
       prev();
