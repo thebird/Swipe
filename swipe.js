@@ -407,6 +407,7 @@ function Swipe(container, options) {
     },
     prev: function() {
 
+      // cancel slideshow
       stop();
 
       prev();
@@ -414,6 +415,7 @@ function Swipe(container, options) {
     },
     next: function() {
 
+      // cancel slideshow
       stop();
 
       next();
