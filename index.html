@@ -47,7 +47,7 @@
     <div><b>7</b></div>
     <div><b>8</b></div>
     <div><b>9</b></div>
-    <div><b>10</b></div>
+    <div id='testing'><b>10</b></div>
     <div><b>11</b></div>
     <div><b>12</b></div>
     <div><b>13</b></div>
@@ -88,6 +88,14 @@ window.mySwipe = Swipe(elem, {
   // callback: function(index, element) {},
   // transitionEnd: function(index, element) {}
 });
+
+mySwipe.slide(3)
+setTimeout(function() {
+  mySwipe.slide('1')
+}, 1000)
+setTimeout(function() {
+  mySwipe.slide(document.getElementById('testing'))
+}, 3000)
 
 // with jQuery
 // window.mySwipe = $('#mySwipe').Swipe().data('Swipe');

@@ -398,7 +398,14 @@ function Swipe(container, options) {
     },
     slide: function(to, speed) {
 
-      slide(to, speed);
+      var index = parseInt(to, 10);
+
+      // if not a number and is a DOM element
+      if (!index && to instanceof Element) {
+        index = parseInt(to.getAttribute('data-index'), 10)
+      }
+
+      slide(index, speed);
 
     },
     prev: function() {
