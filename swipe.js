@@ -423,6 +423,11 @@ function Swipe(container, options) {
       return index;
 
     },
+    getNumSlides: function() {
+      
+      // return total number of slides
+      return slides.length;
+    },
     kill: function() {
 
       // cancel slideshow
