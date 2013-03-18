@@ -85,6 +85,8 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 `getPos()` returns current slide index position
 
+`getNumSlides()` returns the total amount of slides
+
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
 
 ## Browser Support
