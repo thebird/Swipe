@@ -398,7 +398,10 @@ function Swipe(container, options) {
 
     },
     slide: function(to, speed) {
-
+      
+      // cancel slideshow
+      stop();
+      
       slide(to, speed);
 
     },
@@ -412,6 +415,7 @@ function Swipe(container, options) {
     },
     next: function() {
 
+      // cancel slideshow
       stop();
 
       next();
