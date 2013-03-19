@@ -337,6 +337,7 @@ function Swipe(container, options) {
           }
 
           options.callback && options.callback(index, slides[index]);
+          options.events && options.events.emit( 'slide', self, index, slides[index] );
 
         } else {
 
