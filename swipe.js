@@ -34,6 +34,7 @@ function Swipe(container, options) {
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
+  options.continuous = options.continuous !== undefined ? options.continuous : true;
 
   function setup() {
 
@@ -401,7 +402,14 @@ function Swipe(container, options) {
   // expose the Swipe API
   return {
     setup: setup,
-    slide: slide,
+    slide: function(to, speed) {
+      
+      // cancel slideshow
+      stop();
+      
+      slide(to, speed);
+
+    },
     prev: function() {
 
       // cancel slideshow
@@ -412,6 +420,7 @@ function Swipe(container, options) {
     },
     next: function() {
 
+      // cancel slideshow
       stop();
 
       next();
@@ -422,6 +431,11 @@ function Swipe(container, options) {
       // return current index position
       return index;
 
+    },
+    getNumSlides: function() {
+      
+      // return total number of slides
+      return slides.length;
     },
     kill: function() {
 
