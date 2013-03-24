@@ -58,6 +58,34 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **transitionEnd** Function - runs at the end slide transition.
 
+- **events** EventEmitter (https://github.com/Wolfy87/EventEmitter) - An optional EventEmitter which will receive the following events:
+  - begin - arguments: swipeInstance
+  - stop - arguments: swipeInstance
+  - prev - arguments: swipeInstance
+  - next - arguments: swipeInstance
+  - slide - arguments: swipeInstance, index, slide
+  - transitionEnd - arguments: swipeInstance, index, slide
+  
+  Eg:
+  
+``` js
+
+var carouselEvents = new EventEmitter();
+
+var carousel = new Swipe( document.getElementById( 'carousel' ), {
+    events: carouselEvents
+});
+
+carouselEvents.on( 'begin', function( theCarousel ) {
+    console.log( 'begin event' );
+});
+
+carouselEvents.on( 'slide', function( theCarousel, index, slide ) {
+    console.log( 'slide event: index: ' + index );
+});
+
+```
+
 ### Example
 
 ``` js
