@@ -87,6 +87,8 @@ function Swipe(container, options) {
 
     // do nothing if already on requested slide
     if (index == to) return;
+
+    var duration = (slideSpeed !== undefined) ? slideSpeed : speed;
     
     if (browser.transitions) {
 
@@ -95,12 +97,12 @@ function Swipe(container, options) {
 
       while (diff--) move((to > index ? to : index) - diff - 1, width * direction, 0);
 
-      move(index, width * direction, slideSpeed || speed);
-      move(to, 0, slideSpeed || speed);
+      move(index, width * direction, duration);
+      move(to, 0, duration);
 
     } else {
 
-      animate(index * -width, to * -width, slideSpeed || speed);
+      animate(index * -width, to * -width, duration);
 
     }
 
