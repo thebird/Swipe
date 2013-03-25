@@ -19,7 +19,7 @@ function Swipe(container, options) {
     addEventListener: !!window.addEventListener,
     touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
     transitions: (function(temp) {
-      var props = ['transformProperty', 'WebkitTransform', 'MozTransform', 'OTransform', 'msTransform'];
+      var props = ['transitionProperty', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
       for ( var i in props ) if (temp.style[ props[i] ] !== undefined) return true;
       return false;
     })(document.createElement('swipe'))
