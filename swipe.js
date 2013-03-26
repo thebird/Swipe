@@ -105,7 +105,7 @@ function Swipe(container, options) {
       if (options.circular) { // we need to get the next in this direction in place
 
         to = (slides.length + to % slides.length) % slides.length;
-        var next = (slides.length + (to - direction) % slides.length) % slides.length
+        var next = (slides.length + (to - direction) % slides.length) % slides.length;
         move(index, width * direction, slideSpeed || speed);
         move(to, 0, slideSpeed || speed);
         move(next, -(width * direction), 0);
@@ -289,19 +289,32 @@ function Swipe(container, options) {
         stop();
 
         // increase resistance if first or last slide
-        delta.x = 
-          delta.x / 
-            ( (!index && delta.x > 0               // if first slide and sliding left
-              || index == slides.length - 1        // or if last slide and sliding right
-              && delta.x < 0                       // and if sliding at all
-            ) ?                      
-            ( Math.abs(delta.x) / width + 1 )      // determine resistance level
-            : 1 );                                 // no resistance if false
-        
-        // translate 1:1
-        translate(index-1, delta.x + slidePos[index-1], 0);
-        translate(index, delta.x + slidePos[index], 0);
-        translate(index+1, delta.x + slidePos[index+1], 0);
+        if (options.circular) { // we need to get the next in this direction in place
+
+          var before = (slides.length + (index-1) % slides.length) % slides.length;
+          var after = (slides.length + (index+1) % slides.length) % slides.length
+
+          // translate 1:1
+          translate(before, delta.x + slidePos[before], 0);
+          translate(index, delta.x + slidePos[index], 0);
+          translate(after, delta.x + slidePos[after], 0);
+
+        } else {
+
+          delta.x = 
+            delta.x / 
+              ( (!index && delta.x > 0               // if first slide and sliding left
+                || index == slides.length - 1        // or if last slide and sliding right
+                && delta.x < 0                       // and if sliding at all
+              ) ?                      
+              ( Math.abs(delta.x) / width + 1 )      // determine resistance level
+              : 1 );                                 // no resistance if false
+          
+          // translate 1:1
+          translate(index-1, delta.x + slidePos[index-1], 0);
+          translate(index, delta.x + slidePos[index], 0);
+          translate(index+1, delta.x + slidePos[index+1], 0);
+        }
 
       }
 
@@ -321,6 +334,8 @@ function Swipe(container, options) {
       var isPastBounds = 
             !index && delta.x > 0                            // if first slide and slide amt is greater than 0
             || index == slides.length - 1 && delta.x < 0;    // or if last slide and slide amt is less than 0
+
+      if (options.circular) isPastBounds = false;
       
       // determine direction of swipe (true:right, false:left)
       var direction = delta.x < 0;
@@ -330,19 +345,51 @@ function Swipe(container, options) {
 
         if (isValidSlide && !isPastBounds) {
 
+
           if (direction) {
 
-            move(index-1, -width, 0);
-            move(index, slidePos[index]-width, speed);
-            move(index+1, slidePos[index+1]-width, speed);
-            index += 1;
+            if (options.circular) { // we need to get the next in this direction in place
 
+              var before = (slides.length + (index-1) % slides.length) % slides.length;
+              var after = (slides.length + (index+1) % slides.length) % slides.length;
+              var next = (slides.length + (index+2) % slides.length) % slides.length;
+
+              move(before, -width, 0);
+              move(index, slidePos[index]-width, speed);
+              move(after, slidePos[after]-width, speed);
+              move(next, width, 0);
+
+              index = after;
+
+            } else {
+              move(index-1, -width, 0);
+              move(index, slidePos[index]-width, speed);
+              move(index+1, slidePos[index+1]-width, speed);
+
+              index += 1;
+            }          
+                      
           } else {
+            if (options.circular) { // we need to get the next in this direction in place
 
-            move(index+1, width, 0);
-            move(index, slidePos[index]+width, speed);
-            move(index-1, slidePos[index-1]+width, speed);
-            index += -1;
+              var before = (slides.length + (index-1) % slides.length) % slides.length;
+              var after = (slides.length + (index+1) % slides.length) % slides.length;
+              var next = (slides.length + (index-2) % slides.length) % slides.length;
+
+              move(after, width, 0);
+              move(index, slidePos[index]+width, speed);
+              move(before, slidePos[before]+width, speed);
+              move(next, -width, 0);
+
+              index = before;
+
+            } else {
+              move(index+1, width, 0);
+              move(index, slidePos[index]+width, speed);
+              move(index-1, slidePos[index-1]+width, speed);
+
+              index += -1;
+            }
 
           }
 
