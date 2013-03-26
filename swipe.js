@@ -33,11 +33,16 @@ function Swipe(container, options) {
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
+  options.circular = options.circular !== undefined ? options.circular : false;
+
 
   function setup() {
 
     // cache slides
     slides = element.children;
+
+    // in order for the circular to work properly, we need the number of slides to be 3 minimum
+    if (options.circular && slides.length < 3) options.circular = false;
 
     // create an array to store current positions of each slide
     slidePos = new Array(slides.length);
@@ -63,6 +68,8 @@ function Swipe(container, options) {
 
     }
 
+    if (options.circular && browser.transitions) move(slides.length -1, -width, 0);
+
     if (!browser.transitions) element.style.left = (index * -width) + 'px';
 
     container.style.visibility = 'visible';
@@ -70,15 +77,15 @@ function Swipe(container, options) {
   }
 
   function prev() {
-
-    if (index) slide(index-1);
+    if (options.circular) slide(index-1);
+    else if (index) slide(index-1);
     else if (options.continuous) slide(slides.length-1);
 
   }
 
   function next() {
-
-    if (index < slides.length - 1) slide(index+1);
+    if (options.circular) slide(index+1);
+    else if (index < slides.length - 1) slide(index+1);
     else if (options.continuous) slide(0);
 
   }
@@ -90,22 +97,32 @@ function Swipe(container, options) {
     
     if (browser.transitions) {
 
-      var diff = Math.abs(index-to) - 1;
+      var diff = Math.abs(index-to) - 1; // usually 0, except for last to first
       var direction = Math.abs(index-to) / (index-to); // 1:right -1:left
 
-      while (diff--) move((to > index ? to : index) - diff - 1, width * direction, 0);
+      while (diff--) move((to > index ? to : index) - diff - 1, width * direction, 0); // usually not executed
+      
+      if (options.circular) { // we need to get the next in this direction in place
 
-      move(index, width * direction, slideSpeed || speed);
-      move(to, 0, slideSpeed || speed);
+        to = (slides.length + to % slides.length) % slides.length;
+        var next = (slides.length + (to - direction) % slides.length) % slides.length
+        move(index, width * direction, slideSpeed || speed);
+        move(to, 0, slideSpeed || speed);
+        move(next, -(width * direction), 0);
+
+      } else {
+
+        move(index, width * direction, slideSpeed || speed);
+        move(to, 0, slideSpeed || speed);
+      }
 
     } else {
-
+      if (options.circular) to = (slides.length + to % slides.length) % slides.length;
       animate(index * -width, to * -width, slideSpeed || speed);
-
+      //no fallback for circular if the browser does not accept transitions
     }
 
     index = to;
-
     offloadFn(options.callback && options.callback(index, slides[index]));
 
   }
