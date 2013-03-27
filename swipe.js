@@ -68,7 +68,11 @@ function Swipe(container, options) {
 
     }
 
-    if (options.circular && browser.transitions) move(slides.length -1, -width, 0);
+    // reposition elements before and after index
+    if (options.circular && browser.transitions) {
+      move(circle(index-1), -width, 0);
+      move(circle(index+1), width, 0);
+    }
 
     if (!browser.transitions) element.style.left = (index * -width) + 'px';
 
