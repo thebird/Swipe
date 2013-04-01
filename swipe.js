@@ -432,6 +432,21 @@ function Swipe(container, options) {
       // return total number of slides
       return slides.length;
     },
+    resume: function(){
+      
+      // resume slideshow
+      delay = options.auto || 0
+      interval = setTimeout(next, delay)
+
+    },
+    prev: function() {
+
+      // cancel slideshow
+      stop();
+
+      prev();
+
+    },
     kill: function() {
 
       // cancel slideshow
