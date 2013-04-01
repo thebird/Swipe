@@ -28,21 +28,27 @@ function Swipe(container, options) {
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
-  var slides, slidePos, width;
+  var slides, slidePos, width, length;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
-  options.circular = options.circular !== undefined ? options.circular : false;
-
 
   function setup() {
 
     // cache slides
     slides = element.children;
+    length = slides.length;
 
-    // in order for the circular to work properly, we need the number of slides to be 3 minimum
-    if (options.circular && slides.length < 3) options.circular = false;
+    // set continuous to false if only one slide
+    if (slides.length < 2) options.continuous = false;
+
+    //special case if two slides
+    if (options.continuous && slides.length < 3) {
+      element.appendChild(slides[0].cloneNode(true));
+      element.appendChild(element.children[1].cloneNode(true));
+      slides = element.children;
+    }
 
     // create an array to store current positions of each slide
     slidePos = new Array(slides.length);
@@ -69,7 +75,7 @@ function Swipe(container, options) {
     }
 
     // reposition elements before and after index
-    if (options.circular && browser.transitions) {
+    if (options.continuous && browser.transitions) {
       move(circle(index-1), -width, 0);
       move(circle(index+1), width, 0);
     }
@@ -81,22 +87,24 @@ function Swipe(container, options) {
   }
 
   function prev() {
-    if (options.circular) slide(index-1);
+
+    if (options.continuous) slide(index-1);
     else if (index) slide(index-1);
-    else if (options.continuous) slide(slides.length-1);
 
   }
 
   function next() {
-    if (options.circular) slide(index+1);
+
+    if (options.continuous) slide(index+1);
     else if (index < slides.length - 1) slide(index+1);
-    else if (options.continuous) slide(0);
 
   }
 
   function circle(index) {
+
     // a simple positive modulo using slides.length
     return (slides.length + (index % slides.length)) % slides.length;
+
   }
 
   function slide(to, slideSpeed) {
@@ -106,23 +114,34 @@ function Swipe(container, options) {
     
     if (browser.transitions) {
 
-      var diff = Math.abs(index-to) - 1; // usually 0, except for last to first
-      var direction = Math.abs(index-to) / (index-to); // 1:right -1:left
+      var direction = Math.abs(index-to) / (index-to); // 1: backward, -1: forward
 
-      to = circle(to);
-      
-      while (diff--) move((to > index ? to : index) - diff - 1, width * direction, 0); // usually not executed
-      
-      move(index, width * direction, slideSpeed || speed);
-      move(to, 0, slideSpeed || speed);
-      
-      if (options.circular) { // we need to get the next in this direction in place
-        move(circle(to - direction), -(width * direction), 0);
+      // get the actual position of the slide
+      if (options.continuous) {
+        var natural_direction = direction;
+        direction = -slidePos[circle(to)] / width;
+
+        // if going forward but to < index, use to = slides.length + to
+        // if going backward but to > index, use to = -slides.length + to
+        if (direction !== natural_direction) to =  -direction * slides.length + to;
+
       }
 
+      var diff = Math.abs(index-to) - 1;
+
+      // move all the slides between index and to in the right direction
+      while (diff--) move( circle((to > index ? to : index) - diff - 1), width * direction, 0);
+            
+      to = circle(to);
+
+      move(index, width * direction, slideSpeed || speed);
+      move(to, 0, slideSpeed || speed);
+
+      if (options.continuous) move(circle(to - direction), -(width * direction), 0); // we need to get the next in place
+      
     } else {     
       animate(index * -width, to * -width, slideSpeed || speed);
-      //no fallback for circular if the browser does not accept transitions
+      //no fallback for a circular continuous if the browser does not accept transitions
     }
 
     index = to;
@@ -160,7 +179,7 @@ function Swipe(container, options) {
 
     // if not an animation, just reposition
     if (!speed) {
-      
+
       element.style.left = to + 'px';
       return;
 
@@ -291,7 +310,7 @@ function Swipe(container, options) {
         stop();
 
         // increase resistance if first or last slide
-        if (options.circular) { // we don't add resistance at the end
+        if (options.continuous) { // we don't add resistance at the end
 
           translate(circle(index-1), delta.x + slidePos[circle(index-1)], 0);
           translate(index, delta.x + slidePos[index], 0);
@@ -333,7 +352,7 @@ function Swipe(container, options) {
             !index && delta.x > 0                            // if first slide and slide amt is greater than 0
             || index == slides.length - 1 && delta.x < 0;    // or if last slide and slide amt is less than 0
 
-      if (options.circular) isPastBounds = false;
+      if (options.continuous) isPastBounds = false;
       
       // determine direction of swipe (true:right, false:left)
       var direction = delta.x < 0;
@@ -345,7 +364,7 @@ function Swipe(container, options) {
 
           if (direction) {
 
-            if (options.circular) { // we need to get the next in this direction in place
+            if (options.continuous) { // we need to get the next in this direction in place
 
               move(circle(index-1), -width, 0);
               move(circle(index+2), width, 0);
@@ -359,7 +378,7 @@ function Swipe(container, options) {
             index = circle(index+1);  
                       
           } else {
-            if (options.circular) { // we need to get the next in this direction in place
+            if (options.continuous) { // we need to get the next in this direction in place
 
               move(circle(index+1), width, 0);
               move(circle(index-2), -width, 0);
@@ -378,7 +397,7 @@ function Swipe(container, options) {
 
         } else {
 
-          if (options.circular) {
+          if (options.continuous) {
 
             move(circle(index-1), -width, speed);
             move(index, 0, speed);
@@ -484,7 +503,7 @@ function Swipe(container, options) {
     getNumSlides: function() {
       
       // return total number of slides
-      return slides.length;
+      return length;
     },
     kill: function() {
 
