@@ -44,7 +44,7 @@ function Swipe(container, options) {
     if (slides.length < 2) options.continuous = false;
 
     //special case if two slides
-    if (options.continuous && slides.length < 3) {
+    if (browser.transitions && options.continuous && slides.length < 3) {
       element.appendChild(slides[0].cloneNode(true));
       element.appendChild(element.children[1].cloneNode(true));
       slides = element.children;
