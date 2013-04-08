@@ -140,6 +140,8 @@ function Swipe(container, options) {
       if (options.continuous) move(circle(to - direction), -(width * direction), 0); // we need to get the next in place
       
     } else {     
+      
+      to = circle(to);
       animate(index * -width, to * -width, slideSpeed || speed);
       //no fallback for a circular continuous if the browser does not accept transitions
     }
