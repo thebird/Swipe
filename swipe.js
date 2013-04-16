@@ -37,7 +37,7 @@ function Swipe(container, options) {
   function setup() {
 
     // cache slides
-    slides = element.children;
+    slides = options.childSelector ? element.querySelectorAll(options.childSelector) : element.children;
     length = slides.length;
 
     // set continuous to false if only one slide
