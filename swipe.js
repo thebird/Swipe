@@ -217,7 +217,7 @@ function Swipe(container, options) {
   var interval;
 
   function begin() {
-
+    clearTimeout(interval);
     interval = setTimeout(next, delay);
 
   }
