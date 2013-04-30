@@ -82,6 +82,8 @@ function Swipe(container, options) {
 
     if (!browser.transitions) element.style.left = (index * -width) + 'px';
 
+    visibleThree(index, slides);
+
     container.style.visibility = 'visible';
 
   }
@@ -147,6 +149,9 @@ function Swipe(container, options) {
     }
 
     index = to;
+
+    visibleThree(index, slides);
+
     offloadFn(options.callback && options.callback(index, slides[index]));
   }
 
@@ -209,6 +214,23 @@ function Swipe(container, options) {
       element.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px';
 
     }, 4);
+
+  }
+
+  // hide all slides then show only current, next and prev
+  function visibleThree(index, slides) {
+
+    var pos = slides.length;
+
+    while(pos--) {
+
+      slides[pos].style.visibility = 'hidden';
+
+      if(pos === circle(index) || pos === circle(index-1) || pos === circle(index+1)){
+        slides[pos].style.visibility = 'visible';
+      }
+
+    }
 
   }
 
@@ -394,6 +416,8 @@ function Swipe(container, options) {
             index = circle(index-1);
 
           }
+					
+          visibleThree(index, slides);
 
           options.callback && options.callback(index, slides[index]);
 
