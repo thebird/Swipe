@@ -499,7 +499,7 @@ function Swipe(container, options) {
     getPos: function() {
 
       // return current index position
-      return index;
+      return circle(index);
 
     },
     getNumSlides: function() {
