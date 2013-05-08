@@ -146,7 +146,7 @@ function Swipe(container, options) {
       //no fallback for a circular continuous if the browser does not accept transitions
     }
 
-    index = to;
+    index = length == 2 ? (to % 2) : to;
     offloadFn(options.callback && options.callback(index, slides[index]));
   }
 
