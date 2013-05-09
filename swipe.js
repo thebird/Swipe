@@ -31,6 +31,7 @@ function Swipe(container, options) {
   var slides, slidePos, width, length;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
+  var position = index;
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
@@ -146,8 +147,9 @@ function Swipe(container, options) {
       //no fallback for a circular continuous if the browser does not accept transitions
     }
 
-    index = length == 2 ? (to % 2) : to;
-    offloadFn(options.callback && options.callback(index, slides[index]));
+    index = to;
+    position = length == 2 ? (index % 2) : index;
+    offloadFn(options.callback && options.callback(position, slides[index]));
   }
 
   function move(index, dist, speed) {
@@ -499,7 +501,7 @@ function Swipe(container, options) {
     getPos: function() {
 
       // return current index position
-      return index;
+      return position;
 
     },
     getNumSlides: function() {
