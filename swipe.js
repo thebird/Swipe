@@ -240,10 +240,18 @@ function Swipe(container, options) {
 
     handleEvent: function(event) {
 
+      if (!options.disableTouch)
+        switch (event.type) {
+          case 'touchstart': this.start(event); break;
+          case 'touchmove': this.move(event); break;
+          case 'touchend': offloadFn(this.end(event)); break;
+          case 'click':
+            return false;
+            event.preventDefault();
+            event.stopPropagation();
+            break;
+        }
       switch (event.type) {
-        case 'touchstart': this.start(event); break;
-        case 'touchmove': this.move(event); break;
-        case 'touchend': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
@@ -277,9 +285,10 @@ function Swipe(container, options) {
       // reset delta and end measurements
       delta = {};
 
-      // attach touchmove and touchend listeners
+      // attach new touch listeners after touchstart
       element.addEventListener('touchmove', this, false);
       element.addEventListener('touchend', this, false);
+      element.addEventListener('click', this, false);
 
     },
     move: function(event) {
@@ -291,54 +300,61 @@ function Swipe(container, options) {
 
       var touches = event.touches[0];
 
-      // measure change in x and y
-      delta = {
-        x: touches.pageX - start.x,
-        y: touches.pageY - start.y
-      }
-
-      // determine if scrolling test has run - one time test
-      if ( typeof isScrolling == 'undefined') {
-        isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
-      }
-
-      // if user is not trying to scroll vertically
-      if (!isScrolling) {
-
-        // prevent native scrolling 
-        event.preventDefault();
-
-        // stop slideshow
-        stop();
-
-        // increase resistance if first or last slide
-        if (options.continuous) { // we don't add resistance at the end
-
-          translate(circle(index-1), delta.x + slidePos[circle(index-1)], 0);
-          translate(index, delta.x + slidePos[index], 0);
-          translate(circle(index+1), delta.x + slidePos[circle(index+1)], 0);
-
-        } else {
-
-          delta.x = 
-            delta.x / 
-              ( (!index && delta.x > 0               // if first slide and sliding left
-                || index == slides.length - 1        // or if last slide and sliding right
-                && delta.x < 0                       // and if sliding at all
-              ) ?                      
-              ( Math.abs(delta.x) / width + 1 )      // determine resistance level
-              : 1 );                                 // no resistance if false
-          
-          // translate 1:1
-          translate(index-1, delta.x + slidePos[index-1], 0);
-          translate(index, delta.x + slidePos[index], 0);
-          translate(index+1, delta.x + slidePos[index+1], 0);
+      // if confirmed we have started a swipe
+      if (start.x) {
+        // measure change in x and y
+        delta = {
+          x: touches.pageX - start.x,
+          y: touches.pageY - start.y
         }
 
+        // determine if scrolling test has run - one time test
+        if ( typeof isScrolling == 'undefined') {
+          isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
+        }
+
+        // if user is not trying to scroll vertically
+        if (!isScrolling) {
+
+          // prevent native scrolling 
+          event.preventDefault();
+
+          // stop slideshow
+          stop();
+
+          // increase resistance if first or last slide
+          if (options.continuous) { // we don't add resistance at the end
+
+            translate(circle(index - 1), delta.x + slidePos[circle(index - 1)], 0);
+            translate(index, delta.x + slidePos[index], 0);
+            translate(circle(index + 1), delta.x + slidePos[circle(index + 1)], 0);
+
+          } else {
+
+            delta.x =
+              delta.x /
+                ((!index && delta.x > 0               // if first slide and sliding left
+                  || index == slides.length - 1        // or if last slide and sliding right
+                  && delta.x < 0                       // and if sliding at all
+                ) ?
+                (Math.abs(delta.x) / width + 1)      // determine resistance level
+                : 1);                                 // no resistance if false
+
+            // translate 1:1
+            translate(index - 1, delta.x + slidePos[index - 1], 0);
+            translate(index, delta.x + slidePos[index], 0);
+            translate(index + 1, delta.x + slidePos[index + 1], 0);
+          }
+        }
       }
 
     },
     end: function(event) {
+      // we are sliding so shouldn't be clicking
+      if (delta.x && options.stopPropagation) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
 
       // measure duration
       var duration = +new Date - start.time;
@@ -361,41 +377,40 @@ function Swipe(container, options) {
 
       // if not scrolling vertically
       if (!isScrolling) {
-
         if (isValidSlide && !isPastBounds) {
 
           if (direction) {
 
-            if (options.continuous) { // we need to get the next in this direction in place
+          if (options.continuous) { // we need to get the next in this direction in place
 
-              move(circle(index-1), -width, 0);
-              move(circle(index+2), width, 0);
+            move(circle(index-1), -width, 0);
+            move(circle(index+2), width, 0);
 
-            } else {
-              move(index-1, -width, 0);
-            }
-
-            move(index, slidePos[index]-width, speed);
-            move(circle(index+1), slidePos[circle(index+1)]-width, speed);
-            index = circle(index+1);  
-                      
           } else {
-            if (options.continuous) { // we need to get the next in this direction in place
-
-              move(circle(index+1), width, 0);
-              move(circle(index-2), -width, 0);
-
-            } else {
-              move(index+1, width, 0);
-            }
-
-            move(index, slidePos[index]+width, speed);
-            move(circle(index-1), slidePos[circle(index-1)]+width, speed);
-            index = circle(index-1);
-
+            move(index-1, -width, 0);
           }
 
-          options.callback && options.callback(index, slides[index]);
+          move(index, slidePos[index]-width, speed);
+          move(circle(index+1), slidePos[circle(index+1)]-width, speed);
+          index = circle(index+1);  
+                      
+        } else {
+          if (options.continuous) { // we need to get the next in this direction in place
+
+            move(circle(index+1), width, 0);
+            move(circle(index-2), -width, 0);
+
+          } else {
+            move(index+1, width, 0);
+          }
+
+          move(index, slidePos[index]+width, speed);
+          move(circle(index-1), slidePos[circle(index-1)]+width, speed);
+          index = circle(index-1);
+
+        }
+
+        options.callback && options.callback(index, slides[index]);
 
         } else {
 
@@ -413,12 +428,15 @@ function Swipe(container, options) {
           }
 
         }
-
+        // we are sliding so shouldn't be clicking
+        if (delta.x && options.stopPropagation)
+        return false;
       }
 
-      // kill touchmove and touchend event listeners until touchstart called again
+      // kill touch event listeners until touchstart called again
       element.removeEventListener('touchmove', events, false)
       element.removeEventListener('touchend', events, false)
+      element.removeEventListener('click', events, false)
 
     },
     transitionEnd: function(event) {
