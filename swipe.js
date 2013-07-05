@@ -36,6 +36,8 @@ function Swipe(container, options) {
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
+  var autoStop = options.autoStop || options.autoStop === undefined;
+
   function setup() {
 
     // cache slides
