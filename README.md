@@ -26,6 +26,7 @@ Also Swipe needs just a few styles added to your stylesheet:
   overflow: hidden;
   visibility: hidden;
   position: relative;
+  -ms-touch-action: pan-y; /* For IE10, to allow scrolling on swipe elements */
 }
 .swipe-wrap {
   overflow: hidden;
