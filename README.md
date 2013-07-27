@@ -97,7 +97,7 @@ Swipe is now compatible with all browsers, including IE7+. Swipe works best on d
 <img src='http://swipejs.com/assets/swipe-airbnb.png' width='170'>
 <img src='http://swipejs.com/assets/swipe-nhl.png' width='170'>
 <img src='http://swipejs.com/assets/swipe-htc.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-thinkgeek.png' width='170'>  
+<img src='http://swipejs.com/assets/swipe-thinkgeek.png' width='170'>
 <img src='http://swipejs.com/assets/swipe-snapguide.png' width='170'>
 
 Shoot me a [note](mailto:brad@birdsall.co) if you want your logo here
