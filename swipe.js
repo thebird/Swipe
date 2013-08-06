@@ -472,6 +472,19 @@ function Swipe(container, options) {
       setup();
 
     },
+    start: function() {
+
+      // restore delay
+      delay = options.auto || 0;
+
+      begin();
+
+    },
+    stop: function() {
+
+      stop();
+
+    },
     slide: function(to, speed) {
       
       // cancel slideshow

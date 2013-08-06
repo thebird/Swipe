@@ -79,6 +79,10 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
 
 Swipe exposes a few functions that can be useful for script control of your slider.
 
+`start()` starts the slideshow (auto mode)
+
+`stop()` stops the slideshow (auto mode)
+
 `prev()` slide to prev
 
 `next()` slide to next
