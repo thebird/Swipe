@@ -23,7 +23,16 @@
   width:100%;
   position: relative;
 }
-
+.swipe-pagination {
+    display: inline-block;
+    margin-left: 10px;
+}
+.swipe-pagination div {
+    display: inline-block;
+}
+.swipe-active-page {
+  color: red;
+}
 /* END required styles */
 
 </style>
@@ -80,6 +89,7 @@
 // pure JS
 var elem = document.getElementById('mySwipe');
 window.mySwipe = Swipe(elem, {
+    paginate : true
   // startSlide: 4,
   // auto: 3000,
   // continuous: true,
