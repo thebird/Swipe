@@ -84,6 +84,37 @@ function Swipe(container, options) {
 
     container.style.visibility = 'visible';
 
+    //make pagination
+    if (options.paginate && (length >= 2) ) {
+      if (container.querySelectorAll('div.swipe-pagination').length) {
+        container.querySelectorAll('div.swipe-pagination')[0].remove();
+      }
+      var pagination = document.createElement('div');
+      pagination.className = "swipe-pagination";
+      container.appendChild(pagination);
+
+      for ( var pageIndex = 0; pageIndex < length; pageIndex++ ) {
+        var page = document.createElement('div')
+        page.innerHTML = pageIndex.toString();
+        page.setAttribute('data-pageNumber', pageIndex.toString());
+        //set jump to page event handler
+        page.onclick = function() {
+          mySwipe.slide(this.getAttribute('data-pageNumber'), 200);
+        }
+        pagination.appendChild(page);
+      }
+      container.querySelectorAll('div.swipe-pagination div')[index].className = 'swipe-active-page';
+    }
+
+  }
+
+  function setPageTo(index) {
+    var previousPage = container.querySelectorAll('div.swipe-pagination div.swipe-active-page')[0];
+    previousPage.className = previousPage.className
+                                         .replace(/\bswipe-active-page\b/, '');
+    container.querySelectorAll('div.swipe-pagination div')
+             [index]
+             .className = 'swipe-active-page';
   }
 
   function prev() {
@@ -108,7 +139,6 @@ function Swipe(container, options) {
   }
 
   function slide(to, slideSpeed) {
-
     // do nothing if already on requested slide
     if (index == to) return;
     
@@ -148,6 +178,12 @@ function Swipe(container, options) {
 
     index = to;
     offloadFn(options.callback && options.callback(index, slides[index]));
+
+    //change page when sliding
+    if(options.paginate) {
+      setPageTo(to);
+    }
+
   }
 
   function move(index, dist, speed) {
