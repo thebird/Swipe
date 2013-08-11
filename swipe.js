@@ -96,6 +96,11 @@ function Swipe(container, options) {
       for ( var pageIndex = 0; pageIndex < length; pageIndex++ ) {
         var page = document.createElement('div')
         page.innerHTML = pageIndex.toString();
+        page.setAttribute('data-pageNumber', pageIndex.toString());
+        //set jump to page event handler
+        page.onclick = function() {
+          mySwipe.slide(this.getAttribute('data-pageNumber'), 200);
+        }
         pagination.appendChild(page);
       }
       container.querySelectorAll('div.swipe-pagination div')[index].className = 'swipe-active-page';

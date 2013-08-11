@@ -36,6 +36,15 @@ Also Swipe needs just a few styles added to your stylesheet:
   width:100%;
   position: relative;
 }
+.swipe-pagination {
+    display: inline-block;
+}
+.swipe-pagination div {
+    display: inline-block;
+}
+.swipe-active-page {
+  color: red;
+}
 ```
 
 ## Config Options
@@ -49,6 +58,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
 - **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
+
+- **pagination** Boolean *(default:false)* - adds pagination to the slider
 
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
