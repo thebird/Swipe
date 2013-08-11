@@ -84,9 +84,8 @@ function Swipe(container, options) {
 
     container.style.visibility = 'visible';
 
-    //make pagination - Iman
+    //make pagination
     if (options.paginate && (length >= 2) ) {
-      console.log( 'entered iman setup' );
       if (container.querySelectorAll('div.swipe-pagination').length) {
         container.querySelectorAll('div.swipe-pagination')[0].remove();
       }
