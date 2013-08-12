@@ -13,6 +13,8 @@ function Swipe(container, options) {
   // utilities
   var noop = function() {}; // simple no operation function
   var offloadFn = function(fn) { setTimeout(fn || noop, 0) }; // offload a functions execution
+
+  var paused = false;
   
   // check browser capabilities
   var browser = {
@@ -197,7 +199,7 @@ function Swipe(container, options) {
 
         element.style.left = to + 'px';
 
-        if (delay) begin();
+        if (!paused && delay) begin();
 
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
 
@@ -425,7 +427,9 @@ function Swipe(container, options) {
 
       if (parseInt(event.target.getAttribute('data-index'), 10) == index) {
         
-        if (delay) begin();
+        delay = options.auto || 0;
+
+        if (!paused && delay) begin();
 
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
 
@@ -477,10 +481,14 @@ function Swipe(container, options) {
       // restore delay
       delay = options.auto || 0;
 
+      paused = false;
+
       begin();
 
     },
     stop: function() {
+
+      paused = true;
 
       stop();
 
