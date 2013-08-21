@@ -34,7 +34,7 @@ function Swipe(container, options) {
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
-  if ( browser.pointer ) container.style.msTouchAction = 'pan-y';
+  if ( browser.pointer ) container.style.msTouchAction = 'none';
   function setup() {
 
     // cache slides
