@@ -228,24 +228,28 @@ function Swipe(container, options) {
     clearTimeout(interval);
 
   }
-  function preventDefault(e) {
-    e.preventDefault();
-  }
     
-  function toggleOffPreventClick() {
-    var links = element.getElementsByTagName("a");
-    for ( var i = 0 ; i < links.length ; i++) {
-      links[i].removeEventListener("click", preventDefault,false);
-    }
-  }
     
-  function toggleOnPreventClick() {
-    var links = element.getElementsByTagName("a");
-    for ( var i = 0 ; i < links.length ; i++) {
-      links[i].addEventListener("click", preventDefault, false);
-    }
-  }
-    
+    var linkHandler = {
+      
+      preventDefault: function (e) {
+        e.preventDefault();
+      },
+        
+      toggleOffPreventClick: function () {
+        var links = element.getElementsByTagName("a");
+        for ( var i = 0 ; i < links.length ; i++) {
+          links[i].removeEventListener("click", this.preventDefault,false);
+        }
+      },
+        
+      toggleOnPreventClick: function () {
+        var links = element.getElementsByTagName("a");
+        for ( var i = 0 ; i < links.length ; i++) {
+          links[i].addEventListener("click", this.preventDefault, false);
+        }
+      }
+    };
 
   // setup initial vars
   var start = {};
@@ -278,7 +282,7 @@ function Swipe(container, options) {
               // handles links inside the slider
               if( delta.x )
               {
-                  toggleOnPreventClick();
+                  linkHandler.toggleOnPreventClick();
               }
               
               break;
@@ -291,7 +295,7 @@ function Swipe(container, options) {
         case 'otransitionend':
         case 'transitionend':
               offloadFn(this.transitionEnd(event));
-              toggleOffPreventClick();
+              linkHandler.toggleOffPreventClick();
         break;
         case 'resize': offloadFn(setup.call()); break;
       }
