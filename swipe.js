@@ -224,17 +224,33 @@ function Swipe(container, options) {
   }
 
   function stop() {
-
     delay = 0;
     clearTimeout(interval);
 
   }
-
+  function preventDefault(e) {
+    e.preventDefault();
+  }
+    
+  function toggleOffPreventClick() {
+    var links = element.getElementsByTagName("a");
+    for ( var i = 0 ; i < links.length ; i++) {
+      links[i].removeEventListener("click", preventDefault,false);
+    }
+  }
+    
+  function toggleOnPreventClick() {
+    var links = element.getElementsByTagName("a");
+    for ( var i = 0 ; i < links.length ; i++) {
+      links[i].addEventListener("click", preventDefault, false);
+    }
+  }
+    
 
   // setup initial vars
   var start = {};
   var delta = {};
-  var isScrolling;      
+  var isScrolling;
 
   // setup event capturing
   var events = {
@@ -257,7 +273,15 @@ function Swipe(container, options) {
         
         case 'MSPointerDown': this.start(event); break;
               
-        case 'MSPointerMove': this.move(event); break;
+        case 'MSPointerMove':
+              this.move(event);
+              // handles links inside the slider
+              if( delta.x )
+              {
+                  toggleOnPreventClick();
+              }
+              
+              break;
             
         case 'MSPointerUp': offloadFn(this.end(event)); break;
               
@@ -265,7 +289,10 @@ function Swipe(container, options) {
         case 'msTransitionEnd':
         case 'oTransitionEnd':
         case 'otransitionend':
-        case 'transitionend': offloadFn(this.transitionEnd(event)); break;
+        case 'transitionend':
+              offloadFn(this.transitionEnd(event));
+              toggleOffPreventClick();
+        break;
         case 'resize': offloadFn(setup.call()); break;
       }
 
@@ -306,7 +333,8 @@ function Swipe(container, options) {
           element.addEventListener('MSPointerUp', this, false);
       }
       
-        
+            
+      
         
 
     },
@@ -328,6 +356,9 @@ function Swipe(container, options) {
         x: pageX - start.x,
         y: pageY - start.y
       }
+        
+
+               
 
       // determine if scrolling test has run - one time test
       if ( typeof isScrolling == 'undefined') {
@@ -388,6 +419,14 @@ function Swipe(container, options) {
 
       if (options.continuous) isPastBounds = false;
       
+        
+                
+        
+       
+  
+        
+        
+        
       // determine direction of swipe (true:right, false:left)
       var direction = delta.x < 0;
 
@@ -461,6 +500,10 @@ function Swipe(container, options) {
       }
       
         
+        
+      
+        
+        
 
     },
     transitionEnd: function(event) {
@@ -470,7 +513,7 @@ function Swipe(container, options) {
         if (delay) begin();
 
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
-
+        
       }
 
     }
