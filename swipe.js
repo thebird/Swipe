@@ -35,7 +35,12 @@ function Swipe(container, options) {
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
   function setup() {
-
+    var newWidth = container.getBoundingClientRect().width || container.offsetWidth;
+    // prevents reinitialization if width does not change (mobile scrolling triggers resize event)
+    if (width === newWidth) {
+      return;
+    }
+    
     // cache slides
     slides = element.children;
     length = slides.length;
@@ -54,7 +59,7 @@ function Swipe(container, options) {
     slidePos = new Array(slides.length);
 
     // determine width of each slide
-    width = container.getBoundingClientRect().width || container.offsetWidth;
+    width = newWidth;
 
     element.style.width = (slides.length * width) + 'px';
 
