@@ -28,7 +28,7 @@ function Swipe(container, options) {
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
-  var slides, slidePos, width, length;
+  var slides, actualAmountOfSlides, slidePos, width, length;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
@@ -45,6 +45,7 @@ function Swipe(container, options) {
 
     //special case if two slides
     if (browser.transitions && options.continuous && slides.length < 3) {
+      actualAmountOfSlides = 2;
       element.appendChild(slides[0].cloneNode(true));
       element.appendChild(element.children[1].cloneNode(true));
       slides = element.children;
@@ -147,7 +148,14 @@ function Swipe(container, options) {
     }
 
     index = to;
-    offloadFn(options.callback && options.callback(index, slides[index]));
+
+    // make sure the index can't past the actual amount of slides
+    // this only happens with 2 slides
+    var displayIndex = (index + 1 > actualAmountOfSlides
+          ? index - actualAmountOfSlides 
+          : index);
+
+    offloadFn(options.callback && options.callback(displayIndex, slides[index]));
   }
 
   function move(index, dist, speed) {
@@ -505,7 +513,8 @@ function Swipe(container, options) {
     getNumSlides: function() {
       
       // return total number of slides
-      return length;
+      console.log(actualAmountOfSlides);
+      return actualAmountOfSlides || length;
     },
     kill: function() {
 
