@@ -547,6 +547,17 @@ function Swipe(container, options) {
 
       }
 
+    },
+    stop: function() {
+
+      // cansel slideshow
+      stop();
+    },
+    begin: function(newDelay) {
+
+      // start slideshow with defined delay
+      delay = newDelay;
+      begin();
     }
   }
 
