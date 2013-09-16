@@ -1,9 +1,7 @@
 {
-  "name": "Swipe",
+  "name": "simian-swipe",
   "version": "2.0.0",
   "main": ["./swipe.js"],
-  "author": "Brad Birdsall",
-  "license": "MIT",
   "ignore": [
     "**/*.html",
     "**/*.css",
