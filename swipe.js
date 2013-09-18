@@ -88,6 +88,7 @@ function Swipe(container, options) {
 
   function prev() {
 
+    options.prevClicked && options.prevClicked.call(event);
     if (options.continuous) slide(index-1);
     else if (index) slide(index-1);
 
@@ -95,6 +96,7 @@ function Swipe(container, options) {
 
   function next() {
 
+    options.nextClicked && options.nextClicked.call(event);
     if (options.continuous) slide(index+1);
     else if (index < slides.length - 1) slide(index+1);
 
