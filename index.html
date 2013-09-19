@@ -33,7 +33,7 @@
 
 <h1>Swipe 2</h1>
 
-
+<h2>Horizontal</h2>
 
 <div id='mySwipe' style='max-width:500px;margin:0 auto' class='swipe'>
   <div class='swipe-wrap'>
@@ -54,6 +54,8 @@
   <button onclick='mySwipe.stop()'>stop</button>
 
 </div>
+
+<h2>Vertical</h2>
 
 <div id='verticalSwipe' style='max-height:245px;max-width:500px;margin:0 auto' class='swipe'>
   <div class='swipe-wrap'>
@@ -76,7 +78,28 @@
 
 </div>
 
+<h2>Elastic</h2>
 
+<div id='elasticSwipe' style='margin:0 auto' class='swipe'>
+  <div class='swipe-wrap'>
+    <div><b>0</b></div>
+    <div><b>1</b></div>
+    <div><b>2</b></div>
+    <div><b>3</b></div>
+    <div><b>4</b></div>
+    <div><b>5</b></div>
+  </div>
+</div>
+
+
+<div style='text-align:center;padding-top:20px;'>
+  
+  <button onclick='elasticSwipe.prev()'>prev</button> 
+  <button onclick='elasticSwipe.next()'>next</button>
+  <button onclick='elasticSwipe.begin(1000)'>start</button>
+  <button onclick='elasticSwipe.stop()'>stop</button>
+
+</div>
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -105,6 +128,18 @@ window.verticalSwipe = Swipe(elem2, {
   // callback: function(index, element) {},
   // transitionEnd: function(index, element) {}
   orientation: 'vertical'
+});
+
+var elem3 = document.getElementById('elasticSwipe');
+window.elasticSwipe = Swipe(elem3, {
+  // startSlide: 4,
+  // auto: 3000,
+  // continuous: true,
+  // disableScroll: true,
+  // stopPropagation: true,
+  // callback: function(index, element) {},
+  // transitionEnd: function(index, element) {}
+  elastic: true
 });
 
 // with jQuery

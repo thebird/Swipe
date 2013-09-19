@@ -13,17 +13,6 @@ function Swipe(container, options) {
   // utilities
   var noop = function() {}; // simple no operation function
   var offloadFn = function(fn) { setTimeout(fn || noop, 0) }; // offload a functions execution
-  
-  // check browser capabilities
-  var browser = {
-    addEventListener: !!window.addEventListener,
-    touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
-    transitions: (function(temp) {
-      var props = ['transitionProperty', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
-      for ( var i in props ) if (temp.style[ props[i] ] !== undefined) return true;
-      return false;
-    })(document.createElement('swipe'))
-  };
 
   // quit if no root element
   if (!container) return;
@@ -33,7 +22,20 @@ function Swipe(container, options) {
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
   var orientation = options.orientation || 'horizontal';
+  var elastic = options.elastic || false;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
+
+  // check browser capabilities
+  var browser = {
+    addEventListener: !!window.addEventListener,
+    touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+    transitions: (function(temp) {
+      if (elastic) return false;
+      var props = ['transitionProperty', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
+      for ( var i in props ) if (temp.style[ props[i] ] !== undefined) return true;
+      return false;
+    })(document.createElement('swipe'))
+  };
 
   function setup() {
 
@@ -69,10 +71,10 @@ function Swipe(container, options) {
 
       var slide = slides[pos];
 
-      if(orientation == 'horizontal') {
+      if(orientation == 'horizontal' && !elastic) {
         slide.style.width = width + 'px';
       }
-      else if(orientation == 'vertical') {
+      else if(orientation == 'vertical'  && !elastic) {
         slide.style.height = height + 'px';
       }
 
