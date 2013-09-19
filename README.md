@@ -55,6 +55,7 @@ Go ahead and give the demo a try and see how amazing Swipe is.
 Built-in bullet support and arrow navigation contributed by [Alex Budin](https://github.com/alex-b).
 
 
+
 ## Config Options
 
 Swipe can take an optional second parameter– an object of key/value settings:
