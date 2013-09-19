@@ -38,6 +38,21 @@ Also Swipe needs just a few styles added to your stylesheet:
 }
 ```
 
+## Swipe now supports bullets and arrow navigation too
+
+If you want to add arrows and bullets to your swipe wonder you would do something similar to this, but you can structure it as you like, this is just an example, but you can see in action if you open the index.html file:
+
+``` html
+<div id="swipe_direction_nav">
+  <a id="swipe_prev" class="swipe-slider-prev">Prev</a>
+  <div id="swipe_bullet_wrapper"></div>
+  <a id="swipe_next" class="swipe-slider-next">Next</a>
+</div>
+```
+
+Go ahead and give the demo a try and see how amazing Swipe is.
+
+
 ## Config Options
 
 Swipe can take an optional second parameter– an object of key/value settings:
@@ -58,6 +73,16 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **transitionEnd** Function - runs at the end slide transition.
 
+- **btnNextId** Function - the ID of the element that you want to trigger the next slide.
+
+- **btnPrevId** Function - the ID of the element that you want to trigger the previous slide.
+
+- **bulletWrapperId** Function - the wrapper div that will contain the bullets related to your slides (you can style it at your free will in your CSS).
+
+- **bulletClass** Function - the css class that you have created for your bullet, if not specified a default 'swipe-bullet' will be used.
+
+- **bulletActiveClass** Function - the CSS class that represents the active state of your bullet, if not specified a default 'active' class will be used.
+
 ### Example
 
 ``` js
@@ -70,7 +95,12 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   disableScroll: false,
   stopPropagation: false,
   callback: function(index, elem) {},
-  transitionEnd: function(index, elem) {}
+  transitionEnd: function(index, elem) {},
+  btnNextId : 'swipe_next',
+  btnPrevId : 'swipe_prev',
+  bulletWrapperId : 'swipe_bullet_wrapper',
+  bulletClass : 'swipe-bullet',
+  bulletActiveClass : 'active',
 });
 
 ```
