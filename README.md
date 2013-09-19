@@ -52,6 +52,8 @@ If you want to add arrows and bullets to your swipe wonder you would do somethin
 
 Go ahead and give the demo a try and see how amazing Swipe is.
 
+Built-in bullet support and arrow navigation contributed by [Alex Budin](https://github.com/alex-b).
+
 
 ## Config Options
 
@@ -77,9 +79,9 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **btnPrevId** Function - the ID of the element that you want to trigger the previous slide.
 
-- **bulletWrapperId** Function - the wrapper div that will contain the bullets related to your slides (you can style it at your free will in your CSS).
+- **bulletWrapperId** Function - the wrapper that will contain the bullets related to your slides (you can style it at your free will in your CSS).
 
-- **bulletClass** Function - the css class that you have created for your bullet, if not specified a default 'swipe-bullet' will be used.
+- **bulletClass** Function - the CSS class that you have created for your bullet, if not specified a default 'swipe-bullet' will be used.
 
 - **bulletActiveClass** Function - the CSS class that represents the active state of your bullet, if not specified a default 'active' class will be used.
 
