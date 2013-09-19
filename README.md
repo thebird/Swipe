@@ -38,7 +38,7 @@ Also Swipe needs just a few styles added to your stylesheet:
 }
 ```
 
-## Swipe now supports bullets and arrow navigation too
+## Swipe now supports bullets and arrow navigation
 
 If you want to add arrows and bullets to your swipe wonder you would do something similar to this, but you can structure it as you like, this is just an example, but you can see in action if you open the index.html file:
 
