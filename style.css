@@ -50,7 +50,7 @@ html, body {
   overflow: auto;
 }
 
-#mySwipe div b {
+.swipe div b {
   display:block;
   font-weight:bold;
   color:#14ADE5;
