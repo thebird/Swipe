@@ -50,6 +50,8 @@ If you want to add arrows and bullets to your swipe wonder you would do somethin
 </div>
 ```
 
+Also when you click on a bullet Swipe will slide to that specific section. Neat!
+
 Go ahead and give the demo a try and see how amazing Swipe is.
 
 Built-in bullet support and arrow navigation contributed by [Alex Budin](https://github.com/alex-b).
