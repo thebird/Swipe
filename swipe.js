@@ -492,7 +492,7 @@ function Swipe(container, options) {
       addEventHandler(bulletWrap,"click",function(e){
           if (getTarget(e).innerHTML) {
             var slideNumber = parseInt(getTarget(e).innerHTML);
-            if (slideNumber) {  
+            if (!isNaN(slideNumber)) {  
               offloadFn(stop.call());
               offloadFn(slide(slideNumber));
             }
