@@ -61,8 +61,6 @@
   </div>
 </div>
 
-
-
 <div style='text-align:center;padding-top:20px;'>
   
   <button onclick='mySwipe.prev()'>prev</button> 
@@ -70,6 +68,31 @@
 
 </div>
 
+<div id="captions" style='display:none;'>
+  <span>Hi, I'm the zero-th caption</span>
+  <span>Hi, I'm the first caption</span>
+  <span>Hi, I'm the second caption</span>
+  <span>Hi, I'm the third caption</span>
+  <span>Hi, I'm the fourth caption</span>
+  <span>Hi, I'm the fifth caption</span>
+  <span>Hi, I'm the sixth caption</span>
+  <span>Hi, I'm the seventh caption</span>
+  <span>Hi, I'm the eighth caption</span>
+  <span>Hi, I'm the ninth caption</span>
+  <span>Hi, I'm the tenth caption</span>
+  <span>Hi, I'm caption #11</span>
+  <span>Hi, I'm caption #12</span>
+  <span>Hi, I'm caption #13</span>
+  <span>Hi, I'm caption #14</span>
+  <span>Hi, I'm caption #15</span>
+  <span>Hi, I'm caption #16</span>
+  <span>Hi, I'm caption #17</span>
+  <span>Hi, I'm caption #18</span>
+  <span>Hi, I'm caption #19</span>
+  <span>Hi, I'm caption #20</span>
+</div>
+
+<div id="captionDisplay">Loading captions...</span>
 
 
 
@@ -79,6 +102,8 @@
 
 // pure JS
 var elem = document.getElementById('mySwipe');
+var captionContainer = document.getElementById('captions');
+var captionElement = document.getElementById('captionDisplay');
 window.mySwipe = Swipe(elem, {
   // startSlide: 4,
   // auto: 3000,
@@ -87,6 +112,8 @@ window.mySwipe = Swipe(elem, {
   // stopPropagation: true,
   // callback: function(index, element) {},
   // transitionEnd: function(index, element) {}
+  captionContainer: captionContainer,
+  captionElement: captionElement
 });
 
 // with jQuery

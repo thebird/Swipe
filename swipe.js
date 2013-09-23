@@ -28,17 +28,21 @@ function Swipe(container, options) {
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
-  var slides, slidePos, width, length;
+  var slides, slidePos, width, length, captions;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
+  var captionContainer = options.captionContainer || false;
+  var captionElement = options.captionElement || false;
 
   function setup() {
 
     // cache slides
     slides = element.children;
     length = slides.length;
+    //if(captionContainer.children.length === slides.length)
+      captions = captionContainer.children;
 
     // set continuous to false if only one slide
     if (slides.length < 2) options.continuous = false;
@@ -66,6 +70,7 @@ function Swipe(container, options) {
 
       slide.style.width = width + 'px';
       slide.setAttribute('data-index', pos);
+      //slide.setAttribute('data-caption', captions[pos]);
 
       if (browser.transitions) {
         slide.style.left = (pos * -width) + 'px';
@@ -81,6 +86,9 @@ function Swipe(container, options) {
     }
 
     if (!browser.transitions) element.style.left = (index * -width) + 'px';
+
+    //Initially set caption to the starting slide
+    setCaption(index);
 
     container.style.visibility = 'visible';
 
@@ -147,7 +155,15 @@ function Swipe(container, options) {
     }
 
     index = to;
+
+    setCaption(to);
+
     offloadFn(options.callback && options.callback(index, slides[index]));
+  }
+
+  function setCaption(index) {
+    if(captionElement && captions[index])
+      captionElement.innerHTML = captions[index].innerHTML;
   }
 
   function move(index, dist, speed) {
