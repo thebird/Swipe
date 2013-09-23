@@ -41,7 +41,7 @@ function Swipe(container, options) {
     // cache slides
     slides = element.children;
     length = slides.length;
-    //if(captionContainer.children.length === slides.length)
+    if(captionContainer.children.length === slides.length)
       captions = captionContainer.children;
 
     // set continuous to false if only one slide
@@ -70,7 +70,6 @@ function Swipe(container, options) {
 
       slide.style.width = width + 'px';
       slide.setAttribute('data-index', pos);
-      //slide.setAttribute('data-caption', captions[pos]);
 
       if (browser.transitions) {
         slide.style.left = (pos * -width) + 'px';
@@ -89,7 +88,8 @@ function Swipe(container, options) {
 
     //Initially set caption to the starting slide
     setCaption(index);
-
+    if(captionContainer)
+      captionContainer.style.display = 'none';
     container.style.visibility = 'visible';
 
   }
@@ -155,7 +155,6 @@ function Swipe(container, options) {
     }
 
     index = to;
-
     setCaption(to);
 
     offloadFn(options.callback && options.callback(index, slides[index]));
