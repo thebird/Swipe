@@ -57,7 +57,7 @@ function Swipe(container, options) {
     slidePos = new Array(slides.length);
 
     if(orientation == 'horizontal') {
-      width = container.getBoundingClientRect().width || container.offsetWidth; // determine width of each slide
+      width = slides[0].getBoundingClientRect().width || slides[0].offsetWidth; // determine width of each slide
       element.style.width = (slides.length * width) + 'px';
     }
     else if(orientation == 'vertical') {
