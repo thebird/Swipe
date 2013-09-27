@@ -17,7 +17,7 @@ function Swipe(container, options) {
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
-  var slides, slidePos, width, height, length;
+  var slides, slidePos, containerWidth, width, height, length;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
@@ -57,7 +57,14 @@ function Swipe(container, options) {
     slidePos = new Array(slides.length);
 
     if(orientation == 'horizontal') {
-      width = slides[0].getBoundingClientRect().width || slides[0].offsetWidth; // determine width of each slide
+      // determine width of each slide
+      if(elastic) {
+        width = slides[0].getBoundingClientRect().width || slides[0].offsetWidth;
+        containerWidth = container.getBoundingClientRect().width || container.offsetWidth;
+      }        
+      else
+        containerWidth = width = container.getBoundingClientRect().width || container.offsetWidth;
+
       element.style.width = (slides.length * width) + 'px';
     }
     else if(orientation == 'vertical') {
@@ -143,6 +150,11 @@ function Swipe(container, options) {
 
     // do nothing if already on requested slide
     if (index == to) return;
+
+    if(elastic && (containerWidth - ((slides.length * width)-(width*(to-1))) > 0)) {
+      index = to;
+      return;
+    }
     
     if (browser.transitions) {
 
