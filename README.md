@@ -26,6 +26,7 @@ Also Swipe needs just a few styles added to your stylesheet:
   overflow: hidden;
   visibility: hidden;
   position: relative;
+  height: 250px; /* some fixed slide swipe height */
 }
 .swipe-wrap {
   overflow: hidden;
@@ -53,6 +54,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
 
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
+
+- **enableMouse** Boolean *(default:false)* - allows clicks instead of touches when not on compatible device
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
  
