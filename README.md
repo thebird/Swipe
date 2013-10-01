@@ -42,6 +42,8 @@ Also Swipe needs just a few styles added to your stylesheet:
 
 Swipe can take an optional second parameter– an object of key/value settings:
 
+- **direction** String *(default:'x')* - direction of swiper ('x' or 'y')
+
 - **startSlide** Integer *(default:0)* - index position Swipe should start at
 
 -	**speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
