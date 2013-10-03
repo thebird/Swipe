@@ -367,7 +367,7 @@ function Swipe(container, options) {
       // ensure swiping with one touch and not pinching
       if ( event.touches.length > 1 || event.scale && event.scale !== 1) return
 
-      if (options.disableScroll) event.preventDefault();
+      if (options.disableScroll || orientation == 'vertical') event.preventDefault();
 
       var touches = event.touches[0];
 
@@ -379,7 +379,10 @@ function Swipe(container, options) {
 
       // determine if scrolling test has run - one time test
       if ( typeof isScrolling == 'undefined') {
-        isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
+        if(orientation == 'horizontal')
+          isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
+        else if(orientation == 'vertical')
+          isScrolling = !!( isScrolling || Math.abs(delta.y) < Math.abs(delta.x) );
       }
 
       // if user is not trying to scroll vertically
