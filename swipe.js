@@ -302,7 +302,7 @@ function Swipe(container, options) {
 
   // setup event capturing
   var events = {
-
+	
     handleEvent: function(event) {
       switch (event.type) {
         case 'touchstart':
@@ -322,6 +322,12 @@ function Swipe(container, options) {
         	this.move(event, event.clientX, event.clientY);
         	break;
         case 'mouseup': offloadFn(this.end(event)); break;
+        case 'mousewheel':
+        	event.wheelDelta > 0 ? next() : prev();
+        	break;
+        case 'DOMMouseScroll':
+        	-event.detail > 0 ? next() : prev();
+        	break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
@@ -586,7 +592,6 @@ function Swipe(container, options) {
 	          }
 	
 	        }
-	
 	      }
       }
 
@@ -595,6 +600,8 @@ function Swipe(container, options) {
       element.removeEventListener('touchend', events, false)
       element.removeEventListener('mousemove', events, false)
       element.removeEventListener('mouseup', events, false)
+      element.removeEventListener("mousewheel", events, false);
+	  element.removeEventListener("DOMMouseScroll", events, false);
 
     },
     transitionEnd: function(event) {
@@ -624,8 +631,14 @@ function Swipe(container, options) {
     // set touchstart event on element    
     if (browser.touch) {
     	element.addEventListener('touchstart', events, false);
-    } else if (options.enableMouse) {
-    	element.addEventListener('mousedown', events, false);
+    } else if (options.enableMouse || options.enableScroll) {
+    	if (options.enableMouse) {
+	    	element.addEventListener('mousedown', events, false);
+	    }
+    	if (options.enableScroll) {
+	    	element.addEventListener("mousewheel", events, false);
+			element.addEventListener("DOMMouseScroll", events, false);
+		}
     }
 
     if (browser.transitions) {
@@ -640,9 +653,13 @@ function Swipe(container, options) {
     window.addEventListener('resize', events, false);
 
   } else {
-
+  	//console.log("Fallback");
+	if (options.enableScroll) {
+		element.attachEvent("onmousewheel", function(event){
+			event.wheelDelta > 0 ? next() : prev();
+		});
+	}
     window.onresize = function () { setup() }; // to play nice with old IE
-
   }
 
   // expose the Swipe API
@@ -733,7 +750,7 @@ function Swipe(container, options) {
 
       }
       else {
-
+		element.attachEvent("onmousewheel", null);
         window.onresize = null;
 
       }
