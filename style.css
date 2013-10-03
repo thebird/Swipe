@@ -19,10 +19,11 @@ h1 {
   color:#212121;
 }
 h2 {
-  font-size:14px;
+  font-size:25px;
   font-weight:bold;
-  color:#3c3c3c;
+  color:#666;
   margin:20px 10px 10px;
+  text-align: center;
 }
 small {
   margin:0 10px 30px;
@@ -50,7 +51,7 @@ html, body {
   overflow: auto;
 }
 
-#mySwipe div b {
+.swipe div b {
   display:block;
   font-weight:bold;
   color:#14ADE5;
@@ -63,4 +64,18 @@ html, body {
   border-radius: 3px;
   border: 1px solid;
   border-color: #E5E5E5 #D3D3D3 #B9C1C6;
+}
+
+#elasticSwipe {
+  width: 95%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+#elasticSwipe div b {
+  width: 480px;
+}
+
+#elasticSwipe .swipe-wrap div {
+  width: auto;
 }
