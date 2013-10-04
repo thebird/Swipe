@@ -33,6 +33,8 @@ function Swipe(container, options) {
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
   var dir = options.direction || 'x';
+  var scrolling = false;
+  var scrolldelay = options.scrolldelay || 500;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
   function setup() {
@@ -323,10 +325,36 @@ function Swipe(container, options) {
         	break;
         case 'mouseup': offloadFn(this.end(event)); break;
         case 'mousewheel':
-        	event.wheelDelta > 0 ? next() : prev();
+        	if (!scrolling) {
+        		scrolling = true;
+        		if (event.wheelDelta > 0) {
+	        		next();
+        			window.setTimeout(function() {
+	        			scrolling = false;
+	        		}, scrolldelay);
+        		} else {
+        			prev();
+	 				window.setTimeout(function() {
+	        			scrolling = false;
+	        		}, scrolldelay);
+        		}
+        	}
         	break;
         case 'DOMMouseScroll':
-        	-event.detail > 0 ? next() : prev();
+        	if (!scrolling) {
+        		scrolling = true;
+        		if (event.detail < 0) {
+	        		next();
+        			window.setTimeout(function() {
+	        			scrolling = false;
+	        		}, scrolldelay);
+        		} else {
+        			prev();
+	 				window.setTimeout(function() {
+	        			scrolling = false;
+	        		}, scrolldelay);
+        		}
+        	}
         	break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
@@ -654,7 +682,17 @@ function Swipe(container, options) {
   	//console.log("Fallback");
 	if (options.enableScroll) {
 		element.attachEvent("onmousewheel", function(event){
-			event.wheelDelta > 0 ? next() : prev();
+			if (event.wheelDelta > 0) {
+	    		next();
+				window.setTimeout(function() {
+	    			scrolling = false;
+	    		}, scrolldelay);
+			} else {
+				prev();
+				window.setTimeout(function() {
+	    			scrolling = false;
+	    		}, scrolldelay);
+			}
 		});
 	}
     window.onresize = function () { setup() }; // to play nice with old IE
