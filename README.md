@@ -57,6 +57,10 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **enableMouse** Boolean *(default:false)* - allows clicks instead of touches when not on compatible device
 
+- **enableScroll** Boolean *(default:false)* - allows scrolling instead of touches when not on compatible device
+
+- **scrollDelay** Int *(default:500)* - time delay between slides on scroll
+
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
  
 -	**callback** Function - runs at slide change.
