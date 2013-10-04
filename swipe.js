@@ -600,8 +600,6 @@ function Swipe(container, options) {
       element.removeEventListener('touchend', events, false)
       element.removeEventListener('mousemove', events, false)
       element.removeEventListener('mouseup', events, false)
-      element.removeEventListener("mousewheel", events, false);
-	  element.removeEventListener("DOMMouseScroll", events, false);
 
     },
     transitionEnd: function(event) {
@@ -750,9 +748,7 @@ function Swipe(container, options) {
 
       }
       else {
-		element.attachEvent("onmousewheel", null);
         window.onresize = null;
-
       }
 
     }
