@@ -13,6 +13,7 @@
   overflow: hidden;
   visibility: hidden;
   position: relative;
+  height: 250px;
 }
 .swipe-wrap {
   overflow: hidden;
@@ -32,8 +33,6 @@
 <body>
 
 <h1>Swipe 2</h1>
-
-
 
 <div id='mySwipe' style='max-width:500px;margin:0 auto' class='swipe'>
   <div class='swipe-wrap'>
@@ -61,17 +60,12 @@
   </div>
 </div>
 
-
-
 <div style='text-align:center;padding-top:20px;'>
   
   <button onclick='mySwipe.prev()'>prev</button> 
   <button onclick='mySwipe.next()'>next</button>
 
 </div>
-
-
-
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src='swipe.js'></script>
@@ -80,13 +74,16 @@
 // pure JS
 var elem = document.getElementById('mySwipe');
 window.mySwipe = Swipe(elem, {
+  direction: 'y',
+  enableMouse: true,
+  enableScroll: true,
+  transitionEnd: function(index, element) {}
   // startSlide: 4,
   // auto: 3000,
   // continuous: true,
   // disableScroll: true,
   // stopPropagation: true,
   // callback: function(index, element) {},
-  // transitionEnd: function(index, element) {}
 });
 
 // with jQuery
