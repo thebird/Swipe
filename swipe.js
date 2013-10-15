@@ -119,6 +119,8 @@ function Swipe(container, options) {
 
     // do nothing if already on requested slide
     if (index == to) return;
+
+    setCaption(to);
     
     if (browser.transitions) {
 
@@ -155,7 +157,6 @@ function Swipe(container, options) {
     }
 
     index = to;
-    setCaption(to);
 
     offloadFn(options.callback && options.callback(index, slides[index]));
   }
@@ -430,6 +431,8 @@ function Swipe(container, options) {
         }
 
       }
+
+      setCaption(index);
 
       // kill touchmove and touchend event listeners until touchstart called again
       element.removeEventListener('touchmove', events, false)
