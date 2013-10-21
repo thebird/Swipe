@@ -6,7 +6,7 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, del, dfn, em, 
   font-size:100%;
   vertical-align:baseline;
   background:transparent;
-  -ms-touch-action: none;
+  -ms-touch-action: pan-y;
 }
 body {
   -webkit-text-size-adjust:none;
