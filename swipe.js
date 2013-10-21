@@ -241,9 +241,9 @@ function Swipe(container, options) {
     handleEvent: function(event) {
 
       switch (event.type) {
-        case 'touchstart': this.start(event); break;
-        case 'touchmove': this.move(event); break;
-        case 'touchend': offloadFn(this.end(event)); break;
+        case 'touchstart':case 'MSPointerDown': this.start(event); break;
+        case 'touchmove':case 'MSPointerMove': this.move(event); break;
+        case 'touchend': case 'MSPointerUp': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
@@ -256,8 +256,11 @@ function Swipe(container, options) {
 
     },
     start: function(event) {
-
-      var touches = event.touches[0];
+      if (window.navigator.msPointerEnabled) {
+        var touches = event;
+      } else {
+        var touches = event.touches[0];
+      }
 
       // measure start values
       start = {
@@ -278,18 +281,29 @@ function Swipe(container, options) {
       delta = {};
 
       // attach touchmove and touchend listeners
-      element.addEventListener('touchmove', this, false);
-      element.addEventListener('touchend', this, false);
+      if (window.navigator.msPointerEnabled) {
+        element.addEventListener("MSPointerMove", this, false);
+        element.addEventListener("MSPointerUp", this, false);
+      } else {
+        element.addEventListener('touchmove', this, false);
+        element.addEventListener('touchend', this, false);
+      }
 
     },
     move: function(event) {
+      if (window.navigator.msPointerEnabled) {
+        if(!event.isPrimary) {
+            return;
+        }
+        var touches = event;
+      } else {
+        // ensure swiping with one touch and not pinching
+        if ( event.touches.length > 1 || event.scale && event.scale !== 1) return;
+        var touches = event.touches[0];
+      }
 
-      // ensure swiping with one touch and not pinching
-      if ( event.touches.length > 1 || event.scale && event.scale !== 1) return
 
       if (options.disableScroll) event.preventDefault();
-
-      var touches = event.touches[0];
 
       // measure change in x and y
       delta = {
@@ -415,10 +429,12 @@ function Swipe(container, options) {
         }
 
       }
-
+    
       // kill touchmove and touchend event listeners until touchstart called again
-      element.removeEventListener('touchmove', events, false)
-      element.removeEventListener('touchend', events, false)
+      element.removeEventListener('touchmove', events, false);
+      element.removeEventListener('touchend', events, false);
+      element.removeEventListener("MSPointerMove", events, false);
+      element.removeEventListener("MSPointerUp", events, false);
 
     },
     transitionEnd: function(event) {
@@ -447,7 +463,7 @@ function Swipe(container, options) {
     
     // set touchstart event on element    
     if (browser.touch) element.addEventListener('touchstart', events, false);
-
+    if (window.navigator.msPointerEnabled) element.addEventListener('MSPointerDown', events, false);
     if (browser.transitions) {
       element.addEventListener('webkitTransitionEnd', events, false);
       element.addEventListener('msTransitionEnd', events, false);
@@ -538,6 +554,9 @@ function Swipe(container, options) {
         element.removeEventListener('oTransitionEnd', events, false);
         element.removeEventListener('otransitionend', events, false);
         element.removeEventListener('transitionend', events, false);
+        element.removeEventListener('MSPointerDown', events, false);
+        element.removeEventListener('MSPointerMove', events, false);
+        element.removeEventListener('MSPointerUp', events, false);
         window.removeEventListener('resize', events, false);
 
       }
