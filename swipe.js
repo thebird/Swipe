@@ -256,9 +256,8 @@ function Swipe(container, options) {
 
     },
     start: function(event) {
-      if (window.navigator.msPointerEnabled) {
-        var touches = event;
-      } else {
+      var touches = event;
+      if (!window.navigator.msPointerEnabled) {
         var touches = event.touches[0];
       }
 
@@ -292,9 +291,7 @@ function Swipe(container, options) {
     },
     move: function(event) {
       if (window.navigator.msPointerEnabled) {
-        if(!event.isPrimary) {
-            return;
-        }
+        if(!event.isPrimary) {return;}
         var touches = event;
       } else {
         // ensure swiping with one touch and not pinching
@@ -464,6 +461,7 @@ function Swipe(container, options) {
     // set touchstart event on element    
     if (browser.touch) element.addEventListener('touchstart', events, false);
     if (window.navigator.msPointerEnabled) element.addEventListener('MSPointerDown', events, false);
+    
     if (browser.transitions) {
       element.addEventListener('webkitTransitionEnd', events, false);
       element.addEventListener('msTransitionEnd', events, false);
