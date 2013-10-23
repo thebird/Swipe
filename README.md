@@ -58,6 +58,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **transitionEnd** Function - runs at the end slide transition.
 
+- **canSwipeTo** Function - runs prior to changing slide, returns a Boolean
+
 ### Example
 
 ``` js
@@ -70,7 +72,8 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   disableScroll: false,
   stopPropagation: false,
   callback: function(index, elem) {},
-  transitionEnd: function(index, elem) {}
+  transitionEnd: function(index, elem) {},
+  canSwipeTo: function(index) {}
 });
 
 ```

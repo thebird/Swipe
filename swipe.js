@@ -34,6 +34,8 @@ function Swipe(container, options) {
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
+  options.canSwipeTo = typeof options.canSwipeTo === 'function' ? options.canSwipeTo : function(){ return true; };
+
   function setup() {
 
     // cache slides
@@ -108,6 +110,7 @@ function Swipe(container, options) {
   }
 
   function slide(to, slideSpeed) {
+    if (!options.canSwipeTo(to)) return;
 
     // do nothing if already on requested slide
     if (index == to) return;
@@ -322,12 +325,14 @@ function Swipe(container, options) {
 
           delta.x = 
             delta.x / 
-              ( (!index && delta.x > 0               // if first slide and sliding left
-                || index == slides.length - 1        // or if last slide and sliding right
-                && delta.x < 0                       // and if sliding at all
+              ((!index && delta.x > 0                             // if first slide and sliding left
+                || index == slides.length - 1                     // or if last slide and sliding right
+                || (delta.x > 0 || !options.canSwipeTo(index+1))  // Swiping right and next slide is invalid
+                || (delta.x < 0 || !options.canSwipeTo(index-1))  // Swiping left and prev slide is invalid
+                && delta.x < 0                                    // and if sliding at all
               ) ?                      
-              ( Math.abs(delta.x) / width + 1 )      // determine resistance level
-              : 1 );                                 // no resistance if false
+              ( Math.abs(delta.x) / width + 1 )                   // determine resistance level
+              : 1 );                                              // no resistance if false
           
           // translate 1:1
           translate(index-1, delta.x + slidePos[index-1], 0);
@@ -358,6 +363,11 @@ function Swipe(container, options) {
       
       // determine direction of swipe (true:right, false:left)
       var direction = delta.x < 0;
+
+      // Determine whether we are allowed to swipe to that slide
+      if(!isPastBounds && isValidSlide){
+        isValidSlide = options.canSwipeTo(direction ? index+1 : index-1);
+      }
 
       // if not scrolling vertically
       if (!isScrolling) {
