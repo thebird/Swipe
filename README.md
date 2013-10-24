@@ -26,6 +26,8 @@ Also Swipe needs just a few styles added to your stylesheet:
   overflow: hidden;
   visibility: hidden;
   position: relative;
+  -ms-touch-action: pan-y; /* For IE10, to allow scrolling on swipe elements */
+  touch-action: pan-y; /* W3C spec style, to allow scrolling on swipe elements */
 }
 .swipe-wrap {
   overflow: hidden;
@@ -53,7 +55,9 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
- 
+
+- **preventClick** Boolean *(default:false)* - prevent a 'click' event from propagating off of the slide contents
+
 -	**callback** Function - runs at slide change.
 
 - **transitionEnd** Function - runs at the end slide transition.
