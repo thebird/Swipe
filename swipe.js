@@ -19,6 +19,7 @@ function Swipe(container, options) {
     addEventListener: !!window.addEventListener,
     touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
     mstouch: window.navigator && window.navigator.msPointerEnabled,
+    pointer: window.navigator && window.navigator.pointerEnabled,
     transitions: (function(temp) {
       var props = ['transitionProperty', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
       for ( var i in props ) if (temp.style[ props[i] ] !== undefined) return true;
@@ -34,6 +35,11 @@ function Swipe(container, options) {
     evtStart = 'touchstart';
     evtMove = 'touchmove';
     evtStop = 'touchend';
+  }
+  else if (browser.pointer) {
+    evtStart = 'pointerdown';
+    evtMove = 'pointermove';
+    evtStop = 'pointerup';
   }
   else if (browser.mstouch) {
     evtStart = 'MSPointerDown';
