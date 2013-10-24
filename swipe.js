@@ -472,7 +472,7 @@ function Swipe(container, options) {
     
     // set touchstart event on element    
     element.addEventListener(evtStart, events, false);
-    element.addEventListener('click', events, false);
+    if (options.preventClick) element.addEventListener('click', events, false);
 
     if (browser.transitions) {
       element.addEventListener('webkitTransitionEnd', events, false);
@@ -559,7 +559,7 @@ function Swipe(container, options) {
 
         // remove current event listeners
         element.removeEventListener(evtStart, events, false);
-        element.removeEventListener('click', events, false);
+        if (options.preventClick) element.removeEventListener('click', events, false);
         element.removeEventListener('webkitTransitionEnd', events, false);
         element.removeEventListener('msTransitionEnd', events, false);
         element.removeEventListener('oTransitionEnd', events, false);

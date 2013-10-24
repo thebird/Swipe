@@ -55,7 +55,9 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
- 
+
+- **preventClick** Boolean *(default:false)* - prevent a 'click' event from propagating off of the slide contents
+
 -	**callback** Function - runs at slide change.
 
 - **transitionEnd** Function - runs at the end slide transition.
