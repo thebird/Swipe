@@ -119,8 +119,6 @@ function Swipe(container, options) {
 
     // do nothing if already on requested slide
     if (index == to) return;
-
-    setCaption(to);
     
     if (browser.transitions) {
 
@@ -157,6 +155,8 @@ function Swipe(container, options) {
     }
 
     index = to;
+
+    setCaption(index);
 
     offloadFn(options.callback && options.callback(index, slides[index]));
   }
