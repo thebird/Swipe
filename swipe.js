@@ -13,7 +13,7 @@ function Swipe(container, options) {
   // utilities
   var noop = function() {}; // simple no operation function
   var offloadFn = function(fn) { setTimeout(fn || noop, 0) }; // offload a functions execution
-  
+   var is_swiping=false;
   // check browser capabilities
   var browser = {
     addEventListener: !!window.addEventListener,
@@ -290,6 +290,7 @@ function Swipe(container, options) {
 
     },
     move: function(event) {
+    	is_swiping=true;
       if (window.navigator.msPointerEnabled) {
         if(!event.isPrimary) {return;}
         var touches = event;
@@ -443,9 +444,9 @@ function Swipe(container, options) {
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
 
       }
-
+			is_swiping=false;
     }
-
+		
   };
 
   // trigger setup
@@ -515,6 +516,10 @@ function Swipe(container, options) {
       // return current index position
       return index;
 
+    },
+    getState:function() {
+    	
+    	return is_swiping;
     },
     getNumSlides: function() {
       
