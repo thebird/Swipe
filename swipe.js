@@ -496,6 +496,12 @@ function Swipe(container, options) {
       next();
 
     },
+    stop: function() {
+
+      // cancel slideshow
+      stop();
+
+    },
     getPos: function() {
 
       // return current index position
