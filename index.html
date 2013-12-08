@@ -59,8 +59,16 @@
     <div><b>19</b></div>
     <div><b>20</b></div>
   </div>
+        
 </div>
 
+
+<div id="swipe_direction_nav">
+  <a id="swipe_prev" class="swipe-slider-prev">Prev</a>
+  <div id="swipe_bullet_wrapper"></div>
+  <a id="swipe_next" class="swipe-slider-next">Next</a>
+</div>
+  
 
 
 <div style='text-align:center;padding-top:20px;'>
@@ -80,6 +88,11 @@
 // pure JS
 var elem = document.getElementById('mySwipe');
 window.mySwipe = Swipe(elem, {
+  btnNextId : 'swipe_next',
+  btnPrevId : 'swipe_prev',
+  bulletWrapperId : 'swipe_bullet_wrapper',
+  bulletClass : 'swipe-bullet',
+  bulletActiveClass : 'active',
   // startSlide: 4,
   // auto: 3000,
   // continuous: true,

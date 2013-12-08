@@ -64,3 +64,57 @@ html, body {
   border: 1px solid;
   border-color: #E5E5E5 #D3D3D3 #B9C1C6;
 }
+
+
+
+/*************************** SWIPE NAVIGATION ********************/
+
+#swipe_direction_nav {
+  display: table;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+}
+
+#swipe_direction_nav a {
+  display: inline-block;
+  width: 9px;
+  height: 18px;
+  text-indent: -9999px;
+  margin: 0 30px;
+}
+
+#swipe_direction_nav .swipe-slider-next {
+  background-position: 100% 0;
+}
+
+#swipe_bullet_wrapper {
+  text-align: center;
+  z-index: 10;
+  float:left;
+}
+
+#swipe_bullet_wrapper a {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: url('swipe_bullet.png') no-repeat 0 0;
+  text-indent: -9999px;
+  margin: 0 2px;
+  background-position: 0 55%;
+}
+#swipe_bullet_wrapper a.active {
+  background-position: 0 0;
+}
+
+.swipe-slider-prev {
+  background-image: url("left-arrow.png");
+  float:left;
+}
+
+.swipe-slider-next {
+  background-image: url("right-arrow.png");
+  float:left;
+}
+
+/*************************** SWIPE NAVIGATION ********************/
