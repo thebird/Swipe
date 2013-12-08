@@ -44,7 +44,7 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **startSlide** Integer *(default:0)* - index position Swipe should start at
 
--	**speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
+- **speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
@@ -54,7 +54,7 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
  
--	**callback** Function - runs at slide change.
+- **callback** Function - runs at slide change.
 
 - **transitionEnd** Function - runs at the end slide transition.
 
@@ -78,6 +78,10 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
 ## Swipe API
 
 Swipe exposes a few functions that can be useful for script control of your slider.
+
+`start()` starts the slideshow (auto mode)
+
+`stop()` stops the slideshow (auto mode). Using `next()` or `prev()` will not interrupt the paused state of the slideshow.
 
 `prev()` slide to prev
 
