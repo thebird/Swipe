@@ -21,8 +21,7 @@ module.exports = function( grunt ) {
   });
 
   // build
-  grunt.loadNpmTasks('grunt-contrib');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.registerTask('build', 'uglify');
   grunt.registerTask('default', 'build');
-
 };
