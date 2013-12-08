@@ -229,7 +229,7 @@ function Swipe(container, options) {
       if(pos === circle(index) || pos === circle(index-1) || pos === circle(index+1)){
         slides[pos].style.visibility = 'visible';
       } else {
-        slides[pos].style.visibility = 'hidden';    
+        slides[pos].style.visibility = 'hidden';
       }
 
     }
