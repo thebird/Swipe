@@ -13,7 +13,6 @@ function Swipe(container, options) {
   // utilities
   var noop = function() {}; // simple no operation function
   var offloadFn = function(fn) { setTimeout(fn || noop, 0) }; // offload a functions execution
-  var jsLib = window.jQuery || window.Zepto;  // jQuery or Zepto 
   
   // check browser capabilities
   var browser = {
@@ -589,7 +588,7 @@ function Swipe(container, options) {
 
 }
 
-
+var jsLib = window.jQuery || window.Zepto;  // jQuery or Zepto 
 if ( jsLib ) {
   (function($) {
     $.fn.Swipe = function(params) {
