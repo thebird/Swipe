@@ -25,6 +25,12 @@ function Swipe(container, options) {
     })(document.createElement('swipe'))
   };
 
+  var eventNames = {
+    START: browser.touch ? 'touchstart' : 'MSPointerDown',
+    MOVE: browser.touch ? 'touchmove' : 'MSPointerMove',
+    END: browser.touch ? 'touchend' : 'MSPointerUp'
+  };
+
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
@@ -241,9 +247,9 @@ function Swipe(container, options) {
     handleEvent: function(event) {
 
       switch (event.type) {
-        case 'touchstart': this.start(event); break;
-        case 'touchmove': this.move(event); break;
-        case 'touchend': offloadFn(this.end(event)); break;
+        case eventNames.START: this.start(event); break;
+        case eventNames.MOVE: this.move(event); break;
+        case eventNames.END: offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
@@ -257,7 +263,7 @@ function Swipe(container, options) {
     },
     start: function(event) {
 
-      var touches = event.touches[0];
+      var touches = browser.touch ? event.touches[0] : event;
 
       // measure start values
       start = {
@@ -278,18 +284,18 @@ function Swipe(container, options) {
       delta = {};
 
       // attach touchmove and touchend listeners
-      element.addEventListener('touchmove', this, false);
-      element.addEventListener('touchend', this, false);
+      element.addEventListener(eventNames.MOVE, this, false);
+      element.addEventListener(eventNames.END, this, false);
 
     },
     move: function(event) {
 
       // ensure swiping with one touch and not pinching
-      if ( event.touches.length > 1 || event.scale && event.scale !== 1) return
+      if ( browser.touch && event.touches.length > 1 || event.scale && event.scale !== 1) return
 
       if (options.disableScroll) event.preventDefault();
 
-      var touches = event.touches[0];
+      var touches = browser.touch ? event.touches[0] : event;
 
       // measure change in x and y
       delta = {
@@ -417,8 +423,8 @@ function Swipe(container, options) {
       }
 
       // kill touchmove and touchend event listeners until touchstart called again
-      element.removeEventListener('touchmove', events, false)
-      element.removeEventListener('touchend', events, false)
+      element.removeEventListener(eventNames.MOVE, events, false)
+      element.removeEventListener(eventNames.END, events, false)
 
     },
     transitionEnd: function(event) {
@@ -446,7 +452,7 @@ function Swipe(container, options) {
   if (browser.addEventListener) {
 
     // set touchstart event on element
-    if (browser.touch) element.addEventListener('touchstart', events, false);
+    if (browser.touch || window.navigator.msPointerEnabled) element.addEventListener(eventNames.START, events, false);
 
     if (browser.transitions) {
       element.addEventListener('webkitTransitionEnd', events, false);
@@ -538,7 +544,7 @@ function Swipe(container, options) {
       if (browser.addEventListener) {
 
         // remove current event listeners
-        element.removeEventListener('touchstart', events, false);
+        element.removeEventListener(eventNames.START, events, false);
         element.removeEventListener('webkitTransitionEnd', events, false);
         element.removeEventListener('msTransitionEnd', events, false);
         element.removeEventListener('oTransitionEnd', events, false);
