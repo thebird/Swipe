@@ -17,6 +17,7 @@ function Swipe(container, options) {
   // check browser capabilities
   var browser = {
     addEventListener: !!window.addEventListener,
+    pointer: window.navigator.pointerEnabled || window.navigator.msPointerEnabled,
     touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
     transitions: (function(temp) {
       var props = ['transitionProperty', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
@@ -26,10 +27,23 @@ function Swipe(container, options) {
   };
 
   var eventNames = {
-    START: browser.touch ? 'touchstart' : 'MSPointerDown',
-    MOVE: browser.touch ? 'touchmove' : 'MSPointerMove',
-    END: browser.touch ? 'touchend' : 'MSPointerUp'
+    START: 'touchstart',
+    MOVE: 'touchmove',
+    END: 'touchend'
   };
+
+  var pointerType = 'touch';
+
+  if (window.navigator.pointerEnabled) {
+    eventNames.START = "pointerdown";
+    eventNames.MOVE = "pointermove";
+    eventNames.END = "pointerup";
+  } else if (window.navigator.msPointerEnabled) {
+    eventNames.START = "MSPointerDown";
+    eventNames.MOVE = "MSPointerMove";
+    eventNames.END = "MSPointerUp";
+    pointerType = 2;
+  }
 
   // quit if no root element
   if (!container) return;
@@ -263,6 +277,8 @@ function Swipe(container, options) {
     },
     start: function(event) {
 
+      if ( browser.pointer && (event.pointerType !== pointerType) ) return;
+
       var touches = browser.touch ? event.touches[0] : event;
 
       // measure start values
@@ -290,8 +306,10 @@ function Swipe(container, options) {
     },
     move: function(event) {
 
+      if ( browser.pointer && (event.pointerType !== pointerType) ) return;
+
       // ensure swiping with one touch and not pinching
-      if ( browser.touch && event.touches.length > 1 || event.scale && event.scale !== 1) return
+      if ( browser.touch && event.touches.length > 1 || event.scale && event.scale !== 1) return;
 
       if (options.disableScroll) event.preventDefault();
 
@@ -452,7 +470,7 @@ function Swipe(container, options) {
   if (browser.addEventListener) {
 
     // set touchstart event on element
-    if (browser.touch || window.navigator.msPointerEnabled) element.addEventListener(eventNames.START, events, false);
+    if (browser.touch || browser.pointer) element.addEventListener(eventNames.START, events, false);
 
     if (browser.transitions) {
       element.addEventListener('webkitTransitionEnd', events, false);

@@ -2,7 +2,6 @@
 <html>
 <head>
 <title>Swipe 2</title>
-<meta http-equiv="X-UA-Compatible" content="IE=8">
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
 <link href='style.css' rel='stylesheet'/>
 <style>
@@ -13,6 +12,9 @@
   overflow: hidden;
   visibility: hidden;
   position: relative;
+  /* required for windows phone: */
+  -ms-touch-action: none;
+  touch-action: none;
 }
 .swipe-wrap {
   overflow: hidden;
@@ -35,7 +37,7 @@
 
 
 
-<div id='mySwipe' style='max-width:500px;margin:0 auto' class='swipe'>
+<div id='mySwipe' style='max-width:500px;margin:0 auto;' class='swipe'>
   <div class='swipe-wrap'>
     <div><b>0</b></div>
     <div><b>1</b></div>
