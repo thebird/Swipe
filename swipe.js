@@ -311,20 +311,20 @@ function Swipe(container, options) {
         // stop slideshow
         stop();
 
-	// determine direction of swipe (true:right, false:left)
-	var direction = delta.x < 0;
+        // determine direction of swipe (true:right, false:left)
+        var direction = delta.x < 0;
 
         // increase resistance if first or last slide
         if (options.continuous) { // we don't add resistance at the end
 
-	  // fix position of invisible slide
-	  if (direction) {
+          // fix position of invisible slide
+          if (direction) {
             translate(circle(index-1), -width, 0);
             translate(circle(index+1), delta.x + slidePos[circle(index+1)], 0);
-	  } else {
+          } else {
             translate(circle(index-1), delta.x + slidePos[circle(index-1)], 0);
             translate(circle(index+1), width, 0);
-	  }
+          }
 
           translate(index, delta.x + slidePos[index], 0);
 
@@ -340,14 +340,14 @@ function Swipe(container, options) {
               : 1 );                                 // no resistance if false
 
           // translate 1:1
-	  // fix position of invisible slide
-	  if (direction) {
+          // fix position of invisible slide
+          if (direction) {
             translate(index-1, -width, 0);
             translate(index+1, delta.x + slidePos[index+1], 0);
-	  } else {
+          } else {
             translate(index-1, delta.x + slidePos[index-1], 0);
             translate(index+1, width, 0);
-	  }
+          }
           translate(index, delta.x + slidePos[index], 0);
         }
 
