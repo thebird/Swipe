@@ -1,92 +1,93 @@
 <!DOCTYPE HTML> 
 <html>
 <head>
-<title>Swipe 2</title>
-<meta http-equiv="X-UA-Compatible" content="IE=8">
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
-<link href='style.css' rel='stylesheet'/>
-<style>
+    <title>Swipe 2</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+    <link href='style.css' rel='stylesheet'/>
+    <style>
 
-/* Swipe 2 required styles */
+        /* Swipe 2 required styles */
 
-.swipe {
-  overflow: hidden;
-  visibility: hidden;
-  position: relative;
-}
-.swipe-wrap {
-  overflow: hidden;
-  position: relative;
-}
-.swipe-wrap > div {
-  float:left;
-  width:100%;
-  position: relative;
-}
+        .swipe {
+            overflow: hidden;
+            visibility: hidden;
+            position: relative;
+        }
+        .swipe-wrap {
+            overflow: hidden;
+            position: relative;
+        }
+        .swipe-wrap > div {
+            float:left;
+            width:100%;
+            position: relative;
+        }
 
-/* END required styles */
+        /* END required styles */
 
-</style>
+    </style>
 
 </head>
 <body>
 
-<h1>Swipe 2</h1>
+    <h1>Swipe 2</h1>
 
 
 
-<div id='mySwipe' style='max-width:500px;margin:0 auto' class='swipe'>
-  <div class='swipe-wrap'>
-    <div><b>0</b></div>
-    <div><b>1</b></div>
-    <div><b>2</b></div>
-    <div><b>3</b></div>
-    <div><b>4</b></div>
-    <div><b>5</b></div>
-    <div><b>6</b></div>
-    <div><b>7</b></div>
-    <div><b>8</b></div>
-    <div><b>9</b></div>
-    <div><b>10</b></div>
-    <div><b>11</b></div>
-    <div><b>12</b></div>
-    <div><b>13</b></div>
-    <div><b>14</b></div>
-    <div><b>15</b></div>
-    <div><b>16</b></div>
-    <div><b>17</b></div>
-    <div><b>18</b></div>
-    <div><b>19</b></div>
-    <div><b>20</b></div>
-  </div>
-</div>
+    <div id='mySwipe' style='max-width:500px;margin:0 auto' class='swipe'>
+        <div class='swipe-wrap'>
+            <div><b>0</b></div>
+            <div><b>1</b></div>
+            <div><b>2</b></div>
+            <div><b>3</b></div>
+            <div><b>4</b></div>
+            <div><b>5</b></div>
+            <div><b>6</b></div>
+            <div><b>7</b></div>
+            <div><b>8</b></div>
+            <div><b>9</b></div>
+            <div><b>10</b></div>
+            <div><b>11</b></div>
+            <div><b>12</b></div>
+            <div><b>13</b></div>
+            <div><b>14</b></div>
+            <div><b>15</b></div>
+            <div><b>16</b></div>
+            <div><b>17</b></div>
+            <div><b>18</b></div>
+            <div><b>19</b></div>
+            <div><b>20</b></div>
+        </div>
+    </div>
 
 
 
-<div style='text-align:center;padding-top:20px;'>
-  
-  <button onclick='mySwipe.prev()'>prev</button> 
-  <button onclick='mySwipe.next()'>next</button>
+    <div style='text-align:center;padding-top:20px;'>
 
-</div>
+        <button onclick='mySwipe.prev()'>prev</button> 
+        <button onclick='mySwipe.next()'>next</button>
+        <button onclick='mySwipe.slide(5)'>go to 5</button>
+
+    </div>
 
 
 
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src='swipe.js'></script>
-<script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src='swipe.js'></script>
+    <script>
 
 // pure JS
 var elem = document.getElementById('mySwipe');
-window.mySwipe = Swipe(elem, {
-  // startSlide: 4,
-  // auto: 3000,
-  // continuous: true,
-  // disableScroll: true,
-  // stopPropagation: true,
-  // callback: function(index, element) {},
-  // transitionEnd: function(index, element) {}
+window.mySwipe = new Swipe(elem, {
+// startSlide: 4,
+// auto: 3000,
+// continuous: true,
+// disableScroll: true,
+// stopPropagation: true,
+// callback: function(index, element) {},
+// transitionEnd: function(index, element) {}
 });
 
 // with jQuery
