@@ -12,8 +12,6 @@
 
     function Swipe(container, options) {
 
-        "use strict";
-
         // utilities
         var noop = function() {}; // simple no operation function
         var offloadFn = function(fn) {
