@@ -2,11 +2,11 @@
 Swipe only needs to follow a simple pattern. Here is an example:
 
 ``` html
-<div id='slider' class='swipe'>
-  <div class='swipe-wrap'>
-    <div></div>
-    <div></div>
-    <div></div>
+<div id="slider" class="swipe">
+  <div class="swipe-wrap">
+    <div> ... </div>
+    <div> ... </div>
+    <div> ... </div>
   </div>
 </div>
 ```
@@ -32,8 +32,8 @@ Also Swipe needs just a few styles added to your stylesheet:
   position: relative;
 }
 .swipe-wrap > div {
-  float:left;
-  width:100%;
+  float: left;
+  width: 100%;
   position: relative;
 }
 ```
@@ -61,7 +61,6 @@ Swipe can take an optional second parameter– an object of key/value settings:
 ### Example
 
 ``` js
-
 window.mySwipe = new Swipe(document.getElementById('slider'), {
   startSlide: 2,
   speed: 400,
@@ -72,7 +71,6 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   callback: function(index, elem) {},
   transitionEnd: function(index, elem) {}
 });
-
 ```
 
 ## Swipe API
