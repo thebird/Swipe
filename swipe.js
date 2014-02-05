@@ -32,6 +32,7 @@ function Swipe(container, options) {
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
+  var cloneClass = options.cloneClass || 'swipe__clone'
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
   function setup() {
@@ -45,9 +46,7 @@ function Swipe(container, options) {
 
     //special case if two slides
     if (browser.transitions && options.continuous && slides.length < 3) {
-      element.appendChild(slides[0].cloneNode(true));
-      element.appendChild(element.children[1].cloneNode(true));
-      slides = element.children;
+      slides = setupForTwoSlides();
     }
 
     // create an array to store current positions of each slide
@@ -83,6 +82,19 @@ function Swipe(container, options) {
     if (!browser.transitions) element.style.left = (index * -width) + 'px';
 
     container.style.visibility = 'visible';
+
+  }
+
+  function setupForTwoSlides() {
+
+    // called if we have only two slides to animate
+    for(var i = 0; i < 3; i ++) {
+      var node = slides[i].cloneNode(true);
+      node.className = node.className + ' ' + cloneClass;
+      element.appendChild(node);
+    }
+
+    return element.children;
 
   }
 
