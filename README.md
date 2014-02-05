@@ -58,7 +58,7 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **transitionEnd** Function - runs at the end slide transition.
 
-- **cloneClass** String *(default:'swipe__clone')* - class given to cloned slides (slides are cloned if there are only two)
+- **cloneClass** String *(default:swipe__clone)* - class given to cloned slides (slides are cloned if there are only two, in order to enable animation).
 
 ### Example
 
