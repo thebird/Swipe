@@ -96,6 +96,7 @@ function Swipe(container, options) {
 
     if (options.continuous) slide(index-1);
     else if (index) slide(index-1);
+    else if (options.unavailable) options.unavailable(index, slides[index]);
 
   }
 
@@ -103,6 +104,7 @@ function Swipe(container, options) {
 
     if (options.continuous) slide(index+1);
     else if (index < slides.length - 1) slide(index+1);
+    else if (options.unavailable) options.unavailable(index, slides[index]);
 
   }
 
