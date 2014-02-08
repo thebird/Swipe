@@ -320,19 +320,28 @@ function Swipe(container, options) {
 
         } else {
 
-          delta.x =
-            delta.x /
-              ( (!index && delta.x > 0               // if first slide and sliding left
-                || index == slides.length - 1        // or if last slide and sliding right
-                && delta.x < 0                       // and if sliding at all
-              ) ?
-              ( Math.abs(delta.x) / width + 1 )      // determine resistance level
-              : 1 );                                 // no resistance if false
+          // if blockInsteadOfResist is true, block swiping to the right
+          // on the first slide and swiping to the left on the last slide
+          var shouldBlock =
+            (options.blockInsteadOfResist && (!index && delta.x > 0 || index == slides.length - 1))
+            ? true
+            : false;
 
-          // translate 1:1
-          translate(index-1, delta.x + slidePos[index-1], 0);
-          translate(index, delta.x + slidePos[index], 0);
-          translate(index+1, delta.x + slidePos[index+1], 0);
+          if(!shouldBlock) {
+            delta.x =
+              delta.x /
+                ( (!index && delta.x > 0               // if first slide and sliding left
+                  || index == slides.length - 1        // or if last slide and sliding right
+                  && delta.x < 0                       // and if sliding at all
+                ) ?
+                ( Math.abs(delta.x) / width + 1 )      // determine resistance level
+                : 1 );                                 // no resistance if false
+
+            // translate 1:1
+            translate(index-1, delta.x + slidePos[index-1], 0);
+            translate(index, delta.x + slidePos[index], 0);
+            translate(index+1, delta.x + slidePos[index+1], 0);
+          }
         }
 
       }

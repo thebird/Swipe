@@ -50,6 +50,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
 
+- **blockInsteadOfResist** Boolean *(default:false)* - blocks swiping to the right on the first slide and swiping to the left on the last slide, continuous option must be set to false.
+
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
@@ -67,6 +69,7 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   speed: 400,
   auto: 3000,
   continuous: true,
+  blockInsteadOfResist: false,
   disableScroll: false,
   stopPropagation: false,
   callback: function(index, elem) {},
