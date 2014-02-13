@@ -103,7 +103,7 @@ function Swipe(container, options) {
   function circle(index) {
 
     // a simple positive modulo using slides.length
-    return (slides.length + (index % slides.length)) % slides.length;
+    return index % slides.length;
 
   }
 
