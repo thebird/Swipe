@@ -54,7 +54,7 @@ function Swipe(container, options) {
     slidePos = new Array(slides.length);
 
     // determine width of each slide
-    width = container.getBoundingClientRect().width || container.offsetWidth;
+    width = options.width || container.getBoundingClientRect().width || container.offsetWidth;
 
     element.style.width = (slides.length * width) + 'px';
 
