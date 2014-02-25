@@ -241,9 +241,9 @@ function Swipe(container, options) {
     handleEvent: function(event) {
 
       switch (event.type) {
-        case 'touchstart': this.start(event); break;
-        case 'touchmove': this.move(event); break;
-        case 'touchend': offloadFn(this.end(event)); break;
+        case 'touchstart': !options.disableTouch && this.start(event); break;
+        case 'touchmove': !options.disableTouch && this.move(event); break;
+        case 'touchend': !options.disableTouch && offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
