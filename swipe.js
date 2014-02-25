@@ -508,10 +508,17 @@ function Swipe(container, options) {
       return index;
 
     },
+    setPos: function(n) {
+
+      // set current index position
+      index = n;
+
+    },
     getNumSlides: function() {
 
       // return total number of slides
       return length;
+
     },
     kill: function() {
 
