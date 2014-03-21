@@ -102,6 +102,12 @@ function Swipe(container, options) {
 
   function circle(index) {
 
+    // handle negative index
+    if (index < 0) {
+      while (index < 0) {
+        index += slides.length;
+      }
+    }
     // a simple positive modulo using slides.length
     return index % slides.length;
 
