@@ -434,39 +434,75 @@ function Swipe(container, options) {
     }
 
   }
+  
+  
+  function bindEvents() {
+    // add event listeners
+    if (browser.addEventListener) {
+  
+      // set touchstart event on element
+      if (browser.touch) element.addEventListener('touchstart', events, false);
+  
+      if (browser.transitions) {
+        element.addEventListener('webkitTransitionEnd', events, false);
+        element.addEventListener('msTransitionEnd', events, false);
+        element.addEventListener('oTransitionEnd', events, false);
+        element.addEventListener('otransitionend', events, false);
+        element.addEventListener('transitionend', events, false);
+      }
+  
+      // set resize event on window
+      window.addEventListener('resize', events, false);
+  
+    } else {
+  
+      window.onresize = function () { setup() }; // to play nice with old IE
+  
+    }
+  }
+  
+  function unbindEvents(){
+    // removed event listeners
+      if (browser.addEventListener) {
+
+        // remove current event listeners
+        element.removeEventListener('touchstart', events, false);
+        element.removeEventListener('webkitTransitionEnd', events, false);
+        element.removeEventListener('msTransitionEnd', events, false);
+        element.removeEventListener('oTransitionEnd', events, false);
+        element.removeEventListener('otransitionend', events, false);
+        element.removeEventListener('transitionend', events, false);
+        window.removeEventListener('resize', events, false);
+
+      }
+      else {
+
+        window.onresize = null;
+
+      }
+  }
 
   // trigger setup
   setup();
 
   // start auto slideshow if applicable
   if (delay) begin();
-
-
-  // add event listeners
-  if (browser.addEventListener) {
-
-    // set touchstart event on element
-    if (browser.touch) element.addEventListener('touchstart', events, false);
-
-    if (browser.transitions) {
-      element.addEventListener('webkitTransitionEnd', events, false);
-      element.addEventListener('msTransitionEnd', events, false);
-      element.addEventListener('oTransitionEnd', events, false);
-      element.addEventListener('otransitionend', events, false);
-      element.addEventListener('transitionend', events, false);
-    }
-
-    // set resize event on window
-    window.addEventListener('resize', events, false);
-
-  } else {
-
-    window.onresize = function () { setup() }; // to play nice with old IE
-
-  }
-
+  
+  // bind events
+  bindEvents();
+  
   // expose the Swipe API
   return {
+    bindEvents: function(){
+      
+      bindEvents();
+      
+    }
+    unbindEvents: function(){
+      
+      unbindEvents();
+      
+    },
     setup: function() {
 
       setup();
@@ -534,25 +570,7 @@ function Swipe(container, options) {
 
       }
 
-      // removed event listeners
-      if (browser.addEventListener) {
-
-        // remove current event listeners
-        element.removeEventListener('touchstart', events, false);
-        element.removeEventListener('webkitTransitionEnd', events, false);
-        element.removeEventListener('msTransitionEnd', events, false);
-        element.removeEventListener('oTransitionEnd', events, false);
-        element.removeEventListener('otransitionend', events, false);
-        element.removeEventListener('transitionend', events, false);
-        window.removeEventListener('resize', events, false);
-
-      }
-      else {
-
-        window.onresize = null;
-
-      }
-
+      unbindEvents();
     }
   }
 
