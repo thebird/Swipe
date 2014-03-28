@@ -495,6 +495,8 @@ function Swipe(container, options) {
   return {
     bindEvents: function(){
       
+      // unbinding before binding avoids double-binding
+      unbindEvents();
       bindEvents();
       
     }
