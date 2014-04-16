@@ -300,6 +300,7 @@ function Swipe(container, options) {
       // determine if scrolling test has run - one time test
       if ( typeof isScrolling == 'undefined') {
         isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
+        isScrolling || options.slideMove && options.slideMove.call(event, slides[index]);
       }
 
       // if user is not trying to scroll vertically
