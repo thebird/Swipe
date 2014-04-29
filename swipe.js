@@ -226,10 +226,10 @@ function Swipe(container, options) {
 
     if (!style) return;
 
-    style.webkitTransitionDuration = 
-    style.MozTransitionDuration = 
-    style.msTransitionDuration = 
-    style.OTransitionDuration = 
+    style.webkitTransitionDuration =
+    style.MozTransitionDuration =
+    style.msTransitionDuration =
+    style.OTransitionDuration =
     style.transitionDuration = speed + 'ms';
 
     if(orientation == 'horizontal') {
@@ -256,13 +256,13 @@ function Swipe(container, options) {
       return;
 
     }
-    
+
     var start = +new Date;
-    
+
     var timer = setInterval(function() {
 
       var timeElap = +new Date - start;
-      
+
       if (timeElap > speed) {
 
         if(orientation == 'horizontal') {
@@ -313,7 +313,7 @@ function Swipe(container, options) {
   // setup initial vars
   var start = {};
   var delta = {};
-  var isScrolling;      
+  var isScrolling;
 
   // setup event capturing
   var events = {
@@ -329,7 +329,7 @@ function Swipe(container, options) {
         case 'oTransitionEnd':
         case 'otransitionend':
         case 'transitionend': offloadFn(this.transitionEnd(event)); break;
-        case 'resize': offloadFn(setup.call()); break;
+        case 'resize': offloadFn(setup); break;
       }
 
       if (options.stopPropagation) event.stopPropagation();
@@ -350,7 +350,7 @@ function Swipe(container, options) {
         time: +new Date
 
       };
-      
+
       // used for testing first move event
       isScrolling = undefined;
 
@@ -388,7 +388,7 @@ function Swipe(container, options) {
       // if user is not trying to scroll vertically
       if (!isScrolling) {
 
-        // prevent native scrolling 
+        // prevent native scrolling
         event.preventDefault();
 
         // stop slideshow
@@ -601,7 +601,7 @@ function Swipe(container, options) {
     transitionEnd: function(event) {
 
       if (parseInt(event.target.getAttribute('data-index'), 10) == index) {
-        
+
         if (delay) begin();
 
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
@@ -621,8 +621,8 @@ function Swipe(container, options) {
 
   // add event listeners
   if (browser.addEventListener) {
-    
-    // set touchstart event on element    
+
+    // set touchstart event on element
     if (browser.touch) element.addEventListener('touchstart', events, false);
 
     if (browser.transitions) {
@@ -650,10 +650,10 @@ function Swipe(container, options) {
 
     },
     slide: function(to, speed) {
-      
+
       // cancel slideshow
       stop();
-      
+
       slide(to, speed);
 
     },
@@ -680,7 +680,7 @@ function Swipe(container, options) {
 
     },
     getNumSlides: function() {
-      
+
       // return total number of slides
       return length;
     },
@@ -690,16 +690,16 @@ function Swipe(container, options) {
       stop();
 
       // reset element
-      element.style.width = 'auto';
-      element.style.left = 0;
+      element.style.width = '';
+      element.style.left = '';
 
       // reset slides
       var pos = slides.length;
       while(pos--) {
 
         var slide = slides[pos];
-        slide.style.width = '100%';
-        slide.style.left = 0;
+        slide.style.width = '';
+        slide.style.left = '';
 
         if (browser.transitions) translate(pos, 0, 0);
 
