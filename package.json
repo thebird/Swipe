@@ -1,12 +1,25 @@
 {
   "name": "Swipe",
   "version": "2.0.0",
-  "dependencies": {},
+  "description": "A simple swipe enabled, responsive carousel",
+  "main": [
+    "./swipe.js"
+  ],
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.4"
+    "grunt": "~0.4.4",
+    "grunt-contrib-connect": "~0.7.1",
+    "grunt-contrib-uglify": "^0.4.0"
   },
   "engines": {
     "node": ">=0.8.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://ivancamilov@github.com/simian-lab/Swipe.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simian-lab/Swipe/issues"
+  },
+  "homepage": "https://github.com/simian-lab/Swipe"
 }

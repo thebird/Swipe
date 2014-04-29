@@ -13,6 +13,7 @@ function Swipe(container, options) {
   // utilities
   var noop = function() {}; // simple no operation function
   var offloadFn = function(fn) { setTimeout(fn || noop, 0) }; // offload a functions execution
+  var is_swiping = false;
 
   // quit if no root element
   if (!container) return;
@@ -28,6 +29,7 @@ function Swipe(container, options) {
   // check browser capabilities
   var browser = {
     addEventListener: !!window.addEventListener,
+
     touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
     transitions: (function(temp) {
       if (elastic) return false;
@@ -61,7 +63,7 @@ function Swipe(container, options) {
       if(elastic) {
         width = slides[0].getBoundingClientRect().width || slides[0].offsetWidth;
         containerWidth = container.getBoundingClientRect().width || container.offsetWidth;
-      }        
+      }
       else
         containerWidth = width = container.getBoundingClientRect().width || container.offsetWidth;
 
@@ -155,7 +157,7 @@ function Swipe(container, options) {
       index = to;
       return;
     }
-    
+
     if (browser.transitions) {
 
       var direction = Math.abs(index-to) / (index-to); // 1: backward, -1: forward
@@ -182,7 +184,7 @@ function Swipe(container, options) {
         while (diff--) move( circle((to > index ? to : index) - diff - 1), width * direction, 0);
       else if(orientation == 'vertical')
         while (diff--) move( circle((to > index ? to : index) - diff - 1), height * direction, 0);
-            
+
       to = circle(to);
 
       if(orientation == 'horizontal')
@@ -196,9 +198,9 @@ function Swipe(container, options) {
         if (options.continuous) move(circle(to - direction), -(width * direction), 0); // we need to get the next in place
       else if(orientation == 'vertical')
         if (options.continuous) move(circle(to - direction), -(height * direction), 0); // we need to get the next in place
-      
-    } else {     
-      
+
+    } else {
+
       to = circle(to);
 
       if(orientation == 'horizontal')
@@ -234,14 +236,14 @@ function Swipe(container, options) {
 
     if(orientation == 'horizontal') {
       style.webkitTransform = 'translate(' + dist + 'px,0)' + 'translateZ(0)';
-      style.msTransform = 
-      style.MozTransform = 
+      style.msTransform =
+      style.MozTransform =
       style.OTransform = 'translateX(' + dist + 'px)';
     }
     else if(orientation == 'vertical') {
       style.webkitTransform = 'translate(0,' + dist + 'px)' + 'translateZ(0)';
-      style.msTransform = 
-      style.MozTransform = 
+      style.msTransform =
+      style.MozTransform =
       style.OTransform = 'translateY(' + dist + 'px)';
     }
 
@@ -321,9 +323,9 @@ function Swipe(container, options) {
     handleEvent: function(event) {
 
       switch (event.type) {
-        case 'touchstart': this.start(event); break;
-        case 'touchmove': this.move(event); break;
-        case 'touchend': offloadFn(this.end(event)); break;
+        case 'touchstart': case 'MSPointerDown': this.start(event); break;
+        case 'touchmove': case 'MSPointerMove': this.move(event); break;
+        case 'touchend': case 'MSPointerUp': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
@@ -337,7 +339,10 @@ function Swipe(container, options) {
     },
     start: function(event) {
 
-      var touches = event.touches[0];
+      var touches = event;
+      if (!window.navigator.msPointerEnabled) {
+        var touches = event.touches[0];
+      }
 
       // measure start values
       start = {
@@ -358,18 +363,31 @@ function Swipe(container, options) {
       delta = {};
 
       // attach touchmove and touchend listeners
-      element.addEventListener('touchmove', this, false);
-      element.addEventListener('touchend', this, false);
+      if(window.navigator.msPointerEnabled) {
+        element.addEventListener('MSPointerMove', this, false);
+        element.addEventListener('MSPointerUp', this, false);
+      }
+      else {
+        element.addEventListener('touchmove', this, false);
+        element.addEventListener('touchend', this, false);
+      }
 
     },
     move: function(event) {
 
-      // ensure swiping with one touch and not pinching
-      if ( event.touches.length > 1 || event.scale && event.scale !== 1) return
+      is_swiping: true;
+
+      if (window.navigator.msPointerEnabled) {
+        if(!event.isPrimary) return;
+        var touches = event;
+      }
+      else {
+        // ensure swiping with one touch and not pinching
+        if ( event.touches.length > 1 || event.scale && event.scale !== 1) return;
+        var touches = event.touches[0];
+      }
 
       if (options.disableScroll || orientation == 'vertical') event.preventDefault();
-
-      var touches = event.touches[0];
 
       // measure change in x and y
       delta = {
@@ -411,30 +429,30 @@ function Swipe(container, options) {
         } else {
 
           if(orientation == 'horizontal') {
-            delta.x = 
-              delta.x / 
+            delta.x =
+              delta.x /
                 ( (!index && delta.x > 0               // if first slide and sliding left
                   || index == slides.length - 1        // or if last slide and sliding right
                   && delta.x < 0                       // and if sliding at all
-                ) ?                      
+                ) ?
                 ( Math.abs(delta.x) / width + 1 )      // determine resistance level
                 : 1 );                                 // no resistance if false
-            
+
             // translate 1:1
             translate(index-1, delta.x + slidePos[index-1], 0);
             translate(index, delta.x + slidePos[index], 0);
             translate(index+1, delta.x + slidePos[index+1], 0);
           }
           else if(orientation == 'vertical') {
-            delta.y = 
-              delta.y / 
+            delta.y =
+              delta.y /
                 ( (!index && delta.y > 0               // if first slide and sliding left
                   || index == slides.length - 1        // or if last slide and sliding right
                   && delta.y < 0                       // and if sliding at all
-                ) ?                      
+                ) ?
                 ( Math.abs(delta.y) / height + 1 )     // determine resistance level
                 : 1 );                                 // no resistance if false
-            
+
             // translate 1:1
             translate(index-1, delta.y + slidePos[index-1], 0);
             translate(index, delta.y + slidePos[index], 0);
@@ -452,31 +470,31 @@ function Swipe(container, options) {
 
       if(orientation == 'horizontal') {
         // determine if slide attempt triggers next/prev slide
-        var isValidSlide = 
+        var isValidSlide =
               Number(duration) < 250               // if slide duration is less than 250ms
               && Math.abs(delta.x) > 20            // and if slide amt is greater than 20px
               || Math.abs(delta.x) > width/2;      // or if slide amt is greater than half the width
 
         // determine if slide attempt is past start and end
-        var isPastBounds = 
+        var isPastBounds =
               !index && delta.x > 0                            // if first slide and slide amt is greater than 0
               || index == slides.length - 1 && delta.x < 0;    // or if last slide and slide amt is less than 0
       }
       else if(orientation == 'vertical') {
         // determine if slide attempt triggers next/prev slide
-        var isValidSlide = 
+        var isValidSlide =
               Number(duration) < 250               // if slide duration is less than 250ms
               && Math.abs(delta.y) > 20            // and if slide amt is greater than 20px
               || Math.abs(delta.y) > height/2;     // or if slide amt is greater than half the height
 
         // determine if slide attempt is past start and end
-        var isPastBounds = 
+        var isPastBounds =
               !index && delta.y > 0                            // if first slide and slide amt is greater than 0
               || index == slides.length - 1 && delta.y < 0;    // or if last slide and slide amt is less than 0
       }
 
       if (options.continuous) isPastBounds = false;
-      
+
       if(orientation == 'horizontal') {
         // determine direction of swipe (true:right, false:left)
         var direction = delta.x < 0;
@@ -522,8 +540,8 @@ function Swipe(container, options) {
               move(circle(index+1), slidePos[circle(index+1)]-height, speed);
             }
 
-            index = circle(index+1);  
-                      
+            index = circle(index+1);
+
           } else {
             if (options.continuous) { // we need to get the next in this direction in place
 
@@ -594,8 +612,10 @@ function Swipe(container, options) {
       }
 
       // kill touchmove and touchend event listeners until touchstart called again
-      element.removeEventListener('touchmove', events, false)
-      element.removeEventListener('touchend', events, false)
+      element.removeEventListener('touchmove', events, false);
+      element.removeEventListener('touchend', events, false);
+      element.removeEventListener('MSPointerMove', events, false);
+      element.removeEventListener('MSPointerUp', events, false);
 
     },
     transitionEnd: function(event) {
@@ -603,13 +623,11 @@ function Swipe(container, options) {
       if (parseInt(event.target.getAttribute('data-index'), 10) == index) {
 
         if (delay) begin();
-
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
-
       }
 
+      is_swiping = false;
     }
-
   }
 
   // trigger setup
@@ -624,6 +642,7 @@ function Swipe(container, options) {
 
     // set touchstart event on element
     if (browser.touch) element.addEventListener('touchstart', events, false);
+    if (window.navigator.msPointerEnabled) element.addEventListener('MSPointerDown', events, false);
 
     if (browser.transitions) {
       element.addEventListener('webkitTransitionEnd', events, false);
@@ -679,6 +698,9 @@ function Swipe(container, options) {
       return index;
 
     },
+    getState: function() {
+      return is_swiping;
+    },
     getNumSlides: function() {
 
       // return total number of slides
@@ -715,6 +737,9 @@ function Swipe(container, options) {
         element.removeEventListener('oTransitionEnd', events, false);
         element.removeEventListener('otransitionend', events, false);
         element.removeEventListener('transitionend', events, false);
+        element.removeEventListener('MSPointerDown', events, false);
+        element.removeEventListener('MSPointerMove', events, false);
+        element.removeEventListener('MSPointerUp', events, false);
         window.removeEventListener('resize', events, false);
 
       }

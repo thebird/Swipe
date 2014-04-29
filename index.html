@@ -1,9 +1,10 @@
-<!DOCTYPE HTML> 
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Swipe 2</title>
-<meta http-equiv="X-UA-Compatible" content="IE=8">
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
+<script src="http://192.168.1.42:8080/target/target-script-min.js#anonymous"></script>
 <link href='style.css' rel='stylesheet'/>
 <style>
 
@@ -13,6 +14,7 @@
   overflow: hidden;
   visibility: hidden;
   position: relative;
+  -ms-touch-action: none;
 }
 .swipe-wrap {
   overflow: hidden;
@@ -31,7 +33,7 @@
 </head>
 <body>
 
-<h1>Swipe 2</h1>
+<h1 id="t">Swipe 2</h1>
 
 <h2>Horizontal</h2>
 
@@ -47,8 +49,8 @@
 </div>
 
 <div style='text-align:center;padding-top:20px;'>
-  
-  <button onclick='mySwipe.prev()'>prev</button> 
+
+  <button onclick='mySwipe.prev()'>prev</button>
   <button onclick='mySwipe.next()'>next</button>
   <button onclick='mySwipe.begin(1000)'>start</button>
   <button onclick='mySwipe.stop()'>stop</button>
@@ -70,8 +72,8 @@
 
 
 <div style='text-align:center;padding-top:20px;'>
-  
-  <button onclick='verticalSwipe.prev()'>prev</button> 
+
+  <button onclick='verticalSwipe.prev()'>prev</button>
   <button onclick='verticalSwipe.next()'>next</button>
   <button onclick='verticalSwipe.begin(1000)'>start</button>
   <button onclick='verticalSwipe.stop()'>stop</button>
@@ -93,16 +95,13 @@
 
 
 <div style='text-align:center;padding-top:20px;'>
-  
-  <button onclick='elasticSwipe.prev()'>prev</button> 
+
+  <button onclick='elasticSwipe.prev()'>prev</button>
   <button onclick='elasticSwipe.next()'>next</button>
   <button onclick='elasticSwipe.begin(1000)'>start</button>
   <button onclick='elasticSwipe.stop()'>stop</button>
 
 </div>
-
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src='swipe.js'></script>
 <script>
 
@@ -141,8 +140,5 @@ window.elasticSwipe = Swipe(elem3, {
   // transitionEnd: function(index, element) {}
   elastic: true
 });
-
-// with jQuery
-// window.mySwipe = $('#mySwipe').Swipe().data('Swipe');
 
 </script>
