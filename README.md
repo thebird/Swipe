@@ -1,3 +1,5 @@
+## Windows 8 IE include
+Now you can use the swipeJS in Windows8. (Support MSPointer events)
 ## Usage
 Swipe only needs to follow a simple pattern. Here is an example:
 
