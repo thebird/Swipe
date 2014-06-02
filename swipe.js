@@ -2,7 +2,7 @@
  * Swipe 2.1
  *
  * Original by:Brad Birdsall
- * Copyright 2013
+ * Copyright 2013, MIT License
  *
 */
 
