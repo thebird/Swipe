@@ -2,8 +2,7 @@
  * Swipe 2.1
  *
  * Original by:Brad Birdsall
- * Update for W8 by:Ezequiel Mross
- * Copyright 2014
+ * Copyright 2013
  *
 */
 
