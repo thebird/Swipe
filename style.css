@@ -71,6 +71,7 @@ html, body {
   width: 95%;
   max-width: 1300px;
   margin: 0 auto;
+  overflow-x: scroll;
 }
 
 #elasticSwipe div b {

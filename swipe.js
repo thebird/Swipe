@@ -638,7 +638,7 @@ function Swipe(container, options) {
 
 
   // add event listeners
-  if (browser.addEventListener) {
+  if (browser.addEventListener && !elastic) {
 
     // set touchstart event on element
     if (browser.touch) element.addEventListener('touchstart', events, false);
