@@ -50,6 +50,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
 
+- **threshold** Float *(default:0.5)* - proportion of next frame that must be dragged in before slow swipe will trigger
+
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
@@ -67,6 +69,7 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   speed: 400,
   auto: 3000,
   continuous: true,
+  threshold: 0.25,
   disableScroll: false,
   stopPropagation: false,
   callback: function(index, elem) {},
