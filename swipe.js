@@ -94,7 +94,6 @@ function Swipe(container, options) {
   }
 
   function next() {
-
     if (options.continuous) slide(index+1);
     else if (index < slides.length - 1) slide(index+1);
 
@@ -243,7 +242,8 @@ function Swipe(container, options) {
       switch (event.type) {
         case 'touchstart': this.start(event); break;
         case 'touchmove': this.move(event); break;
-        case 'touchend': offloadFn(this.end(event)); break;
+        case 'touchend': this.end(event); break;    //modify by Alon Zhang
+        // case 'touchend': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
@@ -417,8 +417,12 @@ function Swipe(container, options) {
       }
 
       // kill touchmove and touchend event listeners until touchstart called again
-      element.removeEventListener('touchmove', events, false)
-      element.removeEventListener('touchend', events, false)
+      element.removeEventListener('touchmove', events, false);
+      element.removeEventListener('touchend', events, false);
+
+      //add by Alon Zhang
+      //resume slide
+      delay = options.auto;
 
     },
     transitionEnd: function(event) {
@@ -461,7 +465,7 @@ function Swipe(container, options) {
 
   } else {
 
-    window.onresize = function () { setup() }; // to play nice with old IE
+    window.onresize = function () { setup()}; // to play nice with old IE
 
   }
 
