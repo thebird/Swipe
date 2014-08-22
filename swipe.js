@@ -91,7 +91,6 @@ function Swipe(container, options) {
     if (options.continuous) slide(index-1);
     else if (index) slide(index-1);
 
-
   }
 
   function next() {
@@ -317,8 +316,7 @@ function Swipe(container, options) {
         stop();
 
         // increase resistance if first or last slide
-        if (options.continuous) { // we don't add res
-        // istance at the end
+        if (options.continuous) { // we don't add res istance at the end
 
           translate(circle(index-1), delta.x + slidePos[circle(index-1)], 0);
           translate(index, delta.x + slidePos[index], 0);
@@ -497,7 +495,7 @@ function Swipe(container, options) {
       stop();
 
       prev();
-
+      // restart the animate
       begin();
 
     },
@@ -507,7 +505,7 @@ function Swipe(container, options) {
       stop();
 
       next();
-
+      // restart the animate
       begin();
 
     },
@@ -583,5 +581,3 @@ if ( window.jQuery || window.Zepto ) {
     }
   })( window.jQuery || window.Zepto )
 }
-
-
