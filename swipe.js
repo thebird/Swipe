@@ -316,7 +316,7 @@ function Swipe(container, options) {
         stop();
 
         // increase resistance if first or last slide
-        if (options.continuous) { // we don't add res istance at the end
+        if (options.continuous) { // we don't add resistance at the end
 
           translate(circle(index-1), delta.x + slidePos[circle(index-1)], 0);
           translate(index, delta.x + slidePos[index], 0);
