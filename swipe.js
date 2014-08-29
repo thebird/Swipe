@@ -153,9 +153,10 @@ function Swipe(container, options) {
     // do nothing if already on requested slide
     if (index == to) return;
 
-    if(elastic && (containerWidth - ((slides.length * width)-(width*(to-1))) > 0)) {
-      index = to;
-      return;
+    // last page logic
+    var remainingDistance;
+    if(elastic && (containerWidth - ((slides.length * width)-(width*(to))) > 0)) {
+      remainingDistance = (containerWidth - ((slides.length * width)-(width*(to))) > 0) - (containerWidth - ((slides.length * width)-(width*(to-1))));
     }
 
     if (browser.transitions) {
@@ -204,7 +205,10 @@ function Swipe(container, options) {
       to = circle(to);
 
       if(orientation == 'horizontal')
-        animate(index * -width, to * -width, slideSpeed || speed);
+        if(remainingDistance)
+          animate(index * -width, (index * -width) - remainingDistance, slideSpeed || speed);
+        else
+          animate(index * -width, to * -width, slideSpeed || speed);
       else if(orientation == 'vertical')
         animate(index * -height, to * -height, slideSpeed || speed);
       //no fallback for a circular continuous if the browser does not accept transitions
