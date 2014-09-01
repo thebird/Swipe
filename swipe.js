@@ -24,6 +24,7 @@ function Swipe(container, options) {
   var speed = options.speed || 300;
   var orientation = options.orientation || 'horizontal';
   var elastic = options.elastic || false;
+  var lastElement = false;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
   // check browser capabilities
@@ -137,6 +138,7 @@ function Swipe(container, options) {
   function next() {
 
     if (options.continuous) slide(index+1);
+    else if(options.elastic && lastElement) return;
     else if (index < slides.length - 1) slide(index+1);
 
   }
@@ -157,6 +159,9 @@ function Swipe(container, options) {
     var remainingDistance;
     if(elastic && (containerWidth - ((slides.length * width)-(width*(to))) > 0)) {
       remainingDistance = (containerWidth - ((slides.length * width)-(width*(to))) > 0) - (containerWidth - ((slides.length * width)-(width*(to-1))));
+    }
+    else if(elastic && (containerWidth - ((slides.length * width)-(width*(to))) == 0)) {
+      return;
     }
 
     if (browser.transitions) {
@@ -205,10 +210,14 @@ function Swipe(container, options) {
       to = circle(to);
 
       if(orientation == 'horizontal')
-        if(remainingDistance)
+        if(remainingDistance) {
           animate(index * -width, (index * -width) - remainingDistance, slideSpeed || speed);
-        else
+          lastElement = true;
+        }
+        else {
+          lastElement = false;
           animate(index * -width, to * -width, slideSpeed || speed);
+        }
       else if(orientation == 'vertical')
         animate(index * -height, to * -height, slideSpeed || speed);
       //no fallback for a circular continuous if the browser does not accept transitions
