@@ -123,7 +123,7 @@ function Swipe(container, options) {
 
         // if going forward but to < index, use to = slides.length + to
         // if going backward but to > index, use to = -slides.length + to
-        if (direction !== natural_direction) to =  -direction * slides.length + to;
+        if (direction !== natural_direction) to =  -direction * slides.length + Number(to);
 
       }
 
