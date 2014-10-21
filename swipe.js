@@ -211,12 +211,19 @@ function Swipe(container, options) {
 
       if(orientation == 'horizontal')
         if(remainingDistance) {
-          animate(index * -width, (index * -width) - remainingDistance, slideSpeed || speed);
+          animate(index * -width, (index * -width) - remainingDistance, (slideSpeed || speed) / 2);
           lastElement = true;
         }
         else {
-          lastElement = false;
-          animate(index * -width, to * -width, slideSpeed || speed);
+          if(lastElement) {
+            lastElement = false;
+            var moveDistance = (containerWidth - ((slides.length * width)-(width*(to))) > 0) - (containerWidth - ((slides.length * width)-(width*(to-1))));
+            animate((to * -width) - moveDistance/8, to * -width, (slideSpeed || speed) / 2);
+          }
+          else {
+            lastElement = false;
+            animate(index * -width, to * -width, slideSpeed || speed);
+          }
         }
       else if(orientation == 'vertical')
         animate(index * -height, to * -height, slideSpeed || speed);
