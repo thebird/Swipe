@@ -133,9 +133,11 @@ function Swipe(container, options) {
       while (diff--) move( circle((to > index ? to : index) - diff - 1), width * direction, 0);
 
       to = circle(to);
+      
+      slideSpeed = slideSpeed === undefined ? speed : slideSpeed;
 
-      move(index, width * direction, slideSpeed || speed);
-      move(to, 0, slideSpeed || speed);
+      move(index, width * direction, slideSpeed);
+      move(to, 0, slideSpeed);
 
       if (options.continuous) move(circle(to - direction), -(width * direction), 0); // we need to get the next in place
 
