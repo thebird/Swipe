@@ -4,9 +4,6 @@
  * Brad Birdsall
  * Copyright 2013, MIT License
  *
- * modified slightly (Justin Kempton) Docstoc 2014
- * added new option : fadeOutInvisible
- *
 */
 
 function Swipe(container, options) {
@@ -112,16 +109,16 @@ function Swipe(container, options) {
 
 	function fadeOutInvisible(to) {
 		if (options.fadeOutInvisible) {
-			;(function() {
+			(function() {
 				if (!slides[0] || !slides[0].classList) return
 				for (var x = slides.length; x--;) {
 					if (x === to) {
-						slides[x].classList.remove("hiddenPanel")
-						continue
+						slides[x].classList.remove("hiddenPanel");
+						continue;
 					}
-					slides[x].classList.add("hiddenPanel")
+					slides[x].classList.add("hiddenPanel");
 				}
-			}())
+			}());
 		}
 	}
 
@@ -167,7 +164,8 @@ function Swipe(container, options) {
 
     index = to;
 
-		fadeOutInvisible(to)
+		fadeOutInvisible(to);
+
     offloadFn(options.callback && options.callback(index, slides[index], slides));
   }
 
@@ -416,7 +414,8 @@ function Swipe(container, options) {
 
           }
 
-					fadeOutInvisible(index)
+					fadeOutInvisible(index);
+
           options.callback && options.callback(index, slides[index], slides);
 
         } else {
