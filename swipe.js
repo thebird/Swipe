@@ -108,7 +108,7 @@ function Swipe(container, options) {
   }
 
 	function fadeOutInvisible(to) {
-		if (options.fadeOutInvisible) {
+		if (options.fadeOutInvisible && slides[0] && slides[0].classList) {
 			(function() {
 				if (!slides[0] || !slides[0].classList) return
 				for (var x = slides.length; x--;) {
