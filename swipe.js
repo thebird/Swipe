@@ -780,9 +780,14 @@ function Swipe(container, options) {
       // start slideshow with defined delay
       delay = newDelay;
       begin();
+    },
+    isFirst: function() {
+      return index == 0;
+    },
+    isLast: function() {
+      return lastElement;
     }
   }
-
 }
 
 
