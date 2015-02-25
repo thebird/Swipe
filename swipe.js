@@ -508,6 +508,17 @@ function Swipe(container, options) {
       return index;
 
     },
+    getCurrIndex: function() {
+      // Fix for the clone issue in the event of 2 slides
+      var current_index = this.getPos();
+      var number_of_slides = this.getNumSlides();
+    
+      if (current_index >= number_of_slides) {
+        current_index = current_index - number_of_slides;
+      }
+    
+      return current_index;
+    },
     getNumSlides: function() {
 
       // return total number of slides
