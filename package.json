@@ -1,11 +1,22 @@
 {
-  "name": "Swipe",
-  "version": "2.0.0",
+  "name": "swipe-js",
+  "version": "2.0.1",
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.4"
+    "grunt": "~0.4.5",
+    "grunt-contrib-uglify": "~0.8.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nickleefly/swipe.git"
+  },
+  "keywords": [
+    "ecosystem:jquery",
+    "jquery-plugin",
+    "swipe",
+    "slider",
+    "touch"
+  ],
   "engines": {
     "node": ">=0.8.0"
   }
