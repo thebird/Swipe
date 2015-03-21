@@ -1,8 +1,8 @@
 /*
  * Swipe 2.0
  *
- * Brad Birdsall
- * Copyright 2013, MIT License
+ * Brad Birdsall and Xiuyu Li
+ * Copyright 2015, MIT License
  *
 */
 
@@ -34,6 +34,9 @@ function Swipe(container, options) {
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
+  // AutoRestart option: auto restart slideshow after user's touch event
+  options.autoRestart = options.autoRestart !== undefined ? options.autoRestart : true;
+
   function setup() {
 
     // cache slides
@@ -60,7 +63,7 @@ function Swipe(container, options) {
 
     // stack elements
     var pos = slides.length;
-    while(pos--) {
+    while (pos--) {
 
       var slide = slides[pos];
 
@@ -229,6 +232,11 @@ function Swipe(container, options) {
 
   }
 
+  function restart() {
+    stop();
+    delay = options.auto || 0;
+    begin();
+  }
 
   // setup initial vars
   var start = {};
@@ -295,10 +303,10 @@ function Swipe(container, options) {
       delta = {
         x: touches.pageX - start.x,
         y: touches.pageY - start.y
-      }
+      };
 
       // determine if scrolling test has run - one time test
-      if ( typeof isScrolling == 'undefined') {
+      if ( typeof isScrolling === 'undefined') {
         isScrolling = !!( isScrolling || Math.abs(delta.x) < Math.abs(delta.y) );
       }
 
@@ -425,7 +433,7 @@ function Swipe(container, options) {
 
       if (parseInt(event.target.getAttribute('data-index'), 10) == index) {
 
-        if (delay) begin();
+        if (delay || options.autoRestart) restart();
 
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
 
@@ -433,7 +441,7 @@ function Swipe(container, options) {
 
     }
 
-  }
+  };
 
   // trigger setup
   setup();
@@ -496,6 +504,12 @@ function Swipe(container, options) {
       next();
 
     },
+    restart: function() {
+
+      // Restart slideshow
+      restart();
+
+    },
     stop: function() {
 
       // cancel slideshow
@@ -524,7 +538,7 @@ function Swipe(container, options) {
 
       // reset slides
       var pos = slides.length;
-      while(pos--) {
+      while (pos--) {
 
         var slide = slides[pos];
         slide.style.width = '';
@@ -559,12 +573,20 @@ function Swipe(container, options) {
 }
 
 
-if ( window.jQuery || window.Zepto ) {
-  (function($) {
-    $.fn.Swipe = function(params) {
-      return this.each(function() {
-        $(this).data('Swipe', new Swipe($(this)[0], params));
-      });
-    }
-  })( window.jQuery || window.Zepto )
-}
+(function (factory) {
+  if(typeof module === "object" && typeof module.exports === "object") {
+    factory(require("jquery"), window, document);
+  } else {
+    factory(jQuery, window, document);
+  }
+}(function($, window, document, undefined) {
+  if ( window.jQuery || window.Zepto ) {
+    (function($) {
+      $.fn.Swipe = function(params) {
+        return this.each(function() {
+          $(this).data('Swipe', new Swipe($(this)[0], params));
+        });
+      }
+    })( window.jQuery || window.Zepto )
+  }
+}));

@@ -1,3 +1,20 @@
+# Swipe
+
+Swipe is the most accurate touch slider and extremely lightweight (only 5kb for minified version)
+
+## Note
+
+Swipe is originally created by **[Brad Birdsall](https://github.com/thebird)** who seems not maintainning it, and this version is maintain by **[Xiuyu Li](https://github.com/nickleefly)** with new features and bugfix.
+
+## Install
+
+You can directly install this package via Bower: `npm install swipe-js`
+
+
+## Demo
+
+See [online example](http://nickleefly.github.io/swipe/)
+
 ## Usage
 Swipe only needs to follow a simple pattern. Here is an example:
 
@@ -53,7 +70,7 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
- 
+
 -	**callback** Function - runs at slide change.
 
 - **transitionEnd** Function - runs at the end slide transition.
@@ -89,18 +106,24 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
 
+`restart()` restart the auto slide
+
+`stop()` stop the auto slide
+
+`kill()` remove swipe totally
+
 ## Browser Support
 Swipe is now compatible with all browsers, including IE7+. Swipe works best on devices that support CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
 
 ## Who's using Swipe
-<img src='http://swipejs.com/assets/swipe-cnn.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-airbnb.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-nhl.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-htc.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-thinkgeek.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-snapguide.png' width='170'>
+<img src='icons/cnn.png' width='170'>
+<img src='icons/airbnb.png' width='170'>
+<img src='icons/nhl.png' width='170'>
+<img src='icons/htc.png' width='170'>
+<img src='icons/thinkgeek.png' width='170'>
+<img src='icons/snapguide.png' width='170'>
 
-Shoot me a [note](mailto:brad@birdsall.co) if you want your logo here
+Shoot me a [note](mailto:nickleefly@gmail.com) if you want your logo here
 
 ## License
-Copyright (c) 2013 Brad Birdsall Licensed under the [The MIT License (MIT)](http://opensource.org/licenses/MIT).
+Copyright (c) 2015 Brad Birdsall Licensed under the [The MIT License (MIT)](http://opensource.org/licenses/MIT).
