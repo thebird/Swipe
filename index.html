@@ -94,23 +94,24 @@
 </div>
 
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src='swipe.js'></script>
 <script>
-
-// pure JS
-var elem = document.getElementById('mySwipe');
-window.mySwipe = Swipe(elem, {
-  startSlide: 4,
+var option = {
+  startSlide: 2,
+  speed: 400,
   auto: 3000,
   continuous: true,
-  disableScroll: true,
-  stopPropagation: true,
+  disableScroll: false,
+  stopPropagation: false,
   callback: function(index, element) {},
   transitionEnd: function(index, element) {}
-});
+}
+// pure JS
+var elem = document.getElementById('mySwipe');
+window.mySwipe = Swipe(elem, option);
 
 // with jQuery
-// window.mySwipe = $('#mySwipe').Swipe().data('Swipe');
+// window.mySwipe = $('#mySwipe').Swipe(option).data('Swipe');
 
 </script>

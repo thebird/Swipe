@@ -1,5 +1,4 @@
-Swipe
-=====
+# Swipe
 
 Swipe is the most accurate touch slider and extremely lightweight (only 5kb for minified version)
 

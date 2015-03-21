@@ -573,12 +573,20 @@ function Swipe(container, options) {
 }
 
 
-if ( window.jQuery || window.Zepto ) {
-  (function($) {
-    $.fn.Swipe = function(params) {
-      return this.each(function() {
-        $(this).data('Swipe', new Swipe($(this)[0], params));
-      });
-    }
-  })( window.jQuery || window.Zepto )
-}
+(function (factory) {
+  if(typeof module === "object" && typeof module.exports === "object") {
+    factory(require("jquery"), window, document);
+  } else {
+    factory(jQuery, window, document);
+  }
+}(function($, window, document, undefined) {
+  if ( window.jQuery || window.Zepto ) {
+    (function($) {
+      $.fn.Swipe = function(params) {
+        return this.each(function() {
+          $(this).data('Swipe', new Swipe($(this)[0], params));
+        });
+      }
+    })( window.jQuery || window.Zepto )
+  }
+}));
