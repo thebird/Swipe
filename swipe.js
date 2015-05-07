@@ -32,6 +32,7 @@ function Swipe(container, options) {
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
+  var slideWidth = options.slideWidth || 0;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
   function setup() {
@@ -54,12 +55,15 @@ function Swipe(container, options) {
     slidePos = new Array(slides.length);
 
     // determine width of each slide
+    width = container.getBoundingClientRect().width || container.offsetWidth || $("body").width();
     width = container.getBoundingClientRect().width || container.offsetWidth;
     if (width <= 0 || width == null) {
       if (jQuery != undefined) {
         width = jQuery(container).width();
       }
     }
+
+    width = width || slideWidth || $("body").width();
 
     element.style.width = (slides.length * width) + 'px';
 
@@ -239,26 +243,33 @@ function Swipe(container, options) {
   var start = {};
   var delta = {};
   var isScrolling;
+  var enabled = !options.disableTouch || true;
+  var distance = options.breakDistance || null;
 
   // setup event capturing
   var events = {
 
+    enabled : !options.disableTouch || true,
     handleEvent: function(event) {
 
       switch (event.type) {
         case 'touchstart': this.start(event); break;
         case 'touchmove': this.move(event); break;
-        case 'touchend': offloadFn(this.end(event)); break;
+        case 'touchend': events.enabled && offloadFn(this.end(event)); break;
+        case 'scroll': this.scroll(event); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
         case 'otransitionend':
-        case 'transitionend': offloadFn(this.transitionEnd(event)); break;
-        case 'resize': offloadFn(setup); break;
+        case 'transitionend': events.enabled && offloadFn(this.transitionEnd(event)); break;
+        case 'resize': events.enabled && offloadFn(setup); break;
       }
 
-      if (options.stopPropagation) event.stopPropagation();
+      if (options.stopPropagation || !enabled) event.stopPropagation();
 
+    },
+    scroll: function(event) {
+        container.scrollLeft = 0;
     },
     start: function(event) {
 
@@ -312,6 +323,22 @@ function Swipe(container, options) {
 
         // prevent native scrolling
         event.preventDefault();
+        if (!events.enabled) return;
+
+        if (distance != null)
+        {
+            if (delta.x > distance) {
+                delta.x = (width / 2) + 10;
+                this.end(event);
+                return;
+            }
+
+            if (delta.x < -distance) {
+                delta.x = -(width / 2) - 10;
+                this.end(event);
+                return;
+            }
+        }
 
         // stop slideshow
         stop();
@@ -401,7 +428,7 @@ function Swipe(container, options) {
           }
 
           options.callback && options.callback(index, slides[index]);
-
+          container.scrollLeft = 0;
         } else {
 
           if (options.continuous) {
@@ -433,7 +460,7 @@ function Swipe(container, options) {
         if (delay) begin();
 
         options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
-
+        container.scrollLeft = 0;
       }
 
     }
@@ -446,29 +473,50 @@ function Swipe(container, options) {
   // start auto slideshow if applicable
   if (delay) begin();
 
+  function attachEventHandlers()
+  {
+    if (browser.addEventListener) {
+
+      // set touchstart event on element
+      if (browser.touch) element.addEventListener('touchstart', events, false);
+
+      if (browser.transitions) {
+        element.addEventListener('webkitTransitionEnd', events, false);
+        element.addEventListener('msTransitionEnd', events, false);
+        element.addEventListener('oTransitionEnd', events, false);
+        element.addEventListener('otransitionend', events, false);
+        element.addEventListener('transitionend', events, false);
+      }
+
+      // set resize event on window
+      window.addEventListener('resize', events, false);
+
+    } else {
+      window.onresize = function () { setup() }; // to play nice with old IE
+    }
+  }
+  function detachEventHandler() {
+    if (browser.addEventListener) {
+
+        // remove current event listeners
+        element.removeEventListener('touchstart', events, false);
+        element.removeEventListener('webkitTransitionEnd', events, false);
+        element.removeEventListener('msTransitionEnd', events, false);
+        element.removeEventListener('oTransitionEnd', events, false);
+        element.removeEventListener('otransitionend', events, false);
+        element.removeEventListener('transitionend', events, false);
+        window.removeEventListener('resize', events, false);
+
+    }
+    else {
+
+        window.onresize = null;
+
+    }
+  }
 
   // add event listeners
-  if (browser.addEventListener) {
-
-    // set touchstart event on element
-    if (browser.touch) element.addEventListener('touchstart', events, false);
-
-    if (browser.transitions) {
-      element.addEventListener('webkitTransitionEnd', events, false);
-      element.addEventListener('msTransitionEnd', events, false);
-      element.addEventListener('oTransitionEnd', events, false);
-      element.addEventListener('otransitionend', events, false);
-      element.addEventListener('transitionend', events, false);
-    }
-
-    // set resize event on window
-    window.addEventListener('resize', events, false);
-
-  } else {
-
-    window.onresize = function () { setup() }; // to play nice with old IE
-
-  }
+  attachEventHandlers();
 
   // expose the Swipe API
   return {
@@ -540,24 +588,19 @@ function Swipe(container, options) {
       }
 
       // removed event listeners
-      if (browser.addEventListener) {
-
-        // remove current event listeners
-        element.removeEventListener('touchstart', events, false);
-        element.removeEventListener('webkitTransitionEnd', events, false);
-        element.removeEventListener('msTransitionEnd', events, false);
-        element.removeEventListener('oTransitionEnd', events, false);
-        element.removeEventListener('otransitionend', events, false);
-        element.removeEventListener('transitionend', events, false);
-        window.removeEventListener('resize', events, false);
-
-      }
-      else {
-
-        window.onresize = null;
-
-      }
-
+      detachEventHandler();
+    },
+    enable: function(value) {
+      events.enabled = value;
+    },
+    getEnabled: function () {
+      return events.enabled;
+    },
+    attachEvents: function () {
+        attachEventHandlers();
+    },
+    detachEvents: function () {
+        detachEventHandler();
     }
   }
 
