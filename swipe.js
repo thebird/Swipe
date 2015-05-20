@@ -362,7 +362,7 @@ function Swipe(container, options) {
       // if not scrolling vertically
       if (!isScrolling) {
 
-        if (isValidSlide && !isPastBounds) {
+        if (isValidSlide && !isPastBounds && !(direction && container.RightPastRounds) && !(!direction && container.LeftPastRounds)) {
 
           if (direction) {
 
@@ -502,6 +502,18 @@ function Swipe(container, options) {
       stop();
 
     },
+	setLeftSwipe: function(enabled) {
+		
+		// add/set LeftPastRounds to true/false
+		container.LeftPastRounds = enabled;
+		
+	},
+	setRightSwipe: function(enabled) {
+	
+		// add/set RightPastRounds to true/false
+		container.RightPastRounds = enabled;
+		
+	},
     getPos: function() {
 
       // return current index position
