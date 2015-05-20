@@ -502,16 +502,16 @@ function Swipe(container, options) {
       stop();
 
     },
-	setLeftSwipe: function(enabled) {
+	setLeftSwipe: function(disabled) {
 		
 		// add/set LeftPastRounds to true/false
-		container.LeftPastRounds = enabled;
+		container.LeftPastRounds = disabled;
 		
 	},
-	setRightSwipe: function(enabled) {
+	setRightSwipe: function(disabled) {
 	
 		// add/set RightPastRounds to true/false
-		container.RightPastRounds = enabled;
+		container.RightPastRounds = disabled;
 		
 	},
     getPos: function() {
