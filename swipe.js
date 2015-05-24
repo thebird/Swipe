@@ -256,7 +256,8 @@ function Swipe(container, options) {
 
     },
     start: function(event) {
-
+      //lock slidlayout
+      api.lockSlidPane();
       var touches = event.touches[0];
 
       // measure start values
@@ -339,6 +340,8 @@ function Swipe(container, options) {
 
     },
     end: function(event) {
+      //unlock slidlayout
+      api.unlockSlidPane();
 
       // measure duration
       var duration = +new Date - start.time;
