@@ -513,6 +513,22 @@ function Swipe(container, options) {
       // return total number of slides
       return length;
     },
+    lockSlide: function() {
+    
+      // lock slide transition
+      if (browser.addEventListener) {
+        element.removeEventListener('touchstart', events, false);
+      }
+
+    },
+    unlockSlide: function() {
+    
+      // unlock slide transition
+      if (browser.addEventListener) {
+        element.addEventListener('touchstart', events, false);
+      }
+      
+    },
     kill: function() {
 
       // cancel slideshow
