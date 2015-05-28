@@ -242,8 +242,8 @@ function Swipe(container, options) {
       switch (event.type) {
         case 'touchstart': this.start(event); break;
         case 'touchmove': this.move(event); break;
-        case 'touchend': this.end(event); break;    //modify by Alon Zhang
-        // case 'touchend': offloadFn(this.end(event)); break;
+        // case 'touchend': this.end(event); break;    //modify by Alon Zhang
+        case 'touchend': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
         case 'oTransitionEnd':
@@ -256,8 +256,14 @@ function Swipe(container, options) {
 
     },
     start: function(event) {
+      //adapt APICloud, add by Alon Zhang
       //lock slidlayout
       api.lockSlidPane();
+      //lock framegroup
+      api.setFrameGroupAttr({
+          scrollEnabled: false
+      });
+      
       var touches = event.touches[0];
 
       // measure start values
@@ -340,8 +346,13 @@ function Swipe(container, options) {
 
     },
     end: function(event) {
+      //adapt APICloud, add by Alon Zhang
       //unlock slidlayout
       api.unlockSlidPane();
+      //unlock framegroup
+      api.setFrameGroupAttr({
+          scrollEnabled: true
+      });
 
       // measure duration
       var duration = +new Date - start.time;
