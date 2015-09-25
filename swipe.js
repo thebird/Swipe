@@ -420,6 +420,9 @@ function Swipe(container, options) {
       element.removeEventListener('touchmove', events, false)
       element.removeEventListener('touchend', events, false)
 
+      if (options.continuous) {
+        delay = options.auto || 0;  // set the delay option back
+      }
     },
     transitionEnd: function(event) {
 
