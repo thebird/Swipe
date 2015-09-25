@@ -225,10 +225,17 @@ function Swipe(container, options) {
   function stop() {
 
     delay = 0;
-    clearTimeout(interval);
+    pause();
 
   }
 
+  function pause() {
+    clearTimeout(interval);
+  }
+
+  function resume() {
+    if (delay) begin();
+  }
 
   // setup initial vars
   var start = {};
@@ -553,6 +560,12 @@ function Swipe(container, options) {
 
       }
 
+    },
+    pause: function () {
+      pause();
+    },
+    resume: function () {
+      resume();
     }
   }
 
