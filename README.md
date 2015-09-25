@@ -21,59 +21,58 @@ I always place this at the bottom of the page, externally, to verify the page is
 
 Also Swipe needs just a few styles added to your stylesheet:
 
-``` css
-.swipe {
-  overflow: hidden;
-  visibility: hidden;
-  position: relative;
-}
-.swipe-wrap {
-  overflow: hidden;
-  position: relative;
-}
-.swipe-wrap > div {
-  float:left;
-  width:100%;
-  position: relative;
-}
-```
+	// css
+	.swipe {
+	  overflow: hidden;
+	  visibility: hidden;
+	  position: relative;
+	}
+	.swipe-wrap {
+	  overflow: hidden;
+	  position: relative;
+	}
+	// swipe horizontally
+	.swipe-wrap > div {
+	  float:left;
+	  width:100%;
+	  position: relative;
+	}
+	// swipe vertically
+	.swipe-wrap > div {
+	  position: relative;
+	}
+
 
 ## Config Options
 
 Swipe can take an optional second parameter– an object of key/value settings:
 
-- **startSlide** Integer *(default:0)* - index position Swipe should start at
-
--	**speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
-
-- **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
-
-- **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
-
-- **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
-
-- **stopPropagation** Boolean *(default:false)* - stop event propagation
- 
--	**callback** Function - runs at slide change.
-
-- **transitionEnd** Function - runs at the end slide transition.
+- **startSlide** : Integer *(default:0)* index position Swipe should start at
+- **speed** : Integer *(default:300)* speed of prev and next transitions in milliseconds.
+- **auto** : Integer begin with auto slideshow (time in milliseconds between slides)
+- **continuous** : Boolean *(default:true)* - create an infinite feel with no endpoints
+- **disableScroll** : Boolean *(default:false)* - stop any touches on this container from scrolling the page
+- **stopPropagation** : Boolean *(default:false)* - stop event propagation
+- **callback** : Function - runs at slide change.
+- **transitionEnd** : Function - runs at the end slide transition.
+- **slideDirection** : String *(default:'x')* - slide direction
 
 ### Example
 
-``` js
+	// js
+	
+	window.mySwipe = new Swipe(document.getElementById('slider'), {
+	  startSlide: 2,
+	  speed: 400,
+	  auto: 3000,
+	  continuous: true,
+	  disableScroll: false,
+	  stopPropagation: false,
+	  callback: function(index, elem) {},
+	  transitionEnd: function(index, elem) {}
+	});
 
-window.mySwipe = new Swipe(document.getElementById('slider'), {
-  startSlide: 2,
-  speed: 400,
-  auto: 3000,
-  continuous: true,
-  disableScroll: false,
-  stopPropagation: false,
-  callback: function(index, elem) {},
-  transitionEnd: function(index, elem) {}
-});
 
-```
 
 ## Swipe API
 
