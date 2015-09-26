@@ -156,7 +156,20 @@ function Swipe(container, options) {
     slidePos[index] = dist;
 
   }
-
+  
+  
+  function fullscreen() {
+	if (container.requestFullscreen) {
+        container.requestFullscreen();
+    } else if (container.mozRequestFullScreen) {
+        container.mozRequestFullScreen();
+    } else if (container.webkitRequestFullScreen) {
+        container.webkitRequestFullScreen();
+    } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
+    }
+  }
+  
   function translate(index, dist, speed) {
 
     var slide = slides[index];
@@ -339,6 +352,10 @@ function Swipe(container, options) {
 
     },
     end: function(event) {
+	  
+	  if(delta.x === undefined && options.fullscreen == true){
+		fullscreen();  
+	  }
 
       // measure duration
       var duration = +new Date - start.time;
@@ -444,7 +461,7 @@ function Swipe(container, options) {
 
   // add event listeners
   if (browser.addEventListener) {
-
+	  
     // set touchstart event on element
     if (browser.touch) element.addEventListener('touchstart', events, false);
 

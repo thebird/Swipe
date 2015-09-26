@@ -50,6 +50,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **continuous** Boolean *(default:true)* - create an infinite feel with no endpoints
 
+- **fullscreen** Boolean *(default:false)* - onclick of the element, container enters fullscreen mode
+
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
@@ -67,6 +69,7 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   speed: 400,
   auto: 3000,
   continuous: true,
+  fullscreen : true,
   disableScroll: false,
   stopPropagation: false,
   callback: function(index, elem) {},
