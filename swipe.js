@@ -51,7 +51,7 @@ function Swipe(container, options) {
     }
 
     // create an array to store current positions of each slide
-    slidePos = new Array(slides.length);
+    slidePos = [];
 
     // determine width of each slide
     width = container.getBoundingClientRect().width || container.offsetWidth;
