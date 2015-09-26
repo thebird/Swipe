@@ -217,17 +217,18 @@ function Swipe(container, options) {
   var interval;
 
   function begin() {
-
     interval = setTimeout(next, delay);
-
   }
 
   function stop() {
-
     delay = 0;
-    clearTimeout(interval);
-
+    stopSliderInterval();
   }
+
+	function stopSliderInterval() {
+		clearTimeout(interval);
+	}
+
 
 
   // setup initial vars
@@ -309,7 +310,7 @@ function Swipe(container, options) {
         event.preventDefault();
 
         // stop slideshow
-        stop();
+        stopSliderInterval();
 
         // increase resistance if first or last slide
         if (options.continuous) { // we don't add resistance at the end
@@ -468,45 +469,27 @@ function Swipe(container, options) {
   // expose the Swipe API
   return {
     setup: function() {
-
       setup();
-
     },
     slide: function(to, speed) {
-
-      // cancel slideshow
-      stop();
-
+      stopSliderInterval();
       slide(to, speed);
-
     },
     prev: function() {
-
-      // cancel slideshow
-      stop();
-
+      stopSliderInterval();
       prev();
-
     },
     next: function() {
-
-      // cancel slideshow
-      stop();
-
+      stopSliderInterval();
       next();
-
     },
     stop: function() {
-
       // cancel slideshow
       stop();
-
     },
     getPos: function() {
-
       // return current index position
       return index;
-
     },
     getNumSlides: function() {
 
