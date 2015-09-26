@@ -107,10 +107,26 @@ function Swipe(container, options) {
 
   }
 
+	function fadeOutInvisible(to) {
+		if (options.fadeOutInvisible && slides[0] && slides[0].classList) {
+			(function() {
+				if (!slides[0] || !slides[0].classList) return
+				for (var x = slides.length; x--;) {
+					if (x === to) {
+						slides[x].classList.remove("hiddenPanel");
+						continue;
+					}
+					slides[x].classList.add("hiddenPanel");
+				}
+			}());
+		}
+	}
+
   function slide(to, slideSpeed) {
 
     // do nothing if already on requested slide
     if (index == to) return;
+
 
     if (browser.transitions) {
 
@@ -147,7 +163,10 @@ function Swipe(container, options) {
     }
 
     index = to;
-    offloadFn(options.callback && options.callback(index, slides[index]));
+
+		fadeOutInvisible(to);
+
+    offloadFn(options.callback && options.callback(index, slides[index], slides));
   }
 
   function move(index, dist, speed) {
@@ -395,7 +414,9 @@ function Swipe(container, options) {
 
           }
 
-          options.callback && options.callback(index, slides[index]);
+					fadeOutInvisible(index);
+
+          options.callback && options.callback(index, slides[index], slides);
 
         } else {
 
