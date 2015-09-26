@@ -1,3 +1,10 @@
+##Fixed Issues(By Alon Zhang)
+After touchend event, resuming Swipe's auto slide.
+
+1. 兼容 APICloud 
+2. 兼容 openSlidLayout 模块，左右滑不会冲突
+3. 兼容 openFrameGroup 模块，左右滑不会冲突
+
 ## Usage
 Swipe only needs to follow a simple pattern. Here is an example:
 

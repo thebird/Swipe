@@ -94,7 +94,6 @@ function Swipe(container, options) {
   }
 
   function next() {
-
     if (options.continuous) slide(index+1);
     else if (index < slides.length - 1) slide(index+1);
 
@@ -243,6 +242,7 @@ function Swipe(container, options) {
       switch (event.type) {
         case 'touchstart': this.start(event); break;
         case 'touchmove': this.move(event); break;
+        // case 'touchend': this.end(event); break;    //modify by Alon Zhang
         case 'touchend': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
@@ -256,7 +256,14 @@ function Swipe(container, options) {
 
     },
     start: function(event) {
-
+      //adapt APICloud, add by Alon Zhang
+      //lock slidlayout
+      api.lockSlidPane();
+      //lock framegroup
+      api.setFrameGroupAttr({
+          scrollEnabled: false
+      });
+      
       var touches = event.touches[0];
 
       // measure start values
@@ -339,6 +346,13 @@ function Swipe(container, options) {
 
     },
     end: function(event) {
+      //adapt APICloud, add by Alon Zhang
+      //unlock slidlayout
+      api.unlockSlidPane();
+      //unlock framegroup
+      api.setFrameGroupAttr({
+          scrollEnabled: true
+      });
 
       // measure duration
       var duration = +new Date - start.time;
@@ -417,8 +431,12 @@ function Swipe(container, options) {
       }
 
       // kill touchmove and touchend event listeners until touchstart called again
-      element.removeEventListener('touchmove', events, false)
-      element.removeEventListener('touchend', events, false)
+      element.removeEventListener('touchmove', events, false);
+      element.removeEventListener('touchend', events, false);
+
+      //add by Alon Zhang
+      //resume slide
+      delay = options.auto;
 
     },
     transitionEnd: function(event) {
@@ -461,7 +479,7 @@ function Swipe(container, options) {
 
   } else {
 
-    window.onresize = function () { setup() }; // to play nice with old IE
+    window.onresize = function () { setup()}; // to play nice with old IE
 
   }
 
