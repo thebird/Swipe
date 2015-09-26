@@ -27,7 +27,11 @@ function Swipe(container, options) {
 
   // quit if no root element
   if (!container) return;
-  var element = container.children[0];
+  
+  // metamorph script tags in Ember totally throw off 'children[0]'
+  // var element = container.children[0];
+  var element = container.querySelector('.swipe-wrap');
+
   var slides, slidePos, width, length;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
@@ -37,7 +41,9 @@ function Swipe(container, options) {
   function setup() {
 
     // cache slides
-    slides = element.children;
+    // metamorph script tags in Ember totally throw off 'children'
+    // slides = element.children;
+    slides = element.querySelectorAll(':not(script)');
     length = slides.length;
 
     // set continuous to false if only one slide
