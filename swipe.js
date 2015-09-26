@@ -28,7 +28,8 @@ function Swipe(container, options) {
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
-  var slides, slidePos, width, length;
+  var slides, slidePos, width;
+  var length = element.children.length;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
@@ -38,7 +39,6 @@ function Swipe(container, options) {
 
     // cache slides
     slides = element.children;
-    length = slides.length;
 
     // set continuous to false if only one slide
     if (slides.length < 2) options.continuous = false;
@@ -123,7 +123,7 @@ function Swipe(container, options) {
 
         // if going forward but to < index, use to = slides.length + to
         // if going backward but to > index, use to = -slides.length + to
-        if (direction !== natural_direction) to =  -direction * slides.length + to;
+        if (direction !== natural_direction) to =  -direction * slides.length + Number(to);
 
       }
 
