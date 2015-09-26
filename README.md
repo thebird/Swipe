@@ -44,7 +44,7 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **startSlide** Integer *(default:0)* - index position Swipe should start at
 
--	**speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
+- **speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
@@ -53,8 +53,8 @@ Swipe can take an optional second parameter– an object of key/value settings:
 - **disableScroll** Boolean *(default:false)* - stop any touches on this container from scrolling the page
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
- 
--	**callback** Function - runs at slide change.
+
+- **callback** Function - runs at slide change.
 
 - **transitionEnd** Function - runs at the end slide transition.
 
@@ -86,6 +86,10 @@ Swipe exposes a few functions that can be useful for script control of your slid
 `getPos()` returns current slide index position
 
 `getNumSlides()` returns the total amount of slides
+
+`pause()` pauses the auto-slide
+
+`play(duration)` resumes the auto-slide with duration, previously set auto, or default auto
 
 `slide(index, duration)` slide to set index position (duration: speed of transition in milliseconds)
 

@@ -513,6 +513,17 @@ function Swipe(container, options) {
       // return total number of slides
       return length;
     },
+    pause: function() {
+      stop();
+      delay = options.auto || 0;
+    },
+    play: function(ms) {
+      if(typeof ms !== 'undefined') {
+        stop();
+        delay = ms;
+      }
+      begin();
+    },
     kill: function() {
 
       // cancel slideshow
