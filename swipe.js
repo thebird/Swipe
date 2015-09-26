@@ -505,6 +505,9 @@ function Swipe(container, options) {
     getPos: function() {
 
       // return current index position
+      if (length == 2) {
+        return (index % 2);
+      }
       return index;
 
     },
