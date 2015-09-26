@@ -217,7 +217,11 @@ function Swipe(container, options) {
   var interval;
 
   function begin() {
-
+    // stop the interval if interval still exists
+    if(interval){
+        stop();
+    }
+    delay = options.auto;
     interval = setTimeout(next, delay);
 
   }
@@ -334,6 +338,8 @@ function Swipe(container, options) {
           translate(index, delta.x + slidePos[index], 0);
           translate(index+1, delta.x + slidePos[index+1], 0);
         }
+	//restart the animate
+        begin();
 
       }
 
@@ -479,6 +485,9 @@ function Swipe(container, options) {
 
       slide(to, speed);
 
+      //when end the slide ,restart the animate
+      begin();
+
     },
     prev: function() {
 
@@ -486,6 +495,8 @@ function Swipe(container, options) {
       stop();
 
       prev();
+      // restart the animate
+      begin();
 
     },
     next: function() {
@@ -494,6 +505,8 @@ function Swipe(container, options) {
       stop();
 
       next();
+      // restart the animate
+      begin();
 
     },
     stop: function() {
