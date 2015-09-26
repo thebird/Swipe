@@ -28,7 +28,7 @@ function Swipe(container, options) {
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
-  var slides, slidePos, width, length;
+  var slides, slidePos, width, length, moveLeft, moveRight;
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
@@ -39,6 +39,8 @@ function Swipe(container, options) {
     // cache slides
     slides = element.children;
     length = slides.length;
+
+    moveRight = moveLeft = true;
 
     // set continuous to false if only one slide
     if (slides.length < 2) options.continuous = false;
@@ -314,9 +316,11 @@ function Swipe(container, options) {
         // increase resistance if first or last slide
         if (options.continuous) { // we don't add resistance at the end
 
-          translate(circle(index-1), delta.x + slidePos[circle(index-1)], 0);
-          translate(index, delta.x + slidePos[index], 0);
-          translate(circle(index+1), delta.x + slidePos[circle(index+1)], 0);
+          if (!(!moveLeft && delta.x > 0 || !moveRight && delta.x < 0 )) {
+            translate(circle(index-1), delta.x + slidePos[circle(index-1)], 0);
+            translate(index, delta.x + slidePos[index], 0);
+            translate(circle(index+1), delta.x + slidePos[circle(index+1)], 0);
+          }
 
         } else {
 
@@ -366,33 +370,40 @@ function Swipe(container, options) {
 
           if (direction) {
 
-            if (options.continuous) { // we need to get the next in this direction in place
+            if (moveRight) {
 
-              move(circle(index-1), -width, 0);
-              move(circle(index+2), width, 0);
+              if (options.continuous) { // we need to get the next in this direction in place
 
-            } else {
-              move(index-1, -width, 0);
+                move(circle(index-1), -width, 0);
+                move(circle(index+2), width, 0);
+
+              } else {
+                move(index-1, -width, 0);
+              }
+
+              move(index, slidePos[index]-width, speed);
+              move(circle(index+1), slidePos[circle(index+1)]-width, speed);
+              index = circle(index+1);
+
             }
-
-            move(index, slidePos[index]-width, speed);
-            move(circle(index+1), slidePos[circle(index+1)]-width, speed);
-            index = circle(index+1);
 
           } else {
-            if (options.continuous) { // we need to get the next in this direction in place
 
-              move(circle(index+1), width, 0);
-              move(circle(index-2), -width, 0);
+            if (moveLeft) {
 
-            } else {
-              move(index+1, width, 0);
+              if (options.continuous) { // we need to get the next in this direction in place
+
+                move(circle(index+1), width, 0);
+                move(circle(index-2), -width, 0);
+
+              } else {
+                move(index+1, width, 0);
+              }
+
+              move(index, slidePos[index]+width, speed);
+              move(circle(index-1), slidePos[circle(index-1)]+width, speed);
+              index = circle(index-1);
             }
-
-            move(index, slidePos[index]+width, speed);
-            move(circle(index-1), slidePos[circle(index-1)]+width, speed);
-            index = circle(index-1);
-
           }
 
           options.callback && options.callback(index, slides[index]);
@@ -494,6 +505,16 @@ function Swipe(container, options) {
       stop();
 
       next();
+
+    },
+    moveRight: function(t) {
+
+      moveRight = t;
+
+    },
+    moveLeft: function(t) {
+
+      moveLeft = t;
 
     },
     stop: function() {
