@@ -82,6 +82,10 @@ function Swipe(container, options) {
 
     if (!browser.transitions) element.style.left = (index * -width) + 'px';
 
+    // set container height to height of contents
+    var contentHeight = element.getBoundingClientRect().height || element.offsetHeight;
+    container.style.height = contentHeight + 'px';
+
     container.style.visibility = 'visible';
 
   }
