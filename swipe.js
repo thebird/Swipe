@@ -20,7 +20,7 @@ function Swipe(container, options) {
     touch: ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
     transitions: (function(temp) {
       var props = ['transitionProperty', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
-      for ( var i in props ) if (temp.style[ props[i] ] !== undefined) return true;
+      for ( var i in props ) if (typeof temp.style[ props[i] ] !== 'undefined') return true;
       return false;
     })(document.createElement('swipe'))
   };
@@ -32,7 +32,7 @@ function Swipe(container, options) {
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
-  options.continuous = options.continuous !== undefined ? options.continuous : true;
+  options.continuous = typeof options.continuous !== 'undefined' ? options.continuous : true;
 
   function setup() {
 
