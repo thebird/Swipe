@@ -229,6 +229,16 @@ function Swipe(container, options) {
 
   }
 
+  // accept touchstart by default
+  var enabled = true;
+
+  function disable () {
+    enabled = false;
+  }
+
+  function enable () {
+    enabled = true;
+  }
 
   // setup initial vars
   var start = {};
@@ -241,7 +251,7 @@ function Swipe(container, options) {
     handleEvent: function(event) {
 
       switch (event.type) {
-        case 'touchstart': this.start(event); break;
+        case 'touchstart': if (enabled) this.start(event); break;
         case 'touchmove': this.move(event); break;
         case 'touchend': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
@@ -512,6 +522,18 @@ function Swipe(container, options) {
 
       // return total number of slides
       return length;
+    },
+    disable: function () {
+
+      // disable listening to touchstart
+      disable();
+
+    },
+    enable: function () {
+
+      // enable listening to touchstart
+      enable();
+
     },
     kill: function() {
 
