@@ -54,7 +54,11 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **stopPropagation** Boolean *(default:false)* - stop event propagation
  
--	**callback** Function - runs at slide change.
+- **prevClicked** Function - runs at previous button click
+
+- **nextClicked** Function - runs at next button click
+ 
+- **callback** Function - runs at slide change.
 
 - **transitionEnd** Function - runs at the end slide transition.
 
@@ -69,6 +73,8 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   continuous: true,
   disableScroll: false,
   stopPropagation: false,
+  prevClicked: function() {},
+  nextClicked: funtion() {},
   callback: function(index, elem) {},
   transitionEnd: function(index, elem) {}
 });
