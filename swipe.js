@@ -112,6 +112,8 @@ function Swipe(container, options) {
     // do nothing if already on requested slide
     if (index == to) return;
 
+    var moveSpeed = isNaN(slideSpeed) ? speed : slideSpeed;
+
     if (browser.transitions) {
 
       var direction = Math.abs(index-to) / (index-to); // 1: backward, -1: forward
@@ -134,15 +136,15 @@ function Swipe(container, options) {
 
       to = circle(to);
 
-      move(index, width * direction, slideSpeed || speed);
-      move(to, 0, slideSpeed || speed);
+      move(index, width * direction, moveSpeed);
+      move(to, 0, moveSpeed);
 
       if (options.continuous) move(circle(to - direction), -(width * direction), 0); // we need to get the next in place
 
     } else {
 
       to = circle(to);
-      animate(index * -width, to * -width, slideSpeed || speed);
+      animate(index * -width, to * -width, moveSpeed);
       //no fallback for a circular continuous if the browser does not accept transitions
     }
 
