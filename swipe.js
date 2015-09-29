@@ -72,6 +72,8 @@ function Swipe(container, options) {
         move(pos, index > pos ? -width : (index < pos ? width : 0), 0);
       }
 
+      slides[pos].style.visibility = 'hidden';
+
     }
 
     // reposition elements before and after index
@@ -82,6 +84,10 @@ function Swipe(container, options) {
 
     if (!browser.transitions) element.style.left = (index * -width) + 'px';
 
+    slides[index].style.visibility = 'visible';
+    slides[circle(index+1)].style.visibility = 'visible';
+    slides[circle(index-1)].style.visibility = 'visible';
+
     container.style.visibility = 'visible';
 
   }
@@ -90,6 +96,7 @@ function Swipe(container, options) {
 
     if (options.continuous) slide(index-1);
     else if (index) slide(index-1);
+    else if (options.unavailable) options.unavailable(index, slides[index], "prev");
 
   }
 
@@ -97,6 +104,7 @@ function Swipe(container, options) {
 
     if (options.continuous) slide(index+1);
     else if (index < slides.length - 1) slide(index+1);
+    else if (options.unavailable) options.unavailable(index, slides[index], "next");
 
   }
 
@@ -147,6 +155,8 @@ function Swipe(container, options) {
     }
 
     index = to;
+
+    visibleThree();
     offloadFn(options.callback && options.callback(index, slides[index]));
   }
 
@@ -209,6 +219,27 @@ function Swipe(container, options) {
       element.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px';
 
     }, 4);
+
+  }
+
+  // hide all slides other than current one
+  function visibleThree() {
+
+    var pos = length;
+
+    // first make this one visible
+    slides[index].style.visibility = 'visible';
+
+    // then check all others for hiding
+    while(pos--) {
+
+      if(pos === circle(index) || pos === circle(index-1) || pos === circle(index+1)){
+        slides[pos].style.visibility = 'visible';
+      } else {
+        slides[pos].style.visibility = 'hidden';
+      }
+
+    }
 
   }
 
@@ -395,6 +426,7 @@ function Swipe(container, options) {
 
           }
 
+          visibleThree();
           options.callback && options.callback(index, slides[index]);
 
         } else {
@@ -558,13 +590,13 @@ function Swipe(container, options) {
 
 }
 
-
-if ( window.jQuery || window.Zepto ) {
+var jsLib = window.jQuery || window.Zepto;  // jQuery or Zepto
+if ( jsLib ) {
   (function($) {
     $.fn.Swipe = function(params) {
       return this.each(function() {
         $(this).data('Swipe', new Swipe($(this)[0], params));
       });
     }
-  })( window.jQuery || window.Zepto )
+  })( jsLib )
 }
