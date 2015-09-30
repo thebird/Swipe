@@ -218,6 +218,7 @@ function Swipe(container, options) {
 
   function begin() {
 
+    delay = options.auto || 0;
     interval = setTimeout(next, delay);
 
   }
@@ -500,6 +501,15 @@ function Swipe(container, options) {
 
       // cancel slideshow
       stop();
+
+    },
+    begin: function() {
+
+      // cancel slideshow
+      stop();
+
+      // start slideshow
+      begin();
 
     },
     getPos: function() {
