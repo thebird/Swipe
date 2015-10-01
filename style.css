@@ -50,7 +50,28 @@ html, body {
   overflow: auto;
 }
 
-#mySwipe div b {
+
+/* Swipe 2 required styles */
+.notifications-carousel {
+  overflow: hidden;
+  visibility: hidden;
+  position: relative;
+}
+.notifications-carousel__wrap {
+  overflow: hidden;
+  position: relative;
+}
+.notifications-carousel__wrap > .notifications-carousel__slide {
+  float:left;
+  width:100%;
+  position: relative;
+}
+
+h1 {
+  margin-top: 40px;
+}
+
+.number {
   display:block;
   font-weight:bold;
   color:#14ADE5;
