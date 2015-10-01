@@ -53,6 +53,23 @@
       })(document.createElement('swipe'))
     };
 
+    var defaults = {
+      startSlide: 0,
+      speed: 300,
+      continuous: true,
+      easing: 'ease'
+    };
+
+    // quit if no root element
+    if (!container) return;
+    var element = container.children[0];
+    var slides, slidePos, width, length;
+    options = options || {};
+    var index = parseInt(options.startSlide, 10) || defaults.startSlide;
+    var speed = (typeof options.speed !== 'undefined') ? options.speed : defaults.speed; // Bug Fix: Use typeof as options.speed = 0 is considered false and uses 300
+    var easing = options.easing || defaults.easing;
+    options.continuous = (options.continuous !== undefined) ? options.continuous : defaults.continuous;
+
     // Various Easings for transition wuth js fallbacks
     var easings = {
       easeInOutExpo: {
@@ -93,16 +110,6 @@
         }
       }
     };
-
-    // quit if no root element
-    if (!container) return;
-    var element = container.children[0];
-    var slides, slidePos, width, length;
-    options = options || {};
-    var index = parseInt(options.startSlide, 10) || 0;
-    var speed = (typeof options.speed !== 'undefined') ? options.speed : 300; // Bug Fix: Use typeof as options.speed = 0 is considered false and uses 300
-    var easing = options.easing || 'ease';
-    options.continuous = options.continuous !== undefined ? options.continuous : true;
 
     function setup() {
 
@@ -220,17 +227,18 @@
       offloadFn(options.callback && options.callback(index, slides[index]));
     }
 
-    function move(index, dist, speed) {
+    function move(index, dist, speed, useDefaultEase) {
 
-      translate(index, dist, speed);
+      translate(index, dist, speed, useDefaultEase);
       slidePos[index] = dist;
 
     }
 
-    function translate(index, dist, speed) {
+    function translate(index, dist, speed, useDefaultEase) {
 
       var slide = slides[index];
       var style = slide && slide.style;
+      useDefaultEase = useDefaultEase || false;
 
       if (!style) return;
 
@@ -244,7 +252,7 @@
       style.MozTransitionTimingFunction =
       style.msTransitionTimingFunction =
       style.OTransitionTimingFunction =
-      style.transitionTimingFunction = easings[easing].css;
+      style.transitionTimingFunction = easings[(useDefaultEase) ? defaults.easing : easing].css;
 
       style.webkitTransform = 'translate(' + dist + 'px,0)' + 'translateZ(0)';
       style.msTransform =
@@ -444,6 +452,11 @@
               && Math.abs(delta.x) > 20            // and if slide amt is greater than 20px
               || Math.abs(delta.x) > width/2;      // or if slide amt is greater than half the width
 
+        var moveSpeed = Math.abs(speed - Math.floor( (Math.abs(delta.x) / width) * 1.2 * speed ));
+        moveSpeed = (moveSpeed / speed < .5) ? 0.5 * speed :
+                    ((moveSpeed / speed > .75) ? 0.75 * speed :
+                    moveSpeed);
+
         // determine if slide attempt is past start and end
         var isPastBounds =
               !index && delta.x > 0                            // if first slide and slide amt is greater than 0
@@ -470,8 +483,8 @@
                 move(index-1, -width, 0);
               }
 
-              move(index, slidePos[index]-width, speed);
-              move(circle(index+1), slidePos[circle(index+1)]-width, speed);
+              move(index, slidePos[index]-width, moveSpeed);
+              move(circle(index+1), slidePos[circle(index+1)]-width, moveSpeed);
               index = circle(index+1);
 
             } else {
@@ -484,8 +497,8 @@
                 move(index+1, width, 0);
               }
 
-              move(index, slidePos[index]+width, speed);
-              move(circle(index-1), slidePos[circle(index-1)]+width, speed);
+              move(index, slidePos[index]+width, moveSpeed);
+              move(circle(index-1), slidePos[circle(index-1)]+width, moveSpeed);
               index = circle(index-1);
 
             }

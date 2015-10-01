@@ -1,95 +1,105 @@
-<!DOCTYPE HTML> 
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Swipe 2</title>
 <meta http-equiv="X-UA-Compatible" content="IE=8">
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
 <link href='style.css' rel='stylesheet'/>
 <style>
 
-/* Swipe 2 required styles */
-
-.swipe {
-  overflow: hidden;
-  visibility: hidden;
-  position: relative;
-}
-.swipe-wrap {
-  overflow: hidden;
-  position: relative;
-}
-.swipe-wrap > div {
-  float:left;
-  width:100%;
-  position: relative;
-}
-
 /* END required styles */
-
 </style>
-
 </head>
 <body>
 
-<h1>Swipe 2</h1>
-
-
-
-<div id='mySwipe' style='max-width:500px;margin:0 auto' class='swipe'>
-  <div class='swipe-wrap'>
-    <div><b>0</b></div>
-    <div><b>1</b></div>
-    <div><b>2</b></div>
-    <div><b>3</b></div>
-    <div><b>4</b></div>
-    <div><b>5</b></div>
-    <div><b>6</b></div>
-    <div><b>7</b></div>
-    <div><b>8</b></div>
-    <div><b>9</b></div>
-    <div><b>10</b></div>
-    <div><b>11</b></div>
-    <div><b>12</b></div>
-    <div><b>13</b></div>
-    <div><b>14</b></div>
-    <div><b>15</b></div>
-    <div><b>16</b></div>
-    <div><b>17</b></div>
-    <div><b>18</b></div>
-    <div><b>19</b></div>
-    <div><b>20</b></div>
+<h1>Swipe easeInOutExpo easing with 300ms</h1>
+<div style='max-width:500px;margin:0 auto' class='notifications-carousel notifications-carousel--js'>
+  <div class='notifications-carousel__wrap'>
+    <div class='notifications-carousel__slide'><div class="number">0</div></div>
+    <div class='notifications-carousel__slide'><div class="number">1</div></div>
+    <div class='notifications-carousel__slide'><div class="number">2</div></div>
+    <div class='notifications-carousel__slide'><div class="number">3</div></div>
+    <div class='notifications-carousel__slide'><div class="number">4</div></div>
+    <div class='notifications-carousel__slide'><div class="number">5</div></div>
   </div>
 </div>
 
-
-
 <div style='text-align:center;padding-top:20px;'>
-  
-  <button onclick='mySwipe.prev()'>prev</button> 
-  <button onclick='mySwipe.next()'>next</button>
+
+  <button onclick='mySwipe1.prev()'>prev</button>
+  <button onclick='mySwipe1.next()'>next</button>
 
 </div>
 
+<h1>Swipe ease easing with 300ms</h1>
+<div style='max-width:500px;margin:0px auto;' class='notifications-carousel notifications-carousel--js'>
+  <div class='notifications-carousel__wrap'>
+    <div class='notifications-carousel__slide'><div class="number">0</div></div>
+    <div class='notifications-carousel__slide'><div class="number">1</div></div>
+    <div class='notifications-carousel__slide'><div class="number">2</div></div>
+    <div class='notifications-carousel__slide'><div class="number">3</div></div>
+    <div class='notifications-carousel__slide'><div class="number">4</div></div>
+    <div class='notifications-carousel__slide'><div class="number">5</div></div>
+    <div class='notifications-carousel__slide'><div class="number">6</div></div>
+    <div class='notifications-carousel__slide'><div class="number">7</div></div>
+    <div class='notifications-carousel__slide'><div class="number">8</div></div>
+    <div class='notifications-carousel__slide'><div class="number">9</div></div>
+    <div class='notifications-carousel__slide'><div class="number">10</div></div>
+    <div class='notifications-carousel__slide'><div class="number">11</div></div>
+  </div>
+</div>
 
+<div style='text-align:center;padding-top:20px;'>
 
+  <button onclick='mySwipe2.prev()'>prev</button>
+  <button onclick='mySwipe2.next()'>next</button>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</div>
+
+<h1>Swipe linear easing with 300ms</h1>
+<div style='max-width:500px;margin:0px auto' class='notifications-carousel notifications-carousel--js'>
+  <div class='notifications-carousel__wrap'>
+    <div class='notifications-carousel__slide'><div class="number">0</div></div>
+    <div class='notifications-carousel__slide'><div class="number">1</div></div>
+    <div class='notifications-carousel__slide'><div class="number">2</div></div>
+    <div class='notifications-carousel__slide'><div class="number">3</div></div>
+    <div class='notifications-carousel__slide'><div class="number">4</div></div>
+    <div class='notifications-carousel__slide'><div class="number">5</div></div>
+    <div class='notifications-carousel__slide'><div class="number">6</div></div>
+    <div class='notifications-carousel__slide'><div class="number">7</div></div>
+    <div class='notifications-carousel__slide'><div class="number">8</div></div>
+    <div class='notifications-carousel__slide'><div class="number">9</div></div>
+    <div class='notifications-carousel__slide'><div class="number">10</div></div>
+    <div class='notifications-carousel__slide'><div class="number">11</div></div>
+  </div>
+</div>
+
+<div style='text-align:center;padding-top:20px;'>
+
+  <button onclick='mySwipe3.prev()'>prev</button>
+  <button onclick='mySwipe3.next()'>next</button>
+
+</div>
+
 <script src='swipe.js'></script>
 <script>
 
 // pure JS
-var elem = document.getElementById('mySwipe');
-window.mySwipe = Swipe(elem, {
-  // startSlide: 4,
-  // auto: 3000,
-  // continuous: true,
-  // disableScroll: true,
-  // stopPropagation: true,
-  // callback: function(index, element) {},
-  // transitionEnd: function(index, element) {}
+window.mySwipe1 = Swipe(document.getElementsByClassName('notifications-carousel--js')[0], {
+  speed: 300,
+  easing: 'easeInOutExpo',
+  continuous: false,
+  disableScroll: true
+
 });
 
-// with jQuery
-// window.mySwipe = $('#mySwipe').Swipe().data('Swipe');
+window.mySwipe2 = Swipe(document.getElementsByClassName('notifications-carousel--js')[1]);
+
+window.mySwipe3 = Swipe(document.getElementsByClassName('notifications-carousel--js')[2], {
+  speed: 300,
+  easing: 'linear',
+  continuous: false,
+  disableScroll: true
+});
 
 </script>
