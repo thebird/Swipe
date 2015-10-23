@@ -64,6 +64,9 @@ function Swipe(container, options) {
 
       var slide = slides[pos];
 
+      if (!slide.hasAttribute("data-old-width"))
+        slide.setAttribute('data-old-width', slide.style.width);
+
       slide.style.width = width + 'px';
       slide.setAttribute('data-index', pos);
 
@@ -527,7 +530,13 @@ function Swipe(container, options) {
       while(pos--) {
 
         var slide = slides[pos];
-        slide.style.width = '';
+
+        if (slide.hasAttribute('data-old-width')) {
+            slide.style.width = slide.getAttribute('data-old-width');
+            slide.removeAttribute('data-old-width');
+        } else
+            slide.style.width = '';
+
         slide.style.left = '';
 
         if (browser.transitions) translate(pos, 0, 0);
