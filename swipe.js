@@ -567,7 +567,7 @@ function Swipe(container, options) {
       if (browser.addEventListener) {
 
         // remove current event listeners
-        element.removeEventListener(bowser.touchstart, events, false);
+        element.removeEventListener(browser.touchstart, events, false);
         element.removeEventListener('webkitTransitionEnd', events, false);
         element.removeEventListener('msTransitionEnd', events, false);
         element.removeEventListener('oTransitionEnd', events, false);
