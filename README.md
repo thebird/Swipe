@@ -1,9 +1,13 @@
-##Fixed Issues(By Alon Zhang)
-After touchend event, resuming Swipe's auto slide.
+##Fixed Issues(By Jinlong)
+已修复问题
 
-1. 兼容 APICloud 
-2. 兼容 openSlidLayout 模块，左右滑不会冲突
-3. 兼容 openFrameGroup 模块，左右滑不会冲突
+After touchend event, resuming Swipe's auto slide.
+touchend 触发以后，恢复 Swipe 组件的自动轮播。
+
+1. Compatible with api.setRefreshHeaderInfo (APICloud's method)，兼容 APICloud 的 api.setRefreshHeaderInfo（下拉刷新组件），处理 JS 交互事件与 Native 事件的冲突
+2. Compatible with api.openSlidLayout (APICloud's method)，兼容 APICloud 的 api.openSlidLayout（侧滑布局模块），处理 JS 交互事件与 Native 事件的冲突
+3. Compatible with api.openFrameGroup (APICloud's method)，兼容 APICloud 的 api.openFrameGroup（子窗口组模块），处理 JS 交互事件与 Native 事件的冲突
+
 
 ## Usage
 Swipe only needs to follow a simple pattern. Here is an example:
@@ -65,6 +69,16 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **transitionEnd** Function - runs at the end slide transition.
 
+- **compatWithPullToRefresh** 布尔型 - 是否兼容 APICloud 的 api.setRefreshHeaderInfo，默认为 false
+
+- **frameName** 字符串 - 带有下拉刷新组件的 frame 的名字，当 compatWithPullToRefresh 为 true 时，需要传此参数
+
+- **compatWithSlidLayout** 布尔型 - 是否兼容 APICloud 的 api.openSlidLayout，默认为 false
+
+- **compatWithFrameGroup** 布尔型 - 是否兼容 APICloud 的 api.openFrameGroup，默认为 false
+
+- **frameGroupName** 字符串 - frameGroup 组件的名字，当 compatWithFrameGroup 为 true 时，需要传此参数
+
 ### Example
 
 ``` js
@@ -77,7 +91,12 @@ window.mySwipe = new Swipe(document.getElementById('slider'), {
   disableScroll: false,
   stopPropagation: false,
   callback: function(index, elem) {},
-  transitionEnd: function(index, elem) {}
+  transitionEnd: function(index, elem) {},
+  compatWithPullToRefresh: true,
+  frameName: 'frameName',
+  compatWithSlidLayout: true,
+  compatWithFrameGroup: true,
+  frameGroupName: 'frameGroupName'
 });
 
 ```
@@ -98,16 +117,6 @@ Swipe exposes a few functions that can be useful for script control of your slid
 
 ## Browser Support
 Swipe is now compatible with all browsers, including IE7+. Swipe works best on devices that support CSS transforms and touch, but can be used without these as well. A few helper methods determine touch and CSS transition support and choose the proper animation methods accordingly.
-
-## Who's using Swipe
-<img src='http://swipejs.com/assets/swipe-cnn.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-airbnb.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-nhl.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-htc.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-thinkgeek.png' width='170'>
-<img src='http://swipejs.com/assets/swipe-snapguide.png' width='170'>
-
-Shoot me a [note](mailto:brad@birdsall.co) if you want your logo here
 
 ## License
 Copyright (c) 2013 Brad Birdsall Licensed under the [The MIT License (MIT)](http://opensource.org/licenses/MIT).

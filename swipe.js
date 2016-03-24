@@ -34,6 +34,18 @@ function Swipe(container, options) {
   var speed = options.speed || 300;
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
+  //add by jinlong | zhangjinlong3546@sina.com
+  //compatible with api.setRefreshHeaderInfo (APICloud's method)
+  options.compatWithPullToRefresh = options.compatWithPullToRefresh || false;
+  options.frameName = options.frameName || null;
+
+  //compatible with api.openSlidLayout (APICloud's method)
+  options.compatWithSlidLayout = options.compatWithSlidLayout || false;
+
+  //compatible with api.openFrameGroup (APICloud's method)
+  options.compatWithFrameGroup = options.compatWithFrameGroup || false;
+  options.frameGroupName = options.frameGroupName || null;
+
   function setup() {
 
     // cache slides
@@ -242,7 +254,7 @@ function Swipe(container, options) {
       switch (event.type) {
         case 'touchstart': this.start(event); break;
         case 'touchmove': this.move(event); break;
-        // case 'touchend': this.end(event); break;    //modify by Alon Zhang
+        //modify by jinlong | zhangjinlong3546@sina.com
         case 'touchend': offloadFn(this.end(event)); break;
         case 'webkitTransitionEnd':
         case 'msTransitionEnd':
@@ -256,13 +268,26 @@ function Swipe(container, options) {
 
     },
     start: function(event) {
-      //adapt APICloud, add by Alon Zhang
-      //lock slidlayout
-      api.lockSlidPane();
-      //lock framegroup
-      api.setFrameGroupAttr({
-          scrollEnabled: false
-      });
+      //add by jinlong | zhangjinlong3546@sina.com
+      if(options.compatWithPullToRefresh){
+        if(options.frameName){
+          api.setFrameAttr({
+              name: options.frameName,
+              bounces: false
+          });
+        }
+      }
+      if(options.compatWithSlidLayout){
+        api.lockSlidPane();
+      }
+      if(options.compatWithFrameGroup){
+        if(options.frameGroupName){
+          api.setFrameGroupAttr({
+              name: options.frameGroupName,
+              scrollEnabled: false
+          });
+        }
+      }
       
       var touches = event.touches[0];
 
@@ -346,13 +371,26 @@ function Swipe(container, options) {
 
     },
     end: function(event) {
-      //adapt APICloud, add by Alon Zhang
-      //unlock slidlayout
-      api.unlockSlidPane();
-      //unlock framegroup
-      api.setFrameGroupAttr({
-          scrollEnabled: true
-      });
+      //add by jinlong | zhangjinlong3546@sina.com
+      if(options.compatWithPullToRefresh){
+          if(options.frameName){
+            api.setFrameAttr({
+                name: options.frameName,
+                bounces: true
+            });
+          }
+      }
+      if(options.compatWithSlidLayout){
+        api.unlockSlidPane();
+      }
+      if(options.compatWithFrameGroup){
+        if(options.frameGroupName){
+          api.setFrameGroupAttr({
+              name: options.frameGroupName,
+              scrollEnabled: true
+          });
+        }
+      }
 
       // measure duration
       var duration = +new Date - start.time;
@@ -434,7 +472,7 @@ function Swipe(container, options) {
       element.removeEventListener('touchmove', events, false);
       element.removeEventListener('touchend', events, false);
 
-      //add by Alon Zhang
+      //add by jinlong | zhangjinlong3546@sina.com
       //resume slide
       delay = options.auto;
 
