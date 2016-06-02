@@ -14,7 +14,7 @@ Swipe only needs to follow a simple pattern. Here is an example:
 Above is the initial required structure– a series of elements wrapped in two containers. Place any content you want within the items. The containing div will need to be passed to the Swipe function like so:
 
 ``` js
-window.mySwipe = Swipe(document.getElementById('slider'));
+window.mySwipe = Swiper(document.getElementById('slider'));
 ```
 
 I always place this at the bottom of the page, externally, to verify the page is ready.
