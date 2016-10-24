@@ -1,4 +1,6 @@
 ## Usage
+[![CDNJS](https://img.shields.io/cdnjs/v/swipe.svg)](https://cdnjs.com/libraries/swipe)
+
 Swipe only needs to follow a simple pattern. Here is an example:
 
 ``` html
