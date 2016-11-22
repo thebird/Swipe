@@ -287,7 +287,11 @@ function Swipe(container, options) {
       // ensure swiping with one touch and not pinching
       if ( event.touches.length > 1 || event.scale && event.scale !== 1) return
 
-      if (options.disableScroll) event.preventDefault();
+      // bail out if opt is enabled and a move is detected
+      if (options.disableScroll) {
+        event.preventDefault();
+        return;
+      }
 
       var touches = event.touches[0];
 
