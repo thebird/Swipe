@@ -1,0 +1,21 @@
+{
+	"name": "Swipe",
+	"version": "2.0.0",
+	"description": "Swipe is the most accurate touch slider.",
+	"main": "swipe.js",
+
+	"ignore": [
+		
+		"**/*.html",
+		"**/*.css",
+		"Gruntfile.js"
+	],
+
+	"repository": {
+		
+		"type": "git",
+		"url": "git@github.com:chaoscod3r/Swipe.git"
+	},
+
+	"license": "MIT"
+}
