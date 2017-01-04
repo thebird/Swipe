@@ -309,7 +309,7 @@ function Swipe(container, options) {
         event.preventDefault();
 
         // stop slideshow
-        stop();
+        //stop();
 
         // increase resistance if first or last slide
         if (options.continuous) { // we don't add resistance at the end
