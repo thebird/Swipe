@@ -217,7 +217,8 @@ function Swipe(container, options) {
   var interval;
 
   function begin() {
-
+    //clear history or Sliding speed faster and faster 
+    clearTimeout(interval);
     interval = setTimeout(next, delay);
 
   }
