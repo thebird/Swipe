@@ -26,6 +26,11 @@
   width:100%;
   position: relative;
 }
+  [name~="btn"]{
+    padding:10px;
+    background-color:#ffffff;
+    border:0.5pt solid black;
+  }
 
 /* END required styles */
 
@@ -68,8 +73,8 @@
 
 <div style='text-align:center;padding-top:20px;'>
   
-  <button onclick='mySwipe.prev()'>prev</button> 
-  <button onclick='mySwipe.next()'>next</button>
+  <button name="prev btn">prev</button> 
+  <button name="next btn">next</button>
 
 </div>
 
@@ -91,7 +96,8 @@ window.mySwipe = Swipe(elem, {
   // callback: function(index, element) {},
   // transitionEnd: function(index, element) {}
 });
-
+document.prev.addEventListener('click',()=>{mySwipe.prev()})
+document.next.addEventListener('click',()=>{mySwipe.next()})
 // with jQuery
 // window.mySwipe = $('#mySwipe').Swipe().data('Swipe');
 
