@@ -54,12 +54,14 @@ html, body {
   display:block;
   font-weight:bold;
   color:#14ADE5;
-  font-size:20px;
   text-align:center;
   margin:10px;
   padding:100px 10px;
   box-shadow: 0 1px #EBEBEB;
-  background: rgba(255, 255, 255, 0.3);
+  font-size:1.2rem;
+  background-image:url("https://picsum.photos/500/223.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
   border-radius: 3px;
   border: 1px solid;
   border-color: #E5E5E5 #D3D3D3 #B9C1C6;
