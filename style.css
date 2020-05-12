@@ -13,10 +13,11 @@ body {
   min-height:416px;
 }
 h1 {
-  font-size:33px;
-  margin:50px 0 15px;
-  text-align:center;
-  color:#212121;
+  font-size: 4rem;
+  margin: 50px 0 15px;
+  text-align: center;
+  color: #212121;
+  font-family: cursive;
 }
 h2 {
   font-size:14px;
