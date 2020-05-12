@@ -26,10 +26,16 @@
   width:100%;
   position: relative;
 }
-  [name~="btn"]{
+  #prv,#nxt{
     padding:10px;
+    width: 50px;
     background-color:#ffffff;
     border:0.5pt solid black;
+  }
+  
+  .nvg{
+    text-align:center;
+    padding-top:20px
   }
 
 /* END required styles */
@@ -71,10 +77,10 @@
 
 
 
-<div style='text-align:center;padding-top:20px;'>
+<div class="nvg">
   
-  <button name="prev btn">prev</button> 
-  <button name="next btn">next</button>
+  <button id="prv" name="prev">prev</button> 
+  <button id="nxt" name="next">next</button>
 
 </div>
 
@@ -96,8 +102,10 @@ window.mySwipe = Swipe(elem, {
   // callback: function(index, element) {},
   // transitionEnd: function(index, element) {}
 });
-document.prev.addEventListener('click',()=>{mySwipe.prev()})
-document.next.addEventListener('click',()=>{mySwipe.next()})
+var prv = document.getElementById("prv"),
+    nxt = document.getElementById("nxt");
+prv.addEventListener('click',()=>{mySwipe.prev()})
+nxt.addEventListener('click',()=>{mySwipe.next()})
 // with jQuery
 // window.mySwipe = $('#mySwipe').Swipe().data('Swipe');
 
