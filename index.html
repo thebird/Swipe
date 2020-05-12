@@ -110,16 +110,16 @@ nxt.addEventListener('click',()=>{mySwipe.next()})
 document.onkeydown = function(event) {
     switch (event.keyCode) {
        case 37:
-            imageSliderP();
+            mySwipe.prev();
           break;
        case 39:
-            imageSlider();
+            mySwipe.next();
           break;
        case 38: 
-            imageSliderP();
+            mySwipe.prev();
           break;
        case 40: 
-            imageSlider();
+            mySwipe.next();
           break;   
     }
 };
