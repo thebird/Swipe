@@ -107,6 +107,22 @@ var prv = document.getElementById("prv"),
     nxt = document.getElementById("nxt");
 prv.addEventListener('click',()=>{mySwipe.prev()})
 nxt.addEventListener('click',()=>{mySwipe.next()})
+document.onkeydown = function(event) {
+    switch (event.keyCode) {
+       case 37:
+            imageSliderP();
+          break;
+       case 39:
+            imageSlider();
+          break;
+       case 38: 
+            imageSliderP();
+          break;
+       case 40: 
+            imageSlider();
+          break;   
+    }
+};
 // with jQuery
 // window.mySwipe = $('#mySwipe').Swipe().data('Swipe');
 
